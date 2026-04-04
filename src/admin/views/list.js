@@ -14,10 +14,8 @@ const COLLECTION_META = {
 
 function cellValue(doc, col) {
   const val = doc[col]
-  if (!val && val !== 0) return '<span class="text-muted-foreground">—</span>'
-  if (col.includes('At') && typeof val === 'string') {
-    return new Date(val).toLocaleDateString()
-  }
+  if (!val && val !== 0) return '<span class="text-content3">—</span>'
+  if (col.includes('At') && typeof val === 'string') return new Date(val).toLocaleDateString()
   if (col === 'filename' && doc.mimeType?.startsWith('image/')) {
     return `<img src="/media/${val}?w=40&h=40" alt="" class="w-10 h-10 object-cover rounded inline-block mr-2" />${val}`
   }
@@ -34,48 +32,48 @@ export async function listView(collectionSlug, user, { page = 1, search = '' } =
     : {}
 
   const result = await payload.find({
-    collection: collectionSlug,
-    where,
-    sort: meta.defaultSort,
-    limit: LIMIT,
-    page: parseInt(page, 10),
-    depth: 0,
+    collection: collectionSlug, where, sort: meta.defaultSort,
+    limit: LIMIT, page: parseInt(page, 10), depth: 0,
   })
 
   const { docs, totalDocs, totalPages, page: currentPage } = result
 
-  const headers = meta.columns.map((c) => `<th class="table-head px-3 py-2 text-left text-xs font-medium uppercase tracking-wide">${c}</th>`).join('')
+  const headers = meta.columns.map(c =>
+    `<th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-content2">${c}</th>`
+  ).join('')
 
-  const rows = docs.map((doc) => {
-    const cells = meta.columns.map((col) => `<td class="table-cell px-3 py-2 text-sm">${cellValue(doc, col)}</td>`).join('')
-    return `<tr class="table-row hover:bg-muted/50 cursor-pointer" onclick="location.href='/admin/collections/${collectionSlug}/${doc.id}'">${cells}</tr>`
+  const rows = docs.map(doc => {
+    const cells = meta.columns.map(col => `<td class="px-4 py-3 text-sm text-content1">${cellValue(doc, col)}</td>`).join('')
+    return `<tr class="border-b border-border/20 hover:bg-backgroundSecondary cursor-pointer transition-colors" onclick="location.href='/admin/collections/${collectionSlug}/${doc.id}'">${cells}</tr>`
   }).join('')
 
-  const emptyRow = !docs.length ? `<tr><td colspan="${meta.columns.length}" class="table-cell px-3 py-8 text-center text-muted-foreground">No ${meta.label} found</td></tr>` : ''
+  const emptyRow = !docs.length
+    ? `<tr><td colspan="${meta.columns.length}" class="px-4 py-10 text-center text-content3">No ${meta.label} found</td></tr>`
+    : ''
 
   const pagination = totalPages > 1 ? `
-<div class="flex items-center justify-between mt-4 text-sm">
-  <span class="text-muted-foreground">${totalDocs} total</span>
-  <div class="flex gap-2">
-    ${currentPage > 1 ? `<a href="?page=${currentPage - 1}${search ? `&search=${search}` : ''}" class="btn btn-ghost btn-sm">&larr; Prev</a>` : ''}
-    <span class="px-3 py-1">Page ${currentPage} of ${totalPages}</span>
-    ${currentPage < totalPages ? `<a href="?page=${currentPage + 1}${search ? `&search=${search}` : ''}" class="btn btn-ghost btn-sm">Next &rarr;</a>` : ''}
+<div class="flex items-center justify-between mt-4 text-sm text-content2">
+  <span>${totalDocs} total</span>
+  <div class="flex gap-2 items-center">
+    ${currentPage > 1 ? `<a href="?page=${currentPage - 1}${search ? `&search=${search}` : ''}" class="btn btn-outline btn-sm">&larr; Prev</a>` : ''}
+    <span>Page ${currentPage} of ${totalPages}</span>
+    ${currentPage < totalPages ? `<a href="?page=${currentPage + 1}${search ? `&search=${search}` : ''}" class="btn btn-outline btn-sm">Next &rarr;</a>` : ''}
   </div>
 </div>` : ''
 
   const body = `
 <div class="flex items-center justify-between mb-6">
-  <h1 class="text-2xl font-bold">${meta.label}</h1>
+  <h1 class="text-2xl font-bold text-content1">${meta.label}</h1>
   <a href="/admin/collections/${collectionSlug}/create" class="btn btn-primary btn-sm">+ New ${meta.label.replace(/s$/, '')}</a>
 </div>
 <form method="get" class="mb-4 flex gap-2 max-w-sm">
-  <input name="search" value="${search}" placeholder="Search..." class="input input-solid flex-1" />
-  <button type="submit" class="btn btn-ghost btn-sm">Search</button>
+  <input name="search" value="${search}" placeholder="Search..." class="input input-solid input-sm flex-1" />
+  <button type="submit" class="btn btn-outline btn-sm">Search</button>
 </form>
-<div class="card bg-card border border-border">
+<div class="card bg-backgroundSecondary border border-border/30 overflow-hidden">
   <div class="overflow-x-auto">
     <table class="table w-full">
-      <thead class="table-header"><tr>${headers}</tr></thead>
+      <thead class="bg-backgroundPrimary"><tr>${headers}</tr></thead>
       <tbody>${rows}${emptyRow}</tbody>
     </table>
   </div>
