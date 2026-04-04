@@ -10,7 +10,7 @@ export function adminLayout({ title = 'Admin', body, user = null, breadcrumb = '
   <link rel="stylesheet" href="/app.css" />
   <script>${themeInit}</script>
 </head>
-<body class="bg-backgroundPrimary text-content1 min-h-screen flex">
+<body class="min-h-screen flex">
   <div class="sidebar sidebar-sticky w-64 shrink-0 border-r border-border/30">
     <div class="p-4 border-b border-border/30">
       <a href="/admin" class="font-semibold text-base text-content1">Flatload Admin</a>
@@ -73,7 +73,7 @@ export function adminLoginLayout({ body, error = '' }) {
   <link rel="stylesheet" href="/app.css" />
   <script>${themeInit}</script>
 </head>
-<body class="bg-backgroundPrimary text-content1 min-h-screen flex items-center justify-center">
+<body class="min-h-screen flex items-center justify-center">
   <div class="w-full max-w-sm">
     <div class="text-center mb-8">
       <h1 class="text-2xl font-bold">Flatload Admin</h1>
