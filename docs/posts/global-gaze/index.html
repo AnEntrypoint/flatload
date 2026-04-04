@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Global Gaze</title>
+  <meta name="description" content="Stories from around the world." />
+  
+  <meta property="og:title" content="Global Gaze" />
+  <meta property="og:type" content="website" />
+  
+  
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Global Gaze" />
+  <meta name="twitter:description" content="Stories from around the world." />
+  <link rel="stylesheet" href="../../app.css" />
+  <script>(function(){try{var t=localStorage.getItem('theme')||'system';var d=window.matchMedia('(prefers-color-scheme:dark)').matches;var dark=(t==='dark')||(t==='system'&&d);document.documentElement.setAttribute('data-theme',dark?'dark':'light');var di=document.querySelector('.dark-icon');var li=document.querySelector('.light-icon');if(dark){if(di)di.classList.remove('hidden');if(li)li.classList.add('hidden');}else{if(di)di.classList.add('hidden');if(li)li.classList.remove('hidden');}}catch(e){}})();</script>
+</head>
+<body class="bg-background text-foreground min-h-screen flex flex-col">
+  
+  
+<header class="sticky top-0 z-40 w-full border-b border-border bg-background/95 backdrop-blur">
+  <div class="container flex h-16 items-center justify-between">
+    <a href="/flatload/" class="font-semibold text-lg">Zero-Hop</a>
+    <nav class="flex items-center gap-6">
+      <a href="/flatload/posts" class="text-sm font-medium hover:text-primary transition-colors">Posts</a><a href="/flatload/contact" class="text-sm font-medium hover:text-primary transition-colors">Contact</a>
+      <a href="/flatload/search" aria-label="Search" class="hover:text-primary transition-colors">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+      </a>
+      <button id="theme-toggle" aria-label="Toggle theme" class="hover:text-primary transition-colors">
+        <svg class="dark-icon hidden" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+        <svg class="light-icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+      </button>
+    </nav>
+  </div>
+</header>
+  <main class="flex-1">
+    
+<section class="container pt-12 pb-6">
+  <div class="flex flex-wrap gap-2 mb-4"><span class="text-xs bg-secondary text-secondary-foreground px-2 py-0.5 rounded">news</span></div>
+  <h1 class="text-4xl md:text-5xl font-bold mb-4">Global Gaze</h1>
+  <div class="flex flex-wrap gap-4 text-sm text-muted-foreground">
+    <span>Demo Author</span>
+    <time>01/22/2024</time>
+  </div>
+  <div class="mt-8"><img src="../../media/image-post2.webp" srcset="../../media/image-post2.webp 300w, ../../media/image-post2.webp 600w, ../../media/image-post2.webp 900w, ../../media/image-post2.webp 1400w" sizes="(max-width:640px) 100vw, (max-width:1024px) 75vw, 50vw" alt="Curving abstract shapes with an orange and blue gradient" class="w-full rounded-lg max-h-[60vh] object-cover" loading="eager" /></div>
+</section><div class="container py-8"><article class="prose max-w-3xl mx-auto"><h2>Exploring the world through a lens of curiosity and wonder</h2><p>In every corner of the globe, stories wait to be discovered by those willing to look beyond the familiar.</p><p>Global perspectives enrich our understanding of shared humanity, reminding us that beneath cultural differences lie universal aspirations.</p></article></div>
+  </main>
+  
+<footer class="border-t border-border mt-auto">
+  <div class="container py-8 flex flex-col md:flex-row items-center justify-between gap-4">
+    <p class="text-sm text-muted-foreground">&copy; 2026 Zero-Hop</p>
+    <nav class="flex flex-wrap gap-6"><a href="/flatload/admin" class="text-sm text-muted-foreground hover:text-foreground transition-colors">Admin</a><a href="https://github.com/AnEntrypoint/flatload" class="text-sm text-muted-foreground hover:text-foreground transition-colors">Source Code</a></nav>
+  </div>
+</footer>
+  <script type="module" src="../../client.js"></script>
+</body>
+</html>

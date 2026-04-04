@@ -1,0 +1,50 @@
+id: contact
+slug: contact
+title: Contact
+_status: published
+hero:
+  type: none
+layout:
+  - blockType: formBlock
+    enableIntro: true
+    form: contact-form
+    introContent:
+      root:
+        type: root
+        direction: ltr
+        format: ''
+        indent: 0
+        version: 1
+        children:
+          - type: heading
+            tag: h2
+            children:
+              - type: text
+                text: Contact us
+                detail: 0
+                format: 0
+                mode: normal
+                style: ''
+                version: 1
+            direction: ltr
+            format: ''
+            indent: 0
+            version: 1
+          - type: paragraph
+            children:
+              - type: text
+                text: Have a question or want to get in touch? Fill out the form below and we will get back to you as soon as possible.
+                detail: 0
+                format: 0
+                mode: normal
+                style: ''
+                version: 1
+            direction: ltr
+            format: ''
+            indent: 0
+            textFormat: 0
+            version: 1
+meta:
+  title: Contact | Flatload
+createdAt: '2024-01-01T00:00:00.000Z'
+updatedAt: '2024-01-01T00:00:00.000Z'

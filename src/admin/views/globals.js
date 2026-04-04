@@ -1,0 +1,52 @@
+import { adminLayout } from '../layout.js'
+import { payload } from '../../utils/getPayload.js'
+
+const GLOBALS_FIELDS = {
+  header: () => import('../../payload/globals/Header.js').then(m => m.Header.fields),
+  footer: () => import('../../payload/globals/Footer.js').then(m => m.Footer.fields),
+}
+
+// Reuse renderField from edit.js
+async function getFieldsHtml(slug, doc) {
+  const { editView } = await import('./edit.js')
+  // renderField is not exported; inline a simple fallback here
+  return Object.entries(doc)
+    .filter(([k]) => !['globalType', 'createdAt', 'updatedAt', 'id'].includes(k))
+    .map(([k, v]) => {
+      const val = typeof v === 'object' ? JSON.stringify(v, null, 2) : String(v ?? '')
+      return `<div class="form-group">
+        <label class="form-label">${k}</label>
+        <textarea name="${k}" class="input input-solid input-block h-24 resize-y font-mono text-xs">${val.replace(/</g, '&lt;')}</textarea>
+      </div>`
+    }).join('')
+}
+
+export async function globalView(slug, user) {
+  const doc = await payload.findGlobal({ slug, depth: 1 })
+  const title = slug.charAt(0).toUpperCase() + slug.slice(1)
+
+  const fieldsHtml = await getFieldsHtml(slug, doc)
+
+  const body = `
+<div class="flex items-center justify-between mb-6">
+  <h1 class="text-2xl font-bold">${title}</h1>
+  <button form="global-form" type="submit" class="btn btn-primary btn-sm">Save</button>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+  <form id="global-form" method="POST" action="/admin/globals/${slug}" class="lg:col-span-2 space-y-4">
+    ${fieldsHtml}
+    <button type="submit" class="btn btn-primary">Save ${title}</button>
+  </form>
+  <aside>
+    <div class="card bg-card border border-border">
+      <div class="card-body">
+        <h3 class="font-medium text-sm mb-2">Global</h3>
+        <div class="text-xs text-muted-foreground">Updated: ${doc.updatedAt ? new Date(doc.updatedAt).toLocaleString() : '—'}</div>
+        <button form="global-form" type="submit" class="btn btn-primary btn-sm btn-block mt-4">Save</button>
+      </div>
+    </div>
+  </aside>
+</div>`
+
+  return adminLayout({ title, body, user, breadcrumb: `globals / ${slug}` })
+}
