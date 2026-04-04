@@ -4,6 +4,7 @@ import { postsPage } from './frontend/pages/posts.js'
 import { postPage } from './frontend/pages/post.js'
 import { dashboardView } from './admin/views/dashboard.js'
 import { listView } from './admin/views/list.js'
+import { editView } from './admin/views/edit.js'
 import { find } from './store/index.js'
 import { cp, mkdir } from 'fs/promises'
 import { existsSync } from 'fs'
@@ -85,6 +86,16 @@ async function buildStaticAdmin() {
         const html = await listView(slug, DEMO_USER)
         await Bun.write(path.join(DOCS, 'admin', 'collections', slug, 'index.html'), patchAdminHtml(html, 3))
         console.log('wrote admin/collections/' + slug)
+
+        const result = find({ collection: slug, limit: 100 })
+        await Promise.all(result.docs.map(async (doc) => {
+          try {
+            await mkdir(path.join(DOCS, 'admin', 'collections', slug, doc.id), { recursive: true })
+            const itemHtml = await editView(slug, doc.id, DEMO_USER)
+            await Bun.write(path.join(DOCS, 'admin', 'collections', slug, doc.id, 'index.html'), patchAdminHtml(itemHtml, 4))
+            console.log('wrote admin/collections/' + slug + '/' + doc.id)
+          } catch (e) { console.error('admin item error', slug, doc.id, e.message) }
+        }))
       } catch (e) { console.error('admin list error', slug, e.message) }
     })
   )
