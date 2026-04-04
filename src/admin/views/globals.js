@@ -1,31 +1,31 @@
 import { adminLayout } from '../layout.js'
 import { payload } from '../../utils/getPayload.js'
+import { renderField } from '../fields.js'
 
 const GLOBALS_FIELDS = {
   header: () => import('../../payload/globals/Header.js').then(m => m.Header.fields),
   footer: () => import('../../payload/globals/Footer.js').then(m => m.Footer.fields),
 }
 
-// Reuse renderField from edit.js
-async function getFieldsHtml(slug, doc) {
-  const { editView } = await import('./edit.js')
-  // renderField is not exported; inline a simple fallback here
-  return Object.entries(doc)
-    .filter(([k]) => !['globalType', 'createdAt', 'updatedAt', 'id'].includes(k))
-    .map(([k, v]) => {
-      const val = typeof v === 'object' ? JSON.stringify(v, null, 2) : String(v ?? '')
-      return `<div class="form-group">
-        <label class="form-label">${k}</label>
-        <textarea name="${k}" class="input input-solid input-block h-24 resize-y font-mono text-xs">${val.replace(/</g, '&lt;')}</textarea>
-      </div>`
-    }).join('')
-}
-
 export async function globalView(slug, user) {
   const doc = await payload.findGlobal({ slug, depth: 1 })
   const title = slug.charAt(0).toUpperCase() + slug.slice(1)
 
-  const fieldsHtml = await getFieldsHtml(slug, doc)
+  let fieldsHtml = ''
+  try {
+    const getFields = GLOBALS_FIELDS[slug]
+    if (getFields) {
+      const fields = await getFields()
+      fieldsHtml = fields.map(f => renderField(f, doc[f.name])).join('')
+    }
+  } catch {
+    fieldsHtml = Object.entries(doc)
+      .filter(([k]) => !['globalType', 'createdAt', 'updatedAt', 'id', 'slug'].includes(k))
+      .map(([k, v]) => renderField(
+        { name: k, type: typeof v === 'object' ? 'textarea' : 'text', label: k },
+        typeof v === 'object' ? JSON.stringify(v, null, 2) : String(v ?? '')
+      )).join('')
+  }
 
   const body = `
 <div class="flex items-center justify-between mb-6">
@@ -48,5 +48,5 @@ export async function globalView(slug, user) {
   </aside>
 </div>`
 
-  return adminLayout({ title, body, user, breadcrumb: `globals / ${slug}` })
+  return adminLayout({ title, body, user, breadcrumb: 'globals / ' + slug, path: '/admin/globals/' + slug })
 }
