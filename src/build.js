@@ -27,7 +27,7 @@ function rewritePaths(html, depth) {
       if (p.startsWith('http') || p.startsWith('//') || p.startsWith('#')) return m
       return `href="${BASE}/${p || ''}"`
     })
-    .replace(/src="\/media\/([^"?]+)([^"]*)"/g, (m, f, q) => `src="${prefix}media/${f}"`)
+    .replace(/src="\/media\/([^"?]+)([^"]*)"/g, (m, f) => `src="${prefix}media/${f}"`)
     .replace(/srcset="([^"]*)"/g, (m, ss) =>
       `srcset="${ss.replace(/\/media\/([^?\s"]+)[^,\s"]*/g, (_, f) => `${prefix}media/${f}`)}"`
     )
@@ -36,17 +36,15 @@ function rewritePaths(html, depth) {
 
 function patchAdminHtml(html, cssDepth) {
   const cssPrefix = '../'.repeat(cssDepth)
-  const readOnlyBanner = `<div style="background:#f59e0b;color:#1c1917;padding:0.5rem 1rem;font-size:0.8rem;font-weight:600;text-align:center;position:sticky;top:0;z-index:50;">
-  Read-only preview — <a href="https://github.com/AnEntrypoint/flatload" style="text-decoration:underline;">run locally</a> to edit content
-</div>`
+  const banner = `<div style="background:#f59e0b;color:#1c1917;padding:0.4rem 1rem;font-size:0.8rem;font-weight:600;text-align:center;">Read-only preview — <a href="https://github.com/AnEntrypoint/flatload" style="text-decoration:underline;">run locally</a> to edit content</div>`
   return html
     .replace('href="/app.css"', `href="${cssPrefix}app.css"`)
     .replace(/<script[^>]*src="\/admin\/client\.js"[^>]*><\/script>/, '')
     .replace(/\s+onclick="[^"]*"/g, '')
     .replace(/<a\s[^>]*href="[^"]*\/(create|edit|logout)[^"]*"[^>]*>[^<]*<\/a>/g, '')
-    .replace(/href="\/admin(\/[^"]*)?"/, (m, p) => `href="${BASE}/admin${p || ''}/"`)
-    .replace(/href="\/admin\/collections\/([^"]+)"/, (m, slug) => `href="${BASE}/admin/collections/${slug}/"`)
-    .replace(/<body([^>]*)>/, `<body$1>\n  ${readOnlyBanner}`)
+    .replace(/href="\/admin\/collections\/([^"]+)"/g, (m, slug) => `href="${BASE}/admin/collections/${slug}/"`)
+    .replace(/href="\/admin((?:\/[^"]*)?)"(?!.*collections)/g, (m, p) => `href="${BASE}/admin${p || ''}/"`)
+    .replace(/<main([^>]*)>/, `<main$1>\n  ${banner}`)
 }
 
 async function writePage(relPath, html) {
@@ -70,7 +68,6 @@ async function copyDir(src, dest) {
 
 async function buildStaticAdmin() {
   await mkdir(path.join(DOCS, 'admin'), { recursive: true })
-
   const dashboard = await dashboardView(DEMO_USER)
   await Bun.write(path.join(DOCS, 'admin', 'index.html'), patchAdminHtml(dashboard, 1))
   console.log('wrote admin/')
