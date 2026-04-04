@@ -11,16 +11,6 @@ export function renderMedia(media, { size, className = '', alt, eager = false } 
   const resolved = resolveMedia(media)
   if (!resolved) return ''
 
-  const presets = {
-    thumbnail: { w: 300 },
-    square: { w: 500, h: 500 },
-    small: { w: 600 },
-    medium: { w: 900 },
-    large: { w: 1400 },
-    xlarge: { w: 1920 },
-    og: { w: 1200, h: 630 },
-  }
-
   const filename = resolved.filename
   const mimeType = resolved.mimeType || ''
   const altText = alt ?? resolved.alt ?? ''
@@ -28,21 +18,21 @@ export function renderMedia(media, { size, className = '', alt, eager = false } 
 
   if (!filename) return ''
 
-  const src = `/media/${encodeURIComponent(filename)}`
   const cls = className ? ` class="${className}"` : ''
+  const isExternal = filename.startsWith('http')
 
   if (mimeType.startsWith('video/')) {
+    const src = isExternal ? filename : `/media/${encodeURIComponent(filename)}`
     return `<video src="${src}" autoplay muted loop playsinline${cls}></video>`
   }
 
-  let imgSrc = src
-  if (size && presets[size]) {
-    const p = presets[size]
-    imgSrc += `?w=${p.w}${p.h ? `&h=${p.h}` : ''}`
+  if (isExternal) {
+    return `<img src="${filename}" alt="${altText}"${cls} loading="${loading}" />`
   }
 
+  const src = `/media/${encodeURIComponent(filename)}`
   const widths = [300, 600, 900, 1400]
   const srcset = widths.map((w) => `/media/${encodeURIComponent(filename)}?w=${w} ${w}w`).join(', ')
 
-  return `<img src="${imgSrc}" srcset="${srcset}" sizes="(max-width:640px) 100vw, (max-width:1024px) 75vw, 50vw" alt="${altText}"${cls} loading="${loading}" />`
+  return `<img src="${src}" srcset="${srcset}" sizes="(max-width:640px) 100vw, (max-width:1024px) 75vw, 50vw" alt="${altText}"${cls} loading="${loading}" />`
 }
