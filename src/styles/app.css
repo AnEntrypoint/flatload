@@ -17,6 +17,9 @@
 @source inline("bg-success/30");
 @source inline("border-warning");
 @source inline("bg-warning/30");
+@source inline("hero-section");
+@source inline("hero-content");
+@source inline("bg-slate-900");
 
 @theme {
   --breakpoint-sm: 40rem;
@@ -104,4 +107,26 @@
   * { @apply border-border outline-ring/50; }
   body { @apply bg-background text-foreground min-h-screen flex flex-col; }
   h1, h2, h3, h4, h5, h6 { font-weight: unset; font-size: unset; }
+}
+
+@layer utilities {
+  .hero-content h1 {
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    font-weight: 700;
+    line-height: 1.15;
+    margin-bottom: 1rem;
+    color: #fff;
+  }
+  .hero-content h2 {
+    font-size: clamp(1.5rem, 4vw, 2.5rem);
+    font-weight: 600;
+    line-height: 1.2;
+    margin-bottom: 0.75rem;
+    color: #fff;
+  }
+  .hero-content p {
+    font-size: clamp(1rem, 2.5vw, 1.25rem);
+    line-height: 1.65;
+    color: rgba(255,255,255,0.9);
+  }
 }

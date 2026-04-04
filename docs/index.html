@@ -52,14 +52,15 @@
 </header>
   <main class="flex-1">
     
-<section class="relative min-h-[70vh] md:min-h-[80vh] flex items-end bg-foreground text-background overflow-hidden">
+<section class="hero-section relative min-h-[70vh] md:min-h-[80vh] flex items-end overflow-hidden">
+  <div class="absolute inset-0 bg-slate-900"></div>
   <div class="absolute inset-0 opacity-50"><img src="https://picsum.photos/seed/hero1/1400/800" alt="Hero image" class="absolute inset-0 w-full h-full object-cover" loading="eager" /></div>
-  <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
+  <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
   <div class="relative container py-12 md:py-20 lg:py-28">
-    <div class="max-w-3xl [&_h1]:text-3xl [&_h1]:md:text-5xl [&_h1]:font-bold [&_h1]:leading-tight [&_h1]:mb-4 [&_h2]:text-2xl [&_h2]:md:text-4xl [&_h2]:font-semibold [&_p]:text-lg [&_p]:md:text-xl [&_p]:text-white/90 [&_p]:leading-relaxed">
+    <div class="hero-content max-w-3xl text-white">
       <h1>Flatload</h1><p>A flat-file CMS — edit YAML, push to git, deploy to GitHub Pages.</p>
     </div>
-    <div class="flex flex-wrap gap-3 mt-8"><a href="/flatload/posts" class="inline-flex items-center bg-white text-foreground px-6 py-3 rounded-lg hover:bg-white/90 transition-opacity font-medium shadow-sm">All posts</a><a href="/flatload/contact" class="inline-flex items-center border-2 border-white/80 text-white px-6 py-3 rounded-lg hover:bg-white hover:text-foreground transition-colors font-medium">Contact</a></div>
+    <div class="flex flex-wrap gap-3 mt-8"><a href="/flatload/posts" class="inline-flex items-center bg-white text-gray-900 px-6 py-3 rounded-lg hover:bg-white/90 transition-opacity font-medium shadow-sm">All posts</a><a href="/flatload/contact" class="inline-flex items-center border-2 border-white/80 text-white px-6 py-3 rounded-lg hover:bg-white/10 transition-colors font-medium">Contact</a></div>
   </div>
 </section>
   </main>

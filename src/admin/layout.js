@@ -4,7 +4,7 @@ export function adminLayout({ title = 'Admin', body, user = null, breadcrumb = '
   const nav = `
 <aside class="w-64 border-r border-border bg-card flex flex-col min-h-screen shrink-0">
   <div class="p-4 border-b border-border">
-    <a href="/admin" class="font-semibold text-lg">Zero-Hop Admin</a>
+    <a href="/admin" class="font-semibold text-lg">Flatload Admin</a>
   </div>
   <nav class="flex-1 p-3 flex flex-col gap-1 overflow-y-auto">
     <a href="/admin" class="px-3 py-2 rounded text-sm hover:bg-muted transition-colors">Dashboard</a>
@@ -83,7 +83,7 @@ export function adminLoginLayout({ body, error = '' }) {
 <body class="bg-background text-foreground min-h-screen flex items-center justify-center">
   <div class="w-full max-w-sm">
     <div class="text-center mb-8">
-      <h1 class="text-2xl font-bold">Zero-Hop Admin</h1>
+      <h1 class="text-2xl font-bold">Flatload Admin</h1>
       <p class="text-muted-foreground text-sm mt-1">Sign in to continue</p>
     </div>
     ${error ? `<div class="mb-4 p-3 bg-error/30 border border-error rounded text-sm">${error}</div>` : ''}
