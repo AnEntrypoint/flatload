@@ -44,6 +44,12 @@ function patchAdminHtml(html, cssDepth) {
     .replace(/<a\s[^>]*href="[^"]*\/(create|edit|logout)[^"]*"[^>]*>[^<]*<\/a>/g, '')
     .replace(/href="\/admin\/collections\/([^"]+)"/g, (m, slug) => `href="${BASE}/admin/collections/${slug}/"`)
     .replace(/href="\/admin((?:\/[^"]*)?)"(?!.*collections)/g, (m, p) => `href="${BASE}/admin${p || ''}/"`)
+    .replace(/href="\/" target="_blank"/g, `href="${BASE}/" target="_blank"`)
+    .replace(/<li[^>]*><a href="[^"]*\/globals\/[^"]*"[^>]*>[^<]*<\/a><\/li>/g, '')
+    .replace(/<li[^>]*><a href="[^"]*\/collections\/(forms|redirects|search)\/"[^>]*>[^<]*<\/a><\/li>/g, '')
+    .replace(/<li><span class="menu-title[^"]*"[^>]*>Globals<\/span><\/li>\s*/g, '')
+    .replace(/<li><span class="menu-title[^"]*"[^>]*>Plugins<\/span><\/li>\s*/g, '')
+    .replace(/<a[^>]*href="[^"]*\/(globals|forms|redirects)[^"]*"[^>]*>[^<]*<\/a>\s*/g, '')
     .replace(/<main([^>]*)>/, `<main$1>\n  ${banner}`)
 }
 

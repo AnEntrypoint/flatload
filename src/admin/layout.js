@@ -26,13 +26,6 @@ export function adminLayout({ title = 'Admin', body, user = null, breadcrumb = '
         <li class="menu-item"><a href="/admin/collections/media" class="w-full">Media</a></li>
         <li class="menu-item"><a href="/admin/collections/categories" class="w-full">Categories</a></li>
         <li class="menu-item"><a href="/admin/collections/users" class="w-full">Users</a></li>
-        <li><span class="menu-title px-2 mt-3">Globals</span></li>
-        <li class="menu-item"><a href="/admin/globals/header" class="w-full">Header</a></li>
-        <li class="menu-item"><a href="/admin/globals/footer" class="w-full">Footer</a></li>
-        <li><span class="menu-title px-2 mt-3">Plugins</span></li>
-        <li class="menu-item"><a href="/admin/collections/forms" class="w-full">Forms</a></li>
-        <li class="menu-item"><a href="/admin/collections/redirects" class="w-full">Redirects</a></li>
-        <li class="menu-item"><a href="/admin/collections/search" class="w-full">Search</a></li>
       </ul>
     </nav>
     <div class="p-4 border-t border-border/30 text-xs text-content3">
