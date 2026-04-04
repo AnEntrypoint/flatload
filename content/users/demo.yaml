@@ -1,0 +1,6 @@
+id: demo
+name: Demo Author
+email: demo@example.com
+hash: $2b$10$wHcghMrVYqhEv81tbpNOHu/Kl/CocVlN3fqTvLcmm/tOs3.xfvoXG
+createdAt: '2024-01-01T00:00:00.000Z'
+updatedAt: '2024-01-01T00:00:00.000Z'

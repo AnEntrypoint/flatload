@@ -1,0 +1,53 @@
+id: contact-form
+title: Contact Form
+submitButtonLabel: Submit
+confirmationType: message
+confirmationMessage:
+  root:
+    type: root
+    children:
+      - type: heading
+        tag: h2
+        children:
+          - type: text
+            text: The contact form has been submitted successfully.
+            detail: 0
+            format: 0
+            mode: normal
+            style: ''
+            version: 1
+        direction: ltr
+        format: ''
+        indent: 0
+        version: 1
+    direction: ltr
+    format: ''
+    indent: 0
+    version: 1
+fields:
+  - name: full-name
+    blockName: full-name
+    blockType: text
+    label: Full Name
+    required: true
+    width: 100
+  - name: email
+    blockName: email
+    blockType: email
+    label: Email
+    required: true
+    width: 100
+  - name: phone
+    blockName: phone
+    blockType: number
+    label: Phone
+    required: false
+    width: 100
+  - name: message
+    blockName: message
+    blockType: textarea
+    label: Message
+    required: true
+    width: 100
+createdAt: '2024-01-01T00:00:00.000Z'
+updatedAt: '2024-01-01T00:00:00.000Z'

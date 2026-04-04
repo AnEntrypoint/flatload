@@ -1,0 +1,25 @@
+{
+  "name": "flatload",
+  "version": "1.0.0",
+  "description": "Flat-file CMS — buildless Bun SSR, YAML content, static GH Pages output",
+  "license": "MIT",
+  "type": "module",
+  "scripts": {
+    "dev": "bun run --hot src/server.js",
+    "start": "bun run src/server.js",
+    "build:css": "bun x @tailwindcss/cli -i src/styles/app.css -o public/app.css --minify",
+    "build:client": "bun build src/client.js --outfile public/client.js --target browser --minify",
+    "build": "bun run build:css && bun run build:client && bun run src/build.js"
+  },
+  "dependencies": {
+    "js-yaml": "^4.1.0",
+    "bcryptjs": "^2.4.3",
+    "webjsx": "latest",
+    "xstate": "^5.18.0"
+  },
+  "devDependencies": {
+    "@tailwindcss/typography": "^0.5.19",
+    "tailwindcss": "^4.1.18",
+    "@tailwindcss/cli": "^4.2.2"
+  }
+}

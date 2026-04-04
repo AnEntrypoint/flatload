@@ -1,0 +1,60 @@
+id: home
+slug: home
+title: Home
+_status: published
+hero:
+  type: highImpact
+  links:
+    - link:
+        type: custom
+        appearance: default
+        label: All posts
+        url: /posts
+    - link:
+        type: custom
+        appearance: outline
+        label: Contact
+        url: /contact
+  media: image-hero-1
+  richText:
+    root:
+      type: root
+      direction: ltr
+      format: ''
+      indent: 0
+      version: 1
+      children:
+        - type: heading
+          tag: h1
+          children:
+            - type: text
+              text: Flatload
+              detail: 0
+              format: 0
+              mode: normal
+              style: ''
+              version: 1
+          direction: ltr
+          format: ''
+          indent: 0
+          version: 1
+        - type: paragraph
+          children:
+            - type: text
+              text: A flat-file CMS — edit YAML, push to git, deploy to GitHub Pages.
+              detail: 0
+              format: 0
+              mode: normal
+              style: ''
+              version: 1
+          direction: ltr
+          format: ''
+          indent: 0
+          textFormat: 0
+          version: 1
+meta:
+  image: image-hero-1
+  title: Flatload — Flat-file CMS
+layout: []
+createdAt: '2024-01-01T00:00:00.000Z'
+updatedAt: '2024-01-01T00:00:00.000Z'
