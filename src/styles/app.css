@@ -119,3 +119,16 @@
     color: rgba(255,255,255,0.9);
   }
 }
+
+
+/* === Semantic theme utility classes (RippleUI variable aliases) === */
+.bg-background { background-color: rgb(var(--backgroundPrimary)); }
+.bg-background\/95 { background-color: rgb(var(--backgroundPrimary) / 0.95); }
+.bg-background\/60 { background-color: rgb(var(--backgroundPrimary) / 0.60); }
+.text-foreground { color: rgb(var(--content1)); }
+.text-primary { color: rgb(var(--primary)); }
+.text-muted-foreground { color: rgb(var(--content2)); }
+.border-border { border-color: rgb(var(--border)); }
+.border-border\/30 { border-color: rgb(var(--border) / 0.30); }
+.hover\:text-primary:hover { color: rgb(var(--primary)); }
+.hover\:text-foreground:hover { color: rgb(var(--content1)); }
