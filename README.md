@@ -42,6 +42,18 @@ content/
 
 Edit any YAML file, rebuild, push — the site updates.
 
+## Admin
+
+The admin panel at `/admin` provides full CMS editing for all content:
+
+- **Collections**: Pages, Posts, Media, Categories, Users, Forms, Redirects, Search
+- **Globals**: Header, Footer — edited as structured forms, not raw JSON
+- **Field rendering**: driven by `src/payload/collections/*.js` and `src/payload/globals/*.js` schemas
+- **Versions**: git-backed history at `/admin/collections/{slug}/{id}/versions`
+- **Relationship picker**: inline modal search across any collection
+
+Default login: `demo@example.com` / `demo` (from `content/users/demo.yaml`)
+
 ## Stack
 
 - **Runtime**: Bun (server + build)
@@ -49,4 +61,4 @@ Edit any YAML file, rebuild, push — the site updates.
 - **Client JS**: XState (theme toggle, search debounce)
 - **Store**: js-yaml flat files, zero database
 - **Media**: file passthrough, no image resizing dependency
-- **Admin**: built-in admin UI at `/admin`
+- **Admin**: built-in admin UI at `/admin` — schema-driven field rendering, CRUD for all collections, globals editing, media library, version history
