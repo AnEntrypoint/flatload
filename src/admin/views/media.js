@@ -58,7 +58,7 @@ export async function mediaView(user, { page = 1, search = '' } = {}) {
 </div>
 ${pagination}`
 
-  return adminLayout({ title: 'Media', body, user, breadcrumb: 'media' })
+  return adminLayout({ title: 'Media', body, user, breadcrumb: 'media', path: '/admin/collections/media' })
 }
 
 export function mediaUploadView(user) {
@@ -88,5 +88,5 @@ export function mediaUploadView(user) {
   </form>
 </div>`
 
-  return adminLayout({ title: 'Upload Media', body, user, breadcrumb: 'media / upload' })
+  return adminLayout({ title: 'Upload Media', body, user, breadcrumb: 'media / upload', path: '/admin/collections/media' })
 }
