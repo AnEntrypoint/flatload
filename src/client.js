@@ -27,6 +27,18 @@ document.getElementById('theme-toggle')?.addEventListener('click', () => {
   themeActor.send({ type: 'TOGGLE' })
 })
 
+document.getElementById('theme-toggle-mobile')?.addEventListener('click', () => {
+  themeActor.send({ type: 'TOGGLE' })
+})
+
+const mobileMenuToggle = document.getElementById('mobile-menu-toggle')
+const mobileMenu = document.getElementById('mobile-menu')
+mobileMenuToggle?.addEventListener('click', () => {
+  const open = mobileMenu?.classList.toggle('hidden') === false
+  mobileMenuToggle.querySelector('.menu-open-icon')?.classList.toggle('hidden', open)
+  mobileMenuToggle.querySelector('.menu-close-icon')?.classList.toggle('hidden', !open)
+})
+
 document.querySelectorAll('.copy-code-btn').forEach((btn) => {
   btn.addEventListener('click', async () => {
     const code = btn.getAttribute('data-code') || ''
