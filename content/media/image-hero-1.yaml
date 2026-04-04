@@ -1,6 +1,6 @@
 id: image-hero-1
-filename: image-hero1.webp
-alt: Straight metallic shapes with a blue gradient
-mimeType: image/webp
+filename: https://picsum.photos/seed/hero1/1400/800
+alt: Hero image
+mimeType: image/jpeg
 createdAt: '2024-01-01T00:00:00.000Z'
 updatedAt: '2024-01-01T00:00:00.000Z'
