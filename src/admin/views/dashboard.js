@@ -49,5 +49,5 @@ export async function dashboardView(user) {
   </div>
 </div>`
 
-  return adminLayout({ title: 'Dashboard', body, user })
+  return adminLayout({ title: 'Dashboard', body, user, path: '/admin' })
 }
