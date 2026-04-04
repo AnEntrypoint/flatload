@@ -5,3 +5,4 @@ public/media/cache/
 *.db-shm
 *.db-wal
 .DS_Store
+.gm-stop-verified
