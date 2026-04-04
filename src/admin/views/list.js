@@ -43,8 +43,14 @@ export async function listView(collectionSlug, user, { page = 1, search = '' } =
   ).join('')
 
   const rows = docs.map(doc => {
-    const cells = meta.columns.map(col => `<td class="px-4 py-3 text-sm text-content1">${cellValue(doc, col)}</td>`).join('')
-    return `<tr class="border-b border-border/20 hover:bg-backgroundSecondary cursor-pointer transition-colors" onclick="location.href='/admin/collections/${collectionSlug}/${doc.id}'">${cells}</tr>`
+    const cells = meta.columns.map((col, i) => {
+      const val = cellValue(doc, col)
+      const content = i === 0
+        ? `<a href="/admin/collections/${collectionSlug}/${doc.id}" class="block -mx-4 -my-3 px-4 py-3 hover:text-primary">${val}</a>`
+        : val
+      return `<td class="px-4 py-3 text-sm text-content1">${content}</td>`
+    }).join('')
+    return `<tr class="border-b border-border/20 hover:bg-backgroundSecondary transition-colors">${cells}</tr>`
   }).join('')
 
   const emptyRow = !docs.length
