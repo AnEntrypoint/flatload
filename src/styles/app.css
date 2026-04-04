@@ -41,40 +41,40 @@
 :root {
   --background: oklch(100% 0 0deg);
   --foreground: oklch(14.5% 0 0deg);
-  --card: oklch(96.5% 0.005 265deg);
+  --card: oklch(97% 0.003 250deg);
   --card-foreground: oklch(14.5% 0 0deg);
-  --primary: oklch(20.5% 0 0deg);
+  --primary: oklch(52% 0.18 250deg);
   --primary-foreground: oklch(98.5% 0 0deg);
-  --secondary: oklch(97% 0 0deg);
-  --secondary-foreground: oklch(20.5% 0 0deg);
-  --muted: oklch(97% 0 0deg);
+  --secondary: oklch(96% 0.005 250deg);
+  --secondary-foreground: oklch(30% 0.05 250deg);
+  --muted: oklch(96% 0 0deg);
   --muted-foreground: oklch(55.6% 0 0deg);
-  --border: oklch(92.2% 0 0deg);
-  --input: oklch(92.2% 0 0deg);
-  --ring: oklch(70.8% 0 0deg);
+  --border: oklch(91% 0.005 250deg);
+  --input: oklch(91% 0.005 250deg);
+  --ring: oklch(52% 0.18 250deg);
   --radius: 0.625rem;
-  --success: oklch(78% 0.08 200deg);
-  --warning: oklch(89% 0.1 75deg);
-  --error: oklch(75% 0.15 25deg);
+  --success: oklch(62% 0.14 165deg);
+  --warning: oklch(75% 0.14 75deg);
+  --error: oklch(62% 0.22 25deg);
 }
 
 [data-theme='dark'] {
-  --background: oklch(14.5% 0 0deg);
-  --foreground: oklch(98.5% 0 0deg);
-  --card: oklch(17% 0 0deg);
-  --card-foreground: oklch(98.5% 0 0deg);
-  --primary: oklch(98.5% 0 0deg);
-  --primary-foreground: oklch(20.5% 0 0deg);
-  --secondary: oklch(26.9% 0 0deg);
-  --secondary-foreground: oklch(98.5% 0 0deg);
-  --muted: oklch(26.9% 0 0deg);
-  --muted-foreground: oklch(70.8% 0 0deg);
-  --border: oklch(26.9% 0 0deg);
-  --input: oklch(26.9% 0 0deg);
-  --ring: oklch(43.9% 0 0deg);
-  --success: oklch(28% 0.1 200deg);
-  --warning: oklch(35% 0.08 70deg);
-  --error: oklch(45% 0.1 25deg);
+  --background: oklch(14% 0.005 250deg);
+  --foreground: oklch(97% 0 0deg);
+  --card: oklch(19% 0.008 250deg);
+  --card-foreground: oklch(97% 0 0deg);
+  --primary: oklch(68% 0.18 250deg);
+  --primary-foreground: oklch(14% 0 0deg);
+  --secondary: oklch(25% 0.01 250deg);
+  --secondary-foreground: oklch(90% 0 0deg);
+  --muted: oklch(25% 0.005 250deg);
+  --muted-foreground: oklch(65% 0 0deg);
+  --border: oklch(28% 0.01 250deg);
+  --input: oklch(28% 0.01 250deg);
+  --ring: oklch(68% 0.18 250deg);
+  --success: oklch(70% 0.14 165deg);
+  --warning: oklch(78% 0.12 75deg);
+  --error: oklch(68% 0.2 25deg);
 }
 
 @theme inline {
