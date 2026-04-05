@@ -12,18 +12,12 @@
     <div class="p-4 border-b border-border/30">
       <a href="/flatload/admin/" class="font-semibold text-base text-content1">Flatload Admin</a>
     </div>
-    <nav class="menu p-3 flex-1">
+    <nav class="menu p-3 flex-1 overflow-y-auto">
       <ul class="menu-items">
-        <li class="menu-item">
-          <a href="/flatload/admin/" class="w-full">Dashboard</a>
-        </li>
+        <li class="menu-item"><a href="/flatload/admin/" class="w-full">Dashboard</a></li>
         <li><span class="menu-title px-2 mt-3">Collections</span></li>
-        <li class="menu-item"><a href="/flatload/admin/collections/pages/" class="w-full">Pages</a></li>
-        <li class="menu-item"><a href="/flatload/admin/collections/posts/" class="w-full">Posts</a></li>
-        <li class="menu-item"><a href="/flatload/admin/collections/media/" class="w-full">Media</a></li>
-        <li class="menu-item"><a href="/flatload/admin/collections/categories/" class="w-full">Categories</a></li>
-        <li class="menu-item"><a href="/flatload/admin/collections/users/" class="w-full">Users</a></li>
-      </ul>
+        <li class="menu-item"><a href="/flatload/admin/collections/pages/" class="w-full">Pages</a></li><li class="menu-item active"><a href="/flatload/admin/collections/posts/" class="w-full font-medium text-primary">Posts</a></li><li class="menu-item"><a href="/flatload/admin/collections/media/" class="w-full">Media</a></li><li class="menu-item"><a href="/flatload/admin/collections/categories/" class="w-full">Categories</a></li><li class="menu-item"><a href="/flatload/admin/collections/users/" class="w-full">Users</a></li>
+        </ul>
     </nav>
     <div class="p-4 border-t border-border/30 text-xs text-content3">
       <div class="mb-2 truncate">demo@flatload.io</div>
@@ -58,142 +52,15 @@
 </div>
 <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
   <form id="edit-form" method="POST" action="/admin/collections/posts/global-gaze" class="lg:col-span-2 space-y-4">
-    <div class="form-group">
-    <label class="form-label" for="slug">slug</label>
-    <input id="slug" name="slug" type="text" value="global-gaze" class="input input-solid input-block" />
-  </div><div class="form-group">
-    <label class="form-label" for="title">title</label>
-    <input id="title" name="title" type="text" value="Global Gaze" class="input input-solid input-block" />
-  </div><div class="form-group">
-    <label class="form-label" for="_status">_status</label>
-    <input id="_status" name="_status" type="text" value="published" class="input input-solid input-block" />
-  </div><div class="form-group">
-    <label class="form-label" for="publishedAt">publishedAt</label>
-    <input id="publishedAt" name="publishedAt" type="text" value="2024-01-22T00:00:00.000Z" class="input input-solid input-block" />
-  </div><div class="form-group">
-      <label class="form-label" for="authors">authors</label>
-      <textarea id="authors" name="authors" class="input input-solid input-block h-32 resize-y">[
-  "demo"
-]</textarea>
-    </div><div class="form-group">
-      <label class="form-label" for="categories">categories</label>
-      <textarea id="categories" name="categories" class="input input-solid input-block h-32 resize-y">[
-  "news"
-]</textarea>
-    </div><div class="form-group">
-    <label class="form-label" for="heroImage">heroImage</label>
-    <input id="heroImage" name="heroImage" type="text" value="image-2" class="input input-solid input-block" />
-  </div><div class="form-group">
-      <label class="form-label" for="content">content</label>
-      <textarea id="content" name="content" class="input input-solid input-block h-32 resize-y">{
-  "root": {
-    "type": "root",
-    "direction": "ltr",
-    "format": "",
-    "indent": 0,
-    "version": 1,
-    "children": [
-      {
-        "type": "heading",
-        "tag": "h2",
-        "children": [
-          {
-            "type": "text",
-            "text": "Exploring the world through a lens of curiosity and wonder",
-            "detail": 0,
-            "format": 0,
-            "mode": "normal",
-            "style": "",
-            "version": 1
-          }
-        ],
-        "direction": "ltr",
-        "format": "",
-        "indent": 0,
-        "version": 1
-      },
-      {
-        "type": "paragraph",
-        "children": [
-          {
-            "type": "text",
-            "text": "In every corner of the globe, stories wait to be discovered by those willing to look beyond the familiar.",
-            "detail": 0,
-            "format": 0,
-            "mode": "normal",
-            "style": "",
-            "version": 1
-          }
-        ],
-        "direction": "ltr",
-        "format": "",
-        "indent": 0,
-        "textFormat": 0,
-        "version": 1
-      },
-      {
-        "type": "paragraph",
-        "children": [
-          {
-            "type": "text",
-            "text": "Global perspectives enrich our understanding of shared humanity, reminding us that beneath cultural differences lie universal aspirations.",
-            "detail": 0,
-            "format": 0,
-            "mode": "normal",
-            "style": "",
-            "version": 1
-          }
-        ],
-        "direction": "ltr",
-        "format": "",
-        "indent": 0,
-        "textFormat": 0,
-        "version": 1
-      }
-    ]
-  }
-}</textarea>
-    </div><div class="form-group">
-      <label class="form-label" for="relatedPosts">relatedPosts</label>
-      <textarea id="relatedPosts" name="relatedPosts" class="input input-solid input-block h-32 resize-y">[
-  "digital-horizons",
-  "dollar-and-sense-the-financial-forecast"
-]</textarea>
-    </div><div class="form-group">
-      <label class="form-label" for="meta">meta</label>
-      <textarea id="meta" name="meta" class="input input-solid input-block h-32 resize-y">{
-  "title": "Global Gaze",
-  "description": "Stories from around the world."
-}</textarea>
-    </div><div class="form-group">
-      <label class="form-label" for="populatedAuthors">populatedAuthors</label>
-      <textarea id="populatedAuthors" name="populatedAuthors" class="input input-solid input-block h-32 resize-y">[
-  {
-    "id": "demo",
-    "name": "Demo Author"
-  }
-]</textarea>
-    </div>
+    <div class="form-group"><label class="form-label" for="title">Title</label><input id="title" name="title" type="text" value="Global Gaze" class="input input-solid input-block"  /></div><div class="form-group"><label class="form-label" for="slug">Slug</label><input id="slug" name="slug" type="text" value="global-gaze" class="input input-solid input-block"  /></div><div class="form-group"><label class="form-label">Hero Image</label><div class="p-3 border border-border rounded mb-2"><img src="/media/https://picsum.photos/seed/post2/900/600?preset=thumbnail" alt="" class="w-20 h-20 object-cover rounded mb-2" /><div class="text-sm">https://picsum.photos/seed/post2/900/600</div></div><input name="heroImage" type="hidden" value="image-2" /><a href="/flatload/admin/collections/media/" class="btn btn-ghost btn-sm" target="_blank">Browse Media</a></div><div class="form-group"><label class="form-label">Content</label><div id="content-editor" class="border border-border rounded min-h-48 p-3 prose max-w-none" contenteditable="true"><h2 class="font-bold mb-2">Exploring the world through a lens of curiosity and wonder</h2><p class="mb-2">In every corner of the globe, stories wait to be discovered by those willing to look beyond the familiar.</p><p class="mb-2">Global perspectives enrich our understanding of shared humanity, reminding us that beneath cultural differences lie universal aspirations.</p></div><input type="hidden" name="content" id="content-value" value='{"root":{"type":"root","direction":"ltr","format":"","indent":0,"version":1,"children":[{"type":"heading","tag":"h2","children":[{"type":"text","text":"Exploring the world through a lens of curiosity and wonder","detail":0,"format":0,"mode":"normal","style":"","version":1}],"direction":"ltr","format":"","indent":0,"version":1},{"type":"paragraph","children":[{"type":"text","text":"In every corner of the globe, stories wait to be discovered by those willing to look beyond the familiar.","detail":0,"format":0,"mode":"normal","style":"","version":1}],"direction":"ltr","format":"","indent":0,"textFormat":0,"version":1},{"type":"paragraph","children":[{"type":"text","text":"Global perspectives enrich our understanding of shared humanity, reminding us that beneath cultural differences lie universal aspirations.","detail":0,"format":0,"mode":"normal","style":"","version":1}],"direction":"ltr","format":"","indent":0,"textFormat":0,"version":1}]}}' /><script>(function(){var el=document.getElementById('content-editor');var inp=document.getElementById('content-value');if(el)el.addEventListener('input',function(){inp.value=JSON.stringify({root:{type:'root',version:1,children:[{type:'paragraph',version:1,children:[{type:'text',version:1,text:el.innerText,format:0}]}]}});});})()</script></div><div class="form-group" data-rel-field="relatedPosts"><label class="form-label">Related Posts</label><div class="mb-2"><span class="badge badge-outline mr-1">Digital Horizons <button type="button" data-remove-rel="relatedPosts" data-id="digital-horizons" class="ml-1 hover:text-error">×</button></span><span class="badge badge-outline mr-1">Dollar and Sense: The Financial Forecast <button type="button" data-remove-rel="relatedPosts" data-id="dollar-and-sense-the-financial-forecast" class="ml-1 hover:text-error">×</button></span></div><input name="relatedPosts" type="hidden" value="digital-horizons,dollar-and-sense-the-financial-forecast" /><button type="button" class="btn btn-ghost btn-sm">+ Add Related Posts</button></div><div class="form-group" data-rel-field="categories"><label class="form-label">Categories</label><div class="mb-2"><span class="badge badge-outline mr-1">News <button type="button" data-remove-rel="categories" data-id="news" class="ml-1 hover:text-error">×</button></span></div><input name="categories" type="hidden" value="news" /><button type="button" class="btn btn-ghost btn-sm">+ Add Categories</button></div><div class="form-group" data-rel-field="authors"><label class="form-label">Authors</label><div class="mb-2"><span class="badge badge-outline mr-1">Demo Author <button type="button" data-remove-rel="authors" data-id="demo" class="ml-1 hover:text-error">×</button></span></div><input name="authors" type="hidden" value="demo" /><button type="button" class="btn btn-ghost btn-sm">+ Add Authors</button></div><div class="form-group"><label class="form-label" for="publishedAt">Published At</label><input id="publishedAt" name="publishedAt" type="datetime-local" value="2024-01-22T00:00" class="input input-solid" /></div><fieldset class="border border-border rounded p-4 mb-4"><legend class="text-sm font-medium px-2">SEO</legend><div class="form-group"><label class="form-label" for="meta.title">Meta Title</label><input id="meta.title" name="meta.title" type="text" value="Global Gaze" class="input input-solid input-block"  /></div><div class="form-group"><label class="form-label" for="meta.description">Meta Description</label><textarea id="meta.description" name="meta.description" class="input input-solid input-block h-32 resize-y">Stories from around the world.</textarea></div><div class="form-group"><label class="form-label">Meta Image</label><div class="p-3 border border-border rounded mb-2"><div class="text-sm text-content3">No file selected</div></div><input name="meta.image" type="hidden" value="" /><a href="/flatload/admin/collections/media/" class="btn btn-ghost btn-sm" target="_blank">Browse Media</a></div></fieldset>
     <button type="submit" class="btn btn-primary">Save Changes</button>
   </form>
   <aside class="space-y-4">
     <div class="card bg-card border border-border">
       <div class="card-body gap-3">
         <h3 class="font-medium text-sm">Document</h3>
-        
-  <div class="form-group">
-    <label class="form-label">Status</label>
-    <select name="_status" class="select select-solid">
-      <option value="draft" >Draft</option>
-      <option value="published" selected>Published</option>
-    </select>
-  </div>
-        
-  <div class="text-xs text-muted-foreground mt-4 pt-4 border-t border-border space-y-1">
-    <div>ID: <span class="font-mono">global-gaze</span></div>
-    <div>Created: 1/22/2024, 12:00:00 AM</div>
-    <div>Updated: 1/22/2024, 12:00:00 AM</div>
-  </div>
+        <div class="form-group"><label class="form-label">Status</label><select name="_status" class="select select-solid"><option value="draft" >Draft</option><option value="published" selected>Published</option></select></div>
+        <div class="text-xs text-muted-foreground mt-4 pt-4 border-t border-border space-y-1"><div>ID: <span class="font-mono">global-gaze</span></div><div>Created: 1/22/2024, 12:00:00 AM</div><div>Updated: 1/22/2024, 12:00:00 AM</div></div>
         <div class="flex flex-col gap-2 mt-4">
           <button form="edit-form" type="submit" class="btn btn-primary btn-sm btn-block">Save</button>
           <a href="/global-gaze" target="_blank" class="btn btn-ghost btn-sm btn-block">View ↗</a>
