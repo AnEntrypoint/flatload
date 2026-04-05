@@ -2,8 +2,8 @@ import { adminLayout } from '../layout.js'
 import { payload } from '../../utils/getPayload.js'
 
 const COLLECTION_META = {
-  pages:      { label: 'Pages',      columns: ['title', 'slug', 'updatedAt'], defaultSort: '-updatedAt' },
-  posts:      { label: 'Posts',      columns: ['title', 'slug', 'publishedAt', 'updatedAt'], defaultSort: '-updatedAt' },
+  pages:      { label: 'Pages',      columns: ['title', 'slug', '_status', 'updatedAt'], defaultSort: '-updatedAt' },
+  posts:      { label: 'Posts',      columns: ['title', 'slug', '_status', 'publishedAt', 'updatedAt'], defaultSort: '-updatedAt' },
   media:      { label: 'Media',      columns: ['filename', 'mimeType', 'updatedAt'], defaultSort: '-updatedAt' },
   categories: { label: 'Categories', columns: ['title', 'slug', 'updatedAt'], defaultSort: 'title' },
   users:      { label: 'Users',      columns: ['name', 'email', 'updatedAt'], defaultSort: '-updatedAt' },
@@ -12,14 +12,26 @@ const COLLECTION_META = {
   search:     { label: 'Search',     columns: ['title', 'slug', 'updatedAt'], defaultSort: '-updatedAt' },
 }
 
+function colLabel(col) {
+  if (col === '_status') return 'Status'
+  return col.replace(/([A-Z])/g, ' $1').replace(/^./, s => s.toUpperCase())
+}
+
 function cellValue(doc, col) {
   const val = doc[col]
+  if (col === '_status') {
+    const s = val || 'draft'
+    return s === 'published'
+      ? '<span class="badge badge-success text-xs">Published</span>'
+      : '<span class="badge badge-outline text-xs text-content3">Draft</span>'
+  }
   if (!val && val !== 0) return '<span class="text-content3">—</span>'
   if (col.includes('At') && typeof val === 'string') return new Date(val).toLocaleDateString()
   if (col === 'filename' && doc.mimeType?.startsWith('image/')) {
     return `<img src="/media/${val}?w=40&h=40" alt="" class="w-10 h-10 object-cover rounded inline-block mr-2" />${val}`
   }
-  if (typeof val === 'object') return JSON.stringify(val).slice(0, 50)
+  if (Array.isArray(val)) return val.map(v => typeof v === 'object' ? (v.title || v.name || v.email || v.id || '?') : v).join(', ')
+  if (typeof val === 'object') return val.title || val.name || val.email || val.id || JSON.stringify(val).slice(0, 40)
   return String(val)
 }
 
@@ -39,7 +51,7 @@ export async function listView(collectionSlug, user, { page = 1, search = '' } =
   const { docs, totalDocs, totalPages, page: currentPage } = result
 
   const headers = meta.columns.map(c =>
-    `<th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-content2">${c}</th>`
+    `<th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-content2">${colLabel(c)}</th>`
   ).join('')
 
   const rows = docs.map(doc => {
