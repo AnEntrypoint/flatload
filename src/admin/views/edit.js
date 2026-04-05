@@ -15,6 +15,38 @@ const COLLECTION_FIELDS = {
   search:     () => Promise.resolve([{ name: 'title', type: 'text', label: 'Title' }, { name: 'slug', type: 'text', label: 'Slug' }]),
 }
 
+const COMPUTED_FIELDS = new Set(['populatedAuthors', 'populatedDocs', 'hash', 'salt', '__v'])
+
+async function resolveDocDepth1(collectionSlug, doc) {
+  if (!doc) return doc
+  const resolved = { ...doc }
+  const getFields = COLLECTION_FIELDS[collectionSlug]
+  if (!getFields) return resolved
+  let fields
+  try { fields = await getFields() } catch { return resolved }
+  await Promise.all(fields.map(async field => {
+    const val = resolved[field.name]
+    if (!val) return
+    if (field.type === 'upload' && typeof val === 'string') {
+      try {
+        const media = payload.findByID({ collection: field.relationTo || 'media', id: val })
+        if (media) resolved[field.name] = media
+      } catch {}
+    } else if (field.type === 'relationship') {
+      const col = Array.isArray(field.relationTo) ? field.relationTo[0] : field.relationTo
+      if (!col) return
+      const ids = Array.isArray(val) ? val.filter(v => typeof v === 'string') : (typeof val === 'string' ? [val] : [])
+      if (!ids.length) return
+      const docs = ids.map(id => { try { return payload.findByID({ collection: col, id }) || { id } } catch { return { id } } })
+      const byId = Object.fromEntries(docs.filter(Boolean).map(d => [d.id, d]))
+      const origArr = Array.isArray(val) ? val : [val]
+      const merged = origArr.map(v => (typeof v === 'string' ? (byId[v] || { id: v }) : v))
+      resolved[field.name] = field.hasMany ? merged : merged[0]
+    }
+  }))
+  return resolved
+}
+
 async function getFieldsHtml(collectionSlug, doc) {
   const getFields = COLLECTION_FIELDS[collectionSlug]
   if (!getFields) throw new Error('no schema')
@@ -24,8 +56,13 @@ async function getFieldsHtml(collectionSlug, doc) {
 
 function fallbackFieldsHtml(doc) {
   return Object.entries(doc)
-    .filter(([k]) => !['id', 'createdAt', 'updatedAt', '__v'].includes(k))
-    .map(([k, v]) => renderTextField({ name: k, label: k }, typeof v === 'object' ? JSON.stringify(v, null, 2) : v))
+    .filter(([k]) => !['id', 'createdAt', 'updatedAt', '__v'].includes(k) && !COMPUTED_FIELDS.has(k))
+    .map(([k, v]) => {
+      if (typeof v === 'object' && v !== null) {
+        return renderTextField({ name: k, label: k, textarea: true }, JSON.stringify(v, null, 2))
+      }
+      return renderTextField({ name: k, label: k }, v)
+    })
     .join('')
 }
 
@@ -34,7 +71,8 @@ function statusSelect(current) {
 }
 
 export async function editView(collectionSlug, id, user) {
-  const doc = await payload.findByID({ collection: collectionSlug, id, depth: 1 })
+  const rawDoc = await payload.findByID({ collection: collectionSlug, id, depth: 1 })
+  const doc = await resolveDocDepth1(collectionSlug, rawDoc)
   const label = collectionSlug.charAt(0).toUpperCase() + collectionSlug.slice(1, -1)
   let fieldsHtml
   try { fieldsHtml = await getFieldsHtml(collectionSlug, doc) } catch { fieldsHtml = fallbackFieldsHtml(doc) }
