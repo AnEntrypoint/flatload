@@ -2,6 +2,35 @@ export function fieldLabel(field) {
   return field.label || field.name?.replace(/([A-Z])/g, ' $1').replace(/^./, s => s.toUpperCase()) || field.name
 }
 
+function escapeHtml(str) {
+  return String(str || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+}
+
+function lexicalToHtml(node) {
+  if (!node) return ''
+  if (node.type === 'text') {
+    let t = escapeHtml(node.text || '')
+    if (node.format & 1) t = `<strong>${t}</strong>`
+    if (node.format & 2) t = `<em>${t}</em>`
+    if (node.format & 8) t = `<u>${t}</u>`
+    if (node.format & 16) t = `<s>${t}</s>`
+    if (node.format & 32) t = `<code>${t}</code>`
+    return t
+  }
+  const children = (node.children || []).map(lexicalToHtml).join('')
+  switch (node.type) {
+    case 'root':      return children
+    case 'paragraph': return `<p class="mb-2">${children || '<br>'}</p>`
+    case 'heading':   return `<${node.tag} class="font-bold mb-2">${children}</${node.tag}>`
+    case 'list':      return node.listType === 'number' ? `<ol class="list-decimal ml-4 mb-2">${children}</ol>` : `<ul class="list-disc ml-4 mb-2">${children}</ul>`
+    case 'listitem':  return `<li>${children}</li>`
+    case 'link':      return `<a href="${escapeHtml(node.url || '')}" class="underline text-primary">${children}</a>`
+    case 'quote':     return `<blockquote class="border-l-4 border-border pl-4 italic mb-2">${children}</blockquote>`
+    case 'code':      return `<pre class="bg-muted p-2 rounded text-sm mb-2"><code>${children}</code></pre>`
+    default:          return children
+  }
+}
+
 export function renderTextField(field, value = '', prefix = '') {
   const name = `${prefix}${field.name}`
   const val = String(value ?? '')
@@ -45,8 +74,14 @@ function renderDateField(field, value, prefix = '') {
 
 function renderUploadField(field, value, prefix = '') {
   const name = `${prefix}${field.name}`
-  const preview = value?.filename ? `<img src="/media/${value.filename}?preset=thumbnail" alt="" class="w-20 h-20 object-cover rounded mb-2" /><div class="text-sm">${value.filename}</div>` : '<div class="text-sm text-muted-foreground">No file selected</div>'
-  return `<div class="form-group"><label class="form-label">${fieldLabel(field)}</label><div class="p-3 border border-border rounded mb-2">${preview}</div><input name="${name}" type="hidden" value="${value?.id || ''}" /><a href="/admin/collections/media" class="btn btn-ghost btn-sm" target="_blank">Browse Media</a></div>`
+  const id = typeof value === 'object' ? value?.id : value
+  const filename = value?.filename
+  const preview = filename
+    ? `<img src="/media/${filename}?preset=thumbnail" alt="" class="w-20 h-20 object-cover rounded mb-2" /><div class="text-sm">${filename}</div>`
+    : id
+      ? `<div class="text-sm text-content2">ID: ${id}</div>`
+      : '<div class="text-sm text-content3">No file selected</div>'
+  return `<div class="form-group"><label class="form-label">${fieldLabel(field)}</label><div class="p-3 border border-border rounded mb-2">${preview}</div><input name="${name}" type="hidden" value="${id || ''}" /><a href="/admin/collections/media" class="btn btn-ghost btn-sm" target="_blank">Browse Media</a></div>`
 }
 
 function renderRelationshipField(field, value, prefix = '') {
@@ -59,8 +94,10 @@ function renderRelationshipField(field, value, prefix = '') {
 
 function renderRichTextField(field, value, prefix = '') {
   const name = `${prefix}${field.name}`
-  const json = JSON.stringify(value || { root: { children: [], type: 'root', version: 1 } }).replace(/</g, '\\u003c').replace(/>/g, '\\u003e')
-  return `<div class="form-group"><label class="form-label">${fieldLabel(field)}</label><div id="${name}-editor" class="border border-border rounded min-h-48 p-3 prose max-w-none" contenteditable="true"></div><input type="hidden" name="${name}" id="${name}-value" value='${json.replace(/'/g, "&#39;")}' /><script>(function(){var el=document.getElementById('${name}-editor');var inp=document.getElementById('${name}-value');var d=${json};if(el&&d?.root?.children){el.textContent=d.root.children.map(function(n){return n.children?.map(function(c){return c.text||''}).join('')||''}).join('\\n\\n');}if(el)el.addEventListener('input',function(){inp.value=JSON.stringify({root:{type:'root',version:1,children:[{type:'paragraph',version:1,children:[{type:'text',version:1,text:el.textContent,format:0}]}]}});});})()</script></div>`
+  const data = value || { root: { children: [], type: 'root', version: 1 } }
+  const prerendered = lexicalToHtml(data.root || data)
+  const json = JSON.stringify(data).replace(/</g, '\\u003c').replace(/>/g, '\\u003e')
+  return `<div class="form-group"><label class="form-label">${fieldLabel(field)}</label><div id="${name}-editor" class="border border-border rounded min-h-48 p-3 prose max-w-none" contenteditable="true">${prerendered}</div><input type="hidden" name="${name}" id="${name}-value" value='${json.replace(/'/g, "&#39;")}' /><script>(function(){var el=document.getElementById('${name}-editor');var inp=document.getElementById('${name}-value');if(el)el.addEventListener('input',function(){inp.value=JSON.stringify({root:{type:'root',version:1,children:[{type:'paragraph',version:1,children:[{type:'text',version:1,text:el.innerText,format:0}]}]}});});})()</script></div>`
 }
 
 function renderGroupField(field, value, prefix = '') {

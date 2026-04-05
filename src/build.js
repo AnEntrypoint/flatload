@@ -13,7 +13,7 @@ import path from 'path'
 const BASE = '/flatload'
 const DOCS = path.resolve('docs')
 const DEMO_USER = { email: 'demo@flatload.io', name: 'Demo' }
-const ADMIN_COLLECTIONS = ['posts', 'pages', 'media', 'categories', 'users']
+const ADMIN_COLLECTIONS = ['posts', 'pages', 'media', 'categories', 'users', 'forms', 'redirects']
 
 function makeReq(url) {
   return new Request(`http://localhost:3000${url}`)

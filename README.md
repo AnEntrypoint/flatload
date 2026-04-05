@@ -46,9 +46,12 @@ Edit any YAML file, rebuild, push — the site updates.
 
 The admin panel at `/admin` provides full CMS editing for all content:
 
-- **Collections**: Pages, Posts, Media, Categories, Users, Forms, Redirects, Search
+- **Collections**: Pages, Posts, Media, Categories, Users, Forms, Redirects, Search — all with static demo pages on GitHub Pages
 - **Globals**: Header, Footer — edited as structured forms, not raw JSON
 - **Field rendering**: driven by `src/payload/collections/*.js` and `src/payload/globals/*.js` schemas
+- **Rich text**: Lexical JSON pre-rendered as formatted HTML (headings, paragraphs, bold, italic, lists) — content visible without JS
+- **Relationships**: string IDs auto-resolved to labels at edit time (authors show names, categories show titles, uploads show thumbnails)
+- **List views**: human-readable column headers, Published/Draft status badges for posts and pages
 - **Versions**: git-backed history at `/admin/collections/{slug}/{id}/versions`
 - **Relationship picker**: inline modal search across any collection
 
