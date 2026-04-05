@@ -57,7 +57,7 @@ function renderPasswordField(field, prefix = '') {
 
 function renderCheckboxField(field, value, prefix = '') {
   const name = `${prefix}${field.name}`
-  return `<div class="form-group flex items-center gap-3"><input id="${name}" name="${name}" type="checkbox" value="true" ${value ? 'checked' : ''} class="checkbox" /><label class="form-label mb-0" for="${name}">${fieldLabel(field)}</label></div>`
+  return `<div class="form-group flex items-center gap-3"><input type="hidden" name="${name}" value="false" /><input id="${name}" name="${name}" type="checkbox" value="true" ${value ? 'checked' : ''} class="checkbox" /><label class="form-label mb-0" for="${name}">${fieldLabel(field)}</label></div>`
 }
 
 function renderSelectField(field, value, prefix = '') {
@@ -78,26 +78,27 @@ function renderUploadField(field, value, prefix = '') {
   const filename = value?.filename
   const preview = filename
     ? `<img src="/media/${filename}?preset=thumbnail" alt="" class="w-20 h-20 object-cover rounded mb-2" /><div class="text-sm">${filename}</div>`
-    : id
-      ? `<div class="text-sm text-content2">ID: ${id}</div>`
-      : '<div class="text-sm text-content3">No file selected</div>'
-  return `<div class="form-group"><label class="form-label">${fieldLabel(field)}</label><div class="p-3 border border-border rounded mb-2">${preview}</div><input name="${name}" type="hidden" value="${id || ''}" /><a href="/admin/collections/media" class="btn btn-ghost btn-sm" target="_blank">Browse Media</a></div>`
+    : id ? `<div class="text-sm text-content2">ID: ${id}</div>` : '<div class="text-sm text-content3">No file selected</div>'
+  const esc = name.replace(/'/g, "\\'")
+  return `<div class="form-group" data-upload-field="${name}"><label class="form-label">${fieldLabel(field)}</label><div class="p-3 border border-border rounded mb-2" id="${name}-preview">${preview}</div><input name="${name}" type="hidden" id="${name}-upload-id" value="${id || ''}" /><div class="flex gap-2"><button type="button" class="btn btn-ghost btn-sm" data-media-picker="${name}">Choose</button>${id ? `<button type="button" class="btn btn-ghost btn-sm text-error" data-clear-upload="${name}">Clear</button>` : ''}</div></div>`
 }
 
 function renderRelationshipField(field, value, prefix = '') {
   const name = `${prefix}${field.name}`
   const current = Array.isArray(value) ? value : (value ? [value] : [])
-  const labels = current.map(v => { const id = typeof v === 'object' ? v.id : v; const l = typeof v === 'object' ? (v.title || v.name || v.filename || v.email || id) : id; return `<span class="badge badge-outline mr-1">${l} <button type="button" data-remove-rel="${name}" data-id="${id}" class="ml-1 hover:text-error">×</button></span>` }).join('')
+  const labels = current.map(v => { const id = typeof v === 'object' ? v.id : v; const l = typeof v === 'object' ? (v.title || v.name || v.filename || v.email || id) : id; return `<span class="badge badge-outline mr-1">${l} <button type="button" data-remove-rel="${name}" data-id="${id}" class="ml-1 hover:text-error">&times;</button></span>` }).join('')
   const cols = Array.isArray(field.relationTo) ? field.relationTo.join(',') : (field.relationTo || '')
-  return `<div class="form-group" data-rel-field="${name}"><label class="form-label">${fieldLabel(field)}</label><div class="mb-2">${labels || '<span class="text-sm text-muted-foreground">None</span>'}</div><input name="${name}" type="hidden" value="${current.map(v => typeof v === 'object' ? v.id : v).join(',')}" /><button type="button" class="btn btn-ghost btn-sm" onclick="adminOpenRelPicker('${name}','${cols}',${field.hasMany ? 'true' : 'false'})">+ Add ${fieldLabel(field)}</button></div>`
+  return `<div class="form-group" data-rel-field="${name}"><label class="form-label">${fieldLabel(field)}</label><div class="mb-2 flex flex-wrap gap-1" data-rel-display>${labels || '<span class="text-sm text-muted-foreground">None</span>'}</div><input name="${name}" type="hidden" value="${current.map(v => typeof v === 'object' ? v.id : v).join(',')}" /><button type="button" class="btn btn-ghost btn-sm" onclick="adminOpenRelPicker('${name}','${cols}',${field.hasMany ? 'true' : 'false'})">+ Add ${fieldLabel(field)}</button></div>`
 }
 
 function renderRichTextField(field, value, prefix = '') {
   const name = `${prefix}${field.name}`
-  const data = value || { root: { children: [], type: 'root', version: 1 } }
+  let data = value
+  if (typeof data === 'string') { try { data = JSON.parse(data) } catch { data = null } }
+  data = data || { root: { children: [], type: 'root', version: 1 } }
   const prerendered = lexicalToHtml(data.root || data)
-  const json = JSON.stringify(data).replace(/</g, '\\u003c').replace(/>/g, '\\u003e')
-  return `<div class="form-group"><label class="form-label">${fieldLabel(field)}</label><div id="${name}-editor" class="border border-border rounded min-h-48 p-3 prose max-w-none" contenteditable="true">${prerendered}</div><input type="hidden" name="${name}" id="${name}-value" value='${json.replace(/'/g, "&#39;")}' /><script>(function(){var el=document.getElementById('${name}-editor');var inp=document.getElementById('${name}-value');if(el)el.addEventListener('input',function(){inp.value=JSON.stringify({root:{type:'root',version:1,children:[{type:'paragraph',version:1,children:[{type:'text',version:1,text:el.innerText,format:0}]}]}});});})()</script></div>`
+  const json = JSON.stringify(data).replace(/</g, '\\u003c').replace(/>/g, '\\u003e').replace(/'/g, '\\u0027')
+  return `<div class="form-group" data-rte="${name}"><label class="form-label">${fieldLabel(field)}</label><div class="rte-wrap border border-border rounded overflow-hidden"><div class="rte-toolbar flex flex-wrap items-center gap-1 p-2 bg-muted border-b border-border text-xs select-none"><button type="button" class="rte-btn px-2 py-1 rounded hover:bg-background font-bold" data-cmd="bold">B</button><button type="button" class="rte-btn px-2 py-1 rounded hover:bg-background italic" data-cmd="italic">I</button><button type="button" class="rte-btn px-2 py-1 rounded hover:bg-background underline" data-cmd="underline">U</button><button type="button" class="rte-btn px-2 py-1 rounded hover:bg-background line-through" data-cmd="strikeThrough">S</button><button type="button" class="rte-btn px-2 py-1 rounded hover:bg-background font-mono" data-cmd="code">{ }</button><span class="mx-1 text-border">|</span><button type="button" class="rte-btn px-2 py-1 rounded hover:bg-background font-bold" data-cmd="h1">H1</button><button type="button" class="rte-btn px-2 py-1 rounded hover:bg-background font-bold" data-cmd="h2">H2</button><button type="button" class="rte-btn px-2 py-1 rounded hover:bg-background font-bold" data-cmd="h3">H3</button><button type="button" class="rte-btn px-2 py-1 rounded hover:bg-background" data-cmd="p">¶</button><span class="mx-1 text-border">|</span><button type="button" class="rte-btn px-2 py-1 rounded hover:bg-background" data-cmd="insertOrderedList">OL</button><button type="button" class="rte-btn px-2 py-1 rounded hover:bg-background" data-cmd="insertUnorderedList">UL</button><button type="button" class="rte-btn px-2 py-1 rounded hover:bg-background" data-cmd="blockquote">"</button><button type="button" class="rte-btn px-2 py-1 rounded hover:bg-background" data-cmd="link">&#128279;</button></div><div id="${name}-editor" class="rte-editor min-h-48 p-3 prose max-w-none outline-none" contenteditable="true">${prerendered}</div></div><input type="hidden" name="${name}" id="${name}-value" value='${json}' /></div>`
 }
 
 function renderGroupField(field, value, prefix = '') {

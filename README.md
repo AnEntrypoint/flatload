@@ -49,11 +49,15 @@ The admin panel at `/admin` provides full CMS editing for all content:
 - **Collections**: Pages, Posts, Media, Categories, Users, Forms, Redirects, Search — all with static demo pages on GitHub Pages
 - **Globals**: Header, Footer — edited as structured forms, not raw JSON
 - **Field rendering**: driven by `src/payload/collections/*.js` and `src/payload/globals/*.js` schemas
-- **Rich text**: Lexical JSON pre-rendered as formatted HTML (headings, paragraphs, bold, italic, lists) — content visible without JS
-- **Relationships**: string IDs auto-resolved to labels at edit time (authors show names, categories show titles, uploads show thumbnails)
+- **Rich text editor**: formatting toolbar (Bold, Italic, Underline, Strikethrough, Code, H1–H3, OL, UL, Blockquote, Link) — DOM serializes to Lexical AST JSON on every keystroke (`public/admin-richtext.js`)
+- **Blocks**: adding a block fetches schema-driven field HTML from `/admin/api/block-template` — correct fields for every block type
+- **Relationships**: inline picker modal, remove badges work, string IDs resolved to labels at edit time
+- **Upload fields**: inline media picker modal with thumbnail grid; clear button
+- **Checkboxes**: hidden-input trick ensures unchecked saves `false`, not the previous value
+- **Field clearing**: empty text input saves `null`, overwriting the stored value (password fields excluded)
+- **Dirty state**: browser warns before navigating away from unsaved edit/global forms
 - **List views**: human-readable column headers, Published/Draft status badges for posts and pages
 - **Versions**: git-backed history at `/admin/collections/{slug}/{id}/versions`
-- **Relationship picker**: inline modal search across any collection
 
 Default login: `demo@example.com` / `demo` (from `content/users/demo.yaml`)
 

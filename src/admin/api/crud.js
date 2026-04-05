@@ -2,6 +2,25 @@ import { find, findByID, create, update, del, updateGlobal } from '../../store/i
 import { writeFileSync, mkdirSync } from 'fs'
 import { join, resolve } from 'path'
 
+function setDeep(obj, path, value) {
+  const parts = path.replace(/\[(\d+)\]/g, '.$1').split('.')
+  let cur = obj
+  for (let i = 0; i < parts.length - 1; i++) {
+    const part = parts[i]
+    const next = parts[i + 1]
+    if (!cur[part]) cur[part] = /^\d+$/.test(next) ? [] : {}
+    cur = cur[part]
+  }
+  const last = parts[parts.length - 1]
+  if (value === 'true') value = true
+  else if (value === 'false') value = false
+  else if (value === '') value = null
+  else if (typeof value === 'string' && (value[0] === '{' || value[0] === '[')) {
+    try { value = JSON.parse(value) } catch {}
+  }
+  cur[last] = value
+}
+
 function parseFormData(formData) {
   const flat = {}
   for (const [key, val] of formData.entries()) flat[key] = val
@@ -14,25 +33,10 @@ function parseFormData(formData) {
   return result
 }
 
-function setDeep(obj, path, value) {
-  const parts = path.replace(/\[(\d+)\]/g, '.$1').split('.')
-  let cur = obj
-  for (let i = 0; i < parts.length - 1; i++) {
-    const part = parts[i]
-    const next = parts[i + 1]
-    if (!cur[part]) cur[part] = /^\d+$/.test(next) ? [] : {}
-    cur = cur[part]
-  }
-  const last = parts[parts.length - 1]
-  if (value === 'true') value = true
-  if (value === 'false') value = false
-  if (value === '') value = undefined
-  if (value !== undefined) cur[last] = value
-}
-
 export async function updateHandler(req, collection, id) {
   const form = await req.formData()
   const data = parseFormData(form)
+  if (data.password == null) delete data.password
   try {
     update({ collection, id, data })
     return new Response(null, { status: 302, headers: { Location: `/admin/collections/${collection}/${id}?saved=1` } })
