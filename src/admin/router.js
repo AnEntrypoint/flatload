@@ -1,7 +1,7 @@
 import { loginView } from './views/login.js'
 import { dashboardView } from './views/dashboard.js'
 import { listView } from './views/list.js'
-import { editView, createView } from './views/edit.js'
+import { editView, createView, blockTemplateHtml } from './views/edit.js'
 import { globalView } from './views/globals.js'
 import { mediaView, mediaUploadView } from './views/media.js'
 import { versionsView } from './views/versions.js'
@@ -38,6 +38,15 @@ export async function adminRouter(req) {
   const apiDelete = path.match(/^\/admin\/api\/collections\/([^/]+)\/([^/]+)$/)
   if (apiDelete && method === 'DELETE') return deleteHandler(apiDelete[1], apiDelete[2])
 
+  if (path === '/admin/api/block-template') {
+    const collection = url.searchParams.get('collection') || ''
+    const field = url.searchParams.get('field') || ''
+    const blockType = url.searchParams.get('blockType') || ''
+    const idx = parseInt(url.searchParams.get('idx') || '0', 10)
+    const inner = await blockTemplateHtml(collection, field, blockType, idx)
+    return new Response(inner, { headers: { 'Content-Type': 'text/html' } })
+  }
+
   const versionsMatch = path.match(/^\/admin\/collections\/([^/]+)\/([^/]+)\/versions$/)
   if (versionsMatch) return html(await versionsView(versionsMatch[1], versionsMatch[2], user))
 
@@ -67,6 +76,11 @@ export async function adminRouter(req) {
   if (path === '/admin/client.js') {
     const file = Bun.file('public/admin-client.js')
     return new Response(await file.exists() ? file : '// admin client', { headers: { 'Content-Type': 'application/javascript' } })
+  }
+
+  if (path === '/admin/richtext.js') {
+    const file = Bun.file('public/admin-richtext.js')
+    return new Response(await file.exists() ? file : '', { headers: { 'Content-Type': 'application/javascript' } })
   }
 
   return new Response('Not found', { status: 404 })
