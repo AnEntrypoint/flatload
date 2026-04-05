@@ -70,6 +70,7 @@ export function adminLayout({ title = 'Admin', body, user = null, breadcrumb = '
       ${body}
     </main>
   </div>
+  <script defer src="/admin/richtext.js"></script>
   <script type="module" src="/admin/client.js"></script>
 </body>
 </html>`
