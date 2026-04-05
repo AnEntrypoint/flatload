@@ -86,5 +86,5 @@ export async function listView(collectionSlug, user, { page = 1, search = '' } =
 </div>
 ${pagination}`
 
-  return adminLayout({ title: meta.label, body, user, breadcrumb: meta.label })
+  return adminLayout({ title: meta.label, body, user, breadcrumb: meta.label, path: `/admin/collections/${collectionSlug}` })
 }

@@ -1,5 +1,29 @@
-export function adminLayout({ title = 'Admin', body, user = null, breadcrumb = '' }) {
-  const themeInit = `(function(){try{var t=localStorage.getItem('admin-theme')||'system';var d=window.matchMedia('(prefers-color-scheme:dark)').matches;var dark=(t==='dark')||(t==='system'&&d);document.documentElement.setAttribute('data-theme',dark?'dark':'light');}catch(e){}})();`
+const COLLECTIONS = [
+  { slug: 'pages', label: 'Pages' },
+  { slug: 'posts', label: 'Posts' },
+  { slug: 'media', label: 'Media' },
+  { slug: 'categories', label: 'Categories' },
+  { slug: 'users', label: 'Users' },
+  { slug: 'forms', label: 'Forms' },
+  { slug: 'redirects', label: 'Redirects' },
+  { slug: 'search', label: 'Search' },
+]
+
+const GLOBALS = [
+  { slug: 'header', label: 'Header' },
+  { slug: 'footer', label: 'Footer' },
+]
+
+const themeScript = `(function(){try{var t=localStorage.getItem('admin-theme')||'system';var d=window.matchMedia('(prefers-color-scheme:dark)').matches;var dark=(t==='dark')||(t==='system'&&d);document.documentElement.setAttribute('data-theme',dark?'dark':'light');}catch(e){}})();`
+
+function navLink(href, label, currentPath) {
+  const active = currentPath === href || (href !== '/admin' && currentPath?.startsWith(href))
+  return `<li class="menu-item${active ? ' active' : ''}"><a href="${href}" class="w-full${active ? ' font-medium text-primary' : ''}">${label}</a></li>`
+}
+
+export function adminLayout({ title = 'Admin', body, user = null, breadcrumb = '', path = '' }) {
+  const collectionLinks = COLLECTIONS.map(c => navLink('/admin/collections/' + c.slug, c.label, path)).join('')
+  const globalLinks = GLOBALS.map(g => navLink('/admin/globals/' + g.slug, g.label, path)).join('')
 
   return `<!DOCTYPE html>
 <html lang="en" data-theme="light">
@@ -8,24 +32,20 @@ export function adminLayout({ title = 'Admin', body, user = null, breadcrumb = '
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>${title} — Admin</title>
   <link rel="stylesheet" href="/app.css" />
-  <script>${themeInit}</script>
+  <script>${themeScript}</script>
 </head>
 <body class="min-h-screen flex">
   <div class="sidebar sidebar-sticky w-64 shrink-0 border-r border-border/30">
     <div class="p-4 border-b border-border/30">
       <a href="/admin" class="font-semibold text-base text-content1">Flatload Admin</a>
     </div>
-    <nav class="menu p-3 flex-1">
+    <nav class="menu p-3 flex-1 overflow-y-auto">
       <ul class="menu-items">
-        <li class="menu-item" onclick="location.href='/admin'">
-          <a href="/admin" class="w-full">Dashboard</a>
-        </li>
+        ${navLink('/admin', 'Dashboard', path)}
         <li><span class="menu-title px-2 mt-3">Collections</span></li>
-        <li class="menu-item"><a href="/admin/collections/pages" class="w-full">Pages</a></li>
-        <li class="menu-item"><a href="/admin/collections/posts" class="w-full">Posts</a></li>
-        <li class="menu-item"><a href="/admin/collections/media" class="w-full">Media</a></li>
-        <li class="menu-item"><a href="/admin/collections/categories" class="w-full">Categories</a></li>
-        <li class="menu-item"><a href="/admin/collections/users" class="w-full">Users</a></li>
+        ${collectionLinks}
+        <li><span class="menu-title px-2 mt-3">Globals</span></li>
+        ${globalLinks}
       </ul>
     </nav>
     <div class="p-4 border-t border-border/30 text-xs text-content3">
@@ -56,7 +76,6 @@ export function adminLayout({ title = 'Admin', body, user = null, breadcrumb = '
 }
 
 export function adminLoginLayout({ body, error = '' }) {
-  const themeInit = `(function(){try{var t=localStorage.getItem('admin-theme')||'system';var d=window.matchMedia('(prefers-color-scheme:dark)').matches;document.documentElement.setAttribute('data-theme',(t==='dark'||(t==='system'&&d))?'dark':'light');}catch(e){}})();`
   return `<!DOCTYPE html>
 <html lang="en" data-theme="light">
 <head>
@@ -64,7 +83,7 @@ export function adminLoginLayout({ body, error = '' }) {
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Login — Admin</title>
   <link rel="stylesheet" href="/app.css" />
-  <script>${themeInit}</script>
+  <script>${themeScript}</script>
 </head>
 <body class="min-h-screen flex items-center justify-center">
   <div class="w-full max-w-sm">
