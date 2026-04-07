@@ -3,7 +3,9 @@ import { readFileSync, writeFileSync, readdirSync, existsSync, mkdirSync, unlink
 import { join, resolve } from 'path'
 import yaml from 'js-yaml'
 
-const CONTENT_DIR = resolve('content')
+let CONTENT_DIR = resolve('content')
+
+export function setContentDir(dir) { CONTENT_DIR = resolve(dir) }
 
 function collectionDir(collection) {
   return join(CONTENT_DIR, collection)
