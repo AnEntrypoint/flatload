@@ -69,3 +69,9 @@ Default login: `demo@example.com` / `demo` (from `content/users/demo.yaml`)
 - **Store**: js-yaml flat files, zero database
 - **Media**: file passthrough, no image resizing dependency
 - **Admin**: built-in admin UI at `/admin` — schema-driven field rendering, CRUD for all collections, globals editing, media library, version history
+
+## npm publishing
+
+A GitHub Actions workflow at `.github/workflows/publish.yml` bumps the patch version and publishes to npm on every push to `main`.
+
+**Required secret**: add `NPM_TOKEN` in repo **Settings → Secrets and variables → Actions**.
