@@ -4,6 +4,10 @@
   "description": "Flat-file CMS — buildless Bun SSR, YAML content, static GH Pages output",
   "license": "MIT",
   "type": "module",
+  "main": "index.js",
+  "exports": {
+    ".": "./index.js"
+  },
   "scripts": {
     "dev": "bun run --hot src/server.js",
     "start": "bun run src/server.js",
