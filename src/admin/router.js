@@ -7,6 +7,10 @@ import { mediaView, mediaUploadView } from './views/media.js'
 import { versionsView } from './views/versions.js'
 import { loginHandler, logoutHandler, getUser } from './api/auth.js'
 import { updateHandler, createHandler, deleteHandler, updateGlobalHandler, mediaUploadHandler } from './api/crud.js'
+import { fileURLToPath } from 'url'
+import nodePath from 'path'
+
+const ADMIN_PUBLIC = fileURLToPath(new URL('../../public', import.meta.url))
 
 const html = body => new Response(body, { headers: { 'Content-Type': 'text/html; charset=utf-8' } })
 const redirect = url => new Response(null, { status: 302, headers: { Location: url } })
@@ -74,12 +78,12 @@ export async function adminRouter(req) {
   }
 
   if (path === '/admin/client.js') {
-    const file = Bun.file('public/admin-client.js')
+    const file = Bun.file(nodePath.join(ADMIN_PUBLIC, 'admin-client.js'))
     return new Response(await file.exists() ? file : '// admin client', { headers: { 'Content-Type': 'application/javascript' } })
   }
 
   if (path === '/admin/richtext.js') {
-    const file = Bun.file('public/admin-richtext.js')
+    const file = Bun.file(nodePath.join(ADMIN_PUBLIC, 'admin-richtext.js'))
     return new Response(await file.exists() ? file : '', { headers: { 'Content-Type': 'application/javascript' } })
   }
 
