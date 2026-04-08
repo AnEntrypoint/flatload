@@ -26,10 +26,13 @@ jobs:
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
       - name: Bump version
-        run: npm version patch -m "chore: bump to %s [skip ci]"
+        run: npm version patch --no-git-tag-version
 
-      - name: Push version bump
-        run: git push --follow-tags
+      - name: Commit and push version bump
+        run: |
+          git add package.json
+          git commit -m "chore: bump version [skip ci]"
+          git push
 
       - name: Publish
         run: npm publish
