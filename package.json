@@ -1,7 +1,7 @@
 {
-  "name": "@lanmower/flatload",
-  "version": "1.0.2",
-  "description": "Flat-file CMS — buildless Bun SSR, YAML content, static GH Pages output",
+  "name": "flatspace",
+  "version": "1.0.0",
+  "description": "Flat-file CMS server — buildless Bun SSR, YAML content, zero-hop stack",
   "license": "MIT",
   "type": "module",
   "main": "index.js",
