@@ -25,5 +25,8 @@
     "@tailwindcss/typography": "^0.5.19",
     "tailwindcss": "^4.1.18",
     "@tailwindcss/cli": "^4.2.2"
+  },
+  "bin": {
+    "flatspace": "./bin/flatspace.js"
   }
 }
