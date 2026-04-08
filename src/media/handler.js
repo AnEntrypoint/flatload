@@ -1,7 +1,9 @@
 import path from 'path'
 import fs from 'fs'
 
-const MEDIA_DIR = path.resolve('public/media')
+let MEDIA_DIR = path.resolve('public/media')
+
+export function setMediaDir(dir) { MEDIA_DIR = path.resolve(dir) }
 
 const MIME = {
   '.jpg': 'image/jpeg', '.jpeg': 'image/jpeg',
