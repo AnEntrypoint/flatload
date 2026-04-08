@@ -1,6 +1,6 @@
 {
   "name": "flatload",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Flat-file CMS — buildless Bun SSR, YAML content, static GH Pages output",
   "license": "MIT",
   "type": "module",
