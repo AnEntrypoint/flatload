@@ -1,5 +1,5 @@
 {
-  "name": "flatload",
+  "name": "@lanmower/flatload",
   "version": "1.0.1",
   "description": "Flat-file CMS — buildless Bun SSR, YAML content, static GH Pages output",
   "license": "MIT",
