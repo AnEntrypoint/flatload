@@ -1,6 +1,6 @@
 # flatspace
 
-Flat-file CMS — buildless Bun SSR, YAML content, static GitHub Pages output.
+Flat-file CMS — buildless Bun SSR, YAML content, git-based versioning.
 
 [![npm](https://img.shields.io/npm/v/flatspace)](https://www.npmjs.com/package/flatspace)
 
@@ -20,12 +20,10 @@ Open http://localhost:3000
 ## Build static site (GitHub Pages)
 
 ```bash
-bun x @tailwindcss/cli -i src/styles/app.css -o public/app.css --minify
-bun build src/client.js --outfile public/client.js --target browser --minify
-bun run src/build.js
+bun run build
 ```
 
-Output lands in `docs/`. GitHub Pages is configured to serve from `docs/` on `main`.
+Output lands in `docs/`. GitHub Pages serves from `docs/` on `main`.
 
 ## Content
 
@@ -42,35 +40,49 @@ content/
   search/       # search index entries
 ```
 
-Edit any YAML file, rebuild, push — the site updates.
+Edit any YAML file, save — flatspace auto-commits to git. Push to deploy.
 
-## Admin
+## Admin panel
 
-The admin panel at `/admin` provides full CMS editing for all content:
+The admin panel at `/admin` provides a Payload-like CMS experience with no login required — access is controlled via git push/pull permissions. Git tracks who changed what.
 
-- **Collections**: Pages, Posts, Media, Categories, Users, Forms, Redirects, Search — all with static demo pages on GitHub Pages
-- **Globals**: Header, Footer — edited as structured forms, not raw JSON
-- **Field rendering**: driven by `src/payload/collections/*.js` and `src/payload/globals/*.js` schemas
-- **Rich text editor**: formatting toolbar (Bold, Italic, Underline, Strikethrough, Code, H1–H3, OL, UL, Blockquote, Link) — DOM serializes to Lexical AST JSON on every keystroke (`public/admin-richtext.js`)
-- **Blocks**: adding a block fetches schema-driven field HTML from `/admin/api/block-template` — correct fields for every block type
-- **Relationships**: inline picker modal, remove badges work, string IDs resolved to labels at edit time
-- **Upload fields**: inline media picker modal with thumbnail grid; clear button
-- **Checkboxes**: hidden-input trick ensures unchecked saves `false`, not the previous value
-- **Field clearing**: empty text input saves `null`, overwriting the stored value (password fields excluded)
-- **Dirty state**: browser warns before navigating away from unsaved edit/global forms
-- **List views**: human-readable column headers, Published/Draft status badges for posts and pages
-- **Versions**: git-backed history at `/admin/collections/{slug}/{id}/versions`
+### Features
 
-Default login: `demo@example.com` / `demo` (from `content/users/demo.yaml`)
+- **Sidebar navigation** with collapsible toggle and mobile hamburger
+- **Dark/light mode** with system preference detection
+- **Sortable columns** — click any column header to sort
+- **Bulk operations** — select multiple documents, bulk delete
+- **Global search** — Cmd/Ctrl+K searches across all collections
+- **Draft/Publish workflow** — Save Draft or Publish buttons, status badges in list view
+- **Rich text editor** — WYSIWYG toolbar (bold, italic, headings, lists, links, code, blockquote) with Lexical JSON output
+- **Relationship picker** — searchable modal for linking related documents
+- **Media library** — thumbnail grid picker, drag-and-drop upload
+- **Blocks editor** — add/remove/reorder layout blocks with schema-driven fields
+- **Document drawer** — slide-out panel for inline editing of related documents
+- **Live preview** — iframe-based preview panel in edit view
+- **Version history** — git-backed history with author, diff view, and restore to prior version
+- **Breadcrumbs** — clickable navigation: Dashboard > Collection > Document
+- **Auto-discovery** — add a collection schema file and it appears in the admin
+
+## API
+
+```
+GET    /api/:collection              # list (supports where, sort, limit, page)
+GET    /api/:collection/:id          # get document
+POST   /api/:collection              # create document
+PATCH  /api/:collection/:id          # update document
+DELETE /api/:collection/:id          # delete document
+GET    /api/globals/:slug            # get global
+PATCH  /api/globals/:slug            # update global
+```
 
 ## Stack
 
 - **Runtime**: Bun (server + build)
-- **CSS**: Tailwind v4 via `@tailwindcss/cli`
-- **Client JS**: XState (theme toggle, search debounce)
+- **CSS**: Tailwind v4 + RippleUI
 - **Store**: js-yaml flat files, zero database
-- **Media**: file passthrough, no image resizing dependency
-- **Admin**: built-in admin UI at `/admin` — schema-driven field rendering, CRUD for all collections, globals editing, media library, version history
+- **Versioning**: git (auto-commit on save, git log for history)
+- **Admin**: server-rendered HTML, schema-driven field rendering
 
 ## npm
 
@@ -79,14 +91,14 @@ npm install flatspace
 ```
 
 ```js
-import { createServer } from 'flatspace';
-createServer({ port: 3000, contentDir: 'content', publicDir: 'public' });
+import { createServer } from 'flatspace'
+createServer({ port: 3000, contentDir: 'content', publicDir: 'public' })
 ```
 
 ```bash
-npx flatspace aggregate --input saved_images.json --output descriptions.json
+npx flatspace aggregate --input data.json --output out.json
 ```
 
 ### Publishing
 Push to `main` → GH Actions auto-bumps patch version and publishes to npm.
-**Required secret**: `NPM_TOKEN` in repo **Settings → Secrets and variables → Actions**.
+**Required secret**: `NPM_TOKEN` in repo Settings → Secrets.
