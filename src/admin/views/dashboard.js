@@ -1,17 +1,9 @@
 import { adminLayout } from '../layout.js'
 import { payload } from '../../utils/getPayload.js'
+import { getCollections } from '../registry.js'
 
-const COLLECTIONS = [
-  { slug: 'pages',      label: 'Pages' },
-  { slug: 'posts',      label: 'Posts' },
-  { slug: 'media',      label: 'Media' },
-  { slug: 'categories', label: 'Categories' },
-  { slug: 'users',      label: 'Users' },
-  { slug: 'forms',      label: 'Forms' },
-  { slug: 'redirects',  label: 'Redirects' },
-]
-
-export async function dashboardView(user) {
+export async function dashboardView() {
+  const COLLECTIONS = getCollections().map(c => ({ slug: c.slug, label: c.labels?.plural || c.slug.charAt(0).toUpperCase() + c.slug.slice(1) }))
   const counts = await Promise.all(
     COLLECTIONS.map(async ({ slug, label }) => {
       try {
@@ -32,7 +24,6 @@ export async function dashboardView(user) {
   const body = `
 <div class="mb-6">
   <h1 class="text-2xl font-bold text-content1">Dashboard</h1>
-  <p class="text-content2 text-sm mt-1">Welcome back, ${user?.name || user?.email || 'Admin'}</p>
 </div>
 <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
   ${cards}
@@ -49,5 +40,5 @@ export async function dashboardView(user) {
   </div>
 </div>`
 
-  return adminLayout({ title: 'Dashboard', body, user, path: '/admin' })
+  return adminLayout({ title: 'Dashboard', body, breadcrumb: '<a href="/admin" class="hover:text-content1">Dashboard</a>', path: '/admin' })
 }

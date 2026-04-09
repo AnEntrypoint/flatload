@@ -1,18 +1,13 @@
 import { adminLayout } from '../layout.js'
+import { getCollectionBySlug } from '../registry.js'
 import { payload } from '../../utils/getPayload.js'
 import { renderField, renderTextField } from '../fields.js'
 
 export { renderField }
 
-const COLLECTION_FIELDS = {
-  pages:      () => import('../../payload/collections/Pages.js').then(m => m.Pages.fields),
-  posts:      () => import('../../payload/collections/Posts.js').then(m => m.Posts.fields),
-  media:      () => import('../../payload/collections/Media.js').then(m => m.Media.fields),
-  categories: () => import('../../payload/collections/Categories.js').then(m => m.Categories.fields),
-  users:      () => import('../../payload/collections/Users.js').then(m => m.Users.fields),
-  forms:      () => import('../../payload/collections/Forms.js').then(m => m.Forms.fields),
-  redirects:  () => import('../../payload/collections/Redirects.js').then(m => m.Redirects.fields),
-  search:     () => Promise.resolve([{ name: 'title', type: 'text', label: 'Title' }, { name: 'slug', type: 'text', label: 'Slug' }]),
+function getFieldsForCollection(slug) {
+  const col = getCollectionBySlug(slug)
+  return col?.fields || [{ name: 'title', type: 'text', label: 'Title' }, { name: 'slug', type: 'text', label: 'Slug' }]
 }
 
 const COMPUTED_FIELDS = new Set(['populatedAuthors', 'populatedDocs', 'hash', 'salt', '__v'])
@@ -20,10 +15,8 @@ const COMPUTED_FIELDS = new Set(['populatedAuthors', 'populatedDocs', 'hash', 's
 async function resolveDocDepth1(collectionSlug, doc) {
   if (!doc) return doc
   const resolved = { ...doc }
-  const getFields = COLLECTION_FIELDS[collectionSlug]
-  if (!getFields) return resolved
-  let fields
-  try { fields = await getFields() } catch { return resolved }
+  const fields = getFieldsForCollection(collectionSlug)
+  if (!fields.length) return resolved
   await Promise.all(fields.map(async field => {
     const val = resolved[field.name]
     if (!val) return
@@ -47,9 +40,8 @@ async function resolveDocDepth1(collectionSlug, doc) {
 }
 
 async function getFieldsHtml(collectionSlug, doc) {
-  const getFields = COLLECTION_FIELDS[collectionSlug]
-  if (!getFields) throw new Error('no schema')
-  const fields = await getFields()
+  const fields = getFieldsForCollection(collectionSlug)
+  if (!fields.length) throw new Error('no schema')
   return fields.map(f => renderField(f, doc[f.name])).join('')
 }
 
@@ -77,10 +69,8 @@ function findBlocksField(fields, name) {
 }
 
 export async function blockTemplateHtml(collectionSlug, fieldName, blockType, idx) {
-  const getFields = COLLECTION_FIELDS[collectionSlug]
-  if (!getFields) return ''
-  let fields
-  try { fields = await getFields() } catch { return '' }
+  const fields = getFieldsForCollection(collection)
+  if (!fields.length) return ''
   const blocksField = findBlocksField(fields, fieldName)
   if (!blocksField) return ''
   const block = (blocksField.blocks || []).find(b => b.slug === blockType)
@@ -89,7 +79,7 @@ export async function blockTemplateHtml(collectionSlug, fieldName, blockType, id
   return (block.fields || []).map(f => renderField(f, '', prefix)).join('')
 }
 
-export async function editView(collectionSlug, id, user) {
+export async function editView(collectionSlug, id) {
   const rawDoc = await payload.findByID({ collection: collectionSlug, id, depth: 1 })
   const doc = await resolveDocDepth1(collectionSlug, rawDoc)
   const label = collectionSlug.charAt(0).toUpperCase() + collectionSlug.slice(1, -1)
@@ -113,7 +103,9 @@ export async function editView(collectionSlug, id, user) {
       ${hasVersions ? statusSelect(doc._status) : ''}
       ${metaSection}
       <div class="flex flex-col gap-2 mt-4">
-        <button form="edit-form" type="submit" class="btn btn-primary btn-sm btn-block">Save</button>
+        <button type="button" id="toggle-preview" class="btn btn-ghost btn-sm btn-block mb-2">Preview ↗</button>
+         <button form="edit-form" type="submit" name="_action" value="draft" class="btn btn-outline btn-sm btn-block">Save Draft</button>
+         <button form="edit-form" type="submit" name="_action" value="publish" class="btn btn-primary btn-sm btn-block">Publish</button>
         ${doc.slug ? `<a href="/${doc.slug}" target="_blank" class="btn btn-ghost btn-sm btn-block">View ↗</a>` : ''}
         <button type="button" onclick="if(confirm('Delete?')) fetch('/admin/api/collections/${collectionSlug}/${id}',{method:'DELETE'}).then(()=>location.href='/admin/collections/${collectionSlug}')" class="btn btn-ghost btn-sm btn-block text-error">Delete</button>
       </div>
@@ -121,10 +113,11 @@ export async function editView(collectionSlug, id, user) {
     ${hasVersions ? `<div class="card bg-card border border-border"><div class="card-body"><h3 class="font-medium text-sm mb-2">Live Preview</h3><a href="/${doc.slug||''}" target="preview-frame" class="btn btn-ghost btn-sm btn-block">Open Preview ↗</a></div></div>` : ''}
   </aside>
 </div>`
-  return adminLayout({ title: doc.title || doc.filename || 'Edit ' + label, body, user, breadcrumb: collectionSlug + ' / edit', path: '/admin/collections/' + collectionSlug })
+  body += '<div class="hidden lg:w-1/2"><iframe id="preview-frame" class="w-full h-full border-l border-border" style="min-height:80vh"></iframe></div>'
+  return adminLayout({ title: doc.title || doc.filename || 'Edit ' + label, body, breadcrumb: '<a href="/admin" class="hover:text-content1">Dashboard</a> <span class="text-content3">/</span> <a href="/admin/collections/' + collectionSlug + '" class="hover:text-content1">' + label + '</a> <span class="text-content3">/</span> ' + (doc.title || doc.filename || doc.id), path: '/admin/collections/' + collectionSlug })
 }
 
-export async function createView(collectionSlug, user) {
+export async function createView(collectionSlug) {
   const label = collectionSlug.charAt(0).toUpperCase() + collectionSlug.slice(1, -1)
   let fieldsHtml
   try { fieldsHtml = await getFieldsHtml(collectionSlug, {}) } catch { fieldsHtml = renderTextField({ name: 'title', label: 'Title' }, '') }
@@ -145,5 +138,5 @@ export async function createView(collectionSlug, user) {
     <button form="create-form" type="submit" class="btn btn-primary btn-sm btn-block mt-4">Create</button>
   </div></div></aside>
 </div>`
-  return adminLayout({ title: 'New ' + label, body, user, breadcrumb: collectionSlug + ' / new', path: '/admin/collections/' + collectionSlug })
+  return adminLayout({ title: 'New ' + label, body, breadcrumb: '<a href="/admin" class="hover:text-content1">Dashboard</a> <span class="text-content3">/</span> <a href="/admin/collections/' + collectionSlug + '" class="hover:text-content1">' + label + '</a> <span class="text-content3">/</span> New', path: '/admin/collections/' + collectionSlug })
 }

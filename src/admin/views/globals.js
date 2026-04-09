@@ -7,7 +7,7 @@ const GLOBALS_FIELDS = {
   footer: () => import('../../payload/globals/Footer.js').then(m => m.Footer.fields),
 }
 
-export async function globalView(slug, user) {
+export async function globalView(slug) {
   const doc = await payload.findGlobal({ slug, depth: 1 })
   const title = slug.charAt(0).toUpperCase() + slug.slice(1)
 
@@ -48,5 +48,5 @@ export async function globalView(slug, user) {
   </aside>
 </div>`
 
-  return adminLayout({ title, body, user, breadcrumb: 'globals / ' + slug, path: '/admin/globals/' + slug })
+  return adminLayout({ title, body, breadcrumb: '<a href="/admin" class="hover:text-content1">Dashboard</a> <span class="text-content3">/</span> Globals <span class="text-content3">/</span> ' + title, path: '/admin/globals/' + slug })
 }

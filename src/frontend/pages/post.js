@@ -26,7 +26,6 @@ export async function postPage(req, { slug }) {
   const hero = renderPostHero(post)
   const content = `<div class="container py-8"><article class="prose max-w-3xl mx-auto">${renderRichText(post.content)}</article></div>`
 
-  // Related posts
   let relatedHtml = ''
   if (post.relatedPosts?.length) {
     const related = post.relatedPosts
