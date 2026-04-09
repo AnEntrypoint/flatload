@@ -1,6 +1,6 @@
 {
   "name": "flatspace",
-  "version": "1.0.10",
+  "version": "1.0.11",
   "description": "Flat-file CMS server — buildless Bun SSR, YAML content, zero-hop stack",
   "license": "MIT",
   "type": "module",
