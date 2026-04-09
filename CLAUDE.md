@@ -20,6 +20,7 @@ npx flatspace aggregate --input <file.json> --output <out.json> [--type images|v
 
 ## Publish
 Push to main → GH Actions auto-bumps patch version and publishes to npm (NPM_TOKEN secret required).
+Published files: `index.js`, `src/`, `bin/` (70 files, ~144KB). Set via `files` field in package.json.
 
 ## Server
 `src/server.js` — Bun HTTP server serving YAML content via `src/store/index.js`
