@@ -16,8 +16,9 @@
     "build": "bun run build:css && bun run build:client && bun run src/build.js"
   },
   "dependencies": {
-    "js-yaml": "^4.1.0",
     "bcryptjs": "^2.4.3",
+    "js-yaml": "^4.1.0",
+    "rippleui": "^1.12.1",
     "webjsx": "latest",
     "xstate": "^5.18.0"
   },

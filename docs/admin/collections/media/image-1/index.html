@@ -10,17 +10,17 @@
 <body class="min-h-screen flex">
   <div class="sidebar sidebar-sticky w-64 shrink-0 border-r border-border/30">
     <div class="p-4 border-b border-border/30">
-      <a href="/flatload/admin/" class="font-semibold text-base text-content1">Flatload Admin</a>
+      <a href="/flatspace/admin/" class="font-semibold text-base text-content1">Flatload Admin</a>
     </div>
     <nav class="menu p-3 flex-1 overflow-y-auto">
       <ul class="menu-items">
-        <li class="menu-item"><a href="/flatload/admin/" class="w-full">Dashboard</a></li>
+        <li class="menu-item"><a href="/flatspace/admin/" class="w-full">Dashboard</a></li>
         <li><span class="menu-title px-2 mt-3">Collections</span></li>
-        <li class="menu-item"><a href="/flatload/admin/collections/pages/" class="w-full">Pages</a></li><li class="menu-item"><a href="/flatload/admin/collections/posts/" class="w-full">Posts</a></li><li class="menu-item active"><a href="/flatload/admin/collections/media/" class="w-full font-medium text-primary">Media</a></li><li class="menu-item"><a href="/flatload/admin/collections/categories/" class="w-full">Categories</a></li><li class="menu-item"><a href="/flatload/admin/collections/users/" class="w-full">Users</a></li>
+        <li class="menu-item"><a href="/flatspace/admin/collections/pages/" class="w-full">Pages</a></li><li class="menu-item"><a href="/flatspace/admin/collections/posts/" class="w-full">Posts</a></li><li class="menu-item active"><a href="/flatspace/admin/collections/media/" class="w-full font-medium text-primary">Media</a></li><li class="menu-item"><a href="/flatspace/admin/collections/categories/" class="w-full">Categories</a></li><li class="menu-item"><a href="/flatspace/admin/collections/users/" class="w-full">Users</a></li>
         </ul>
     </nav>
     <div class="p-4 border-t border-border/30 text-xs text-content3">
-      <div class="mb-2 truncate">demo@flatload.io</div>
+      <div class="mb-2 truncate">demo@flatspace.dev</div>
       
     </div>
   </div>
@@ -30,7 +30,7 @@
         <span class="text-sm text-content2">media / edit</span>
       </div>
       <div class="navbar-end gap-4">
-        <a href="/flatload/" target="_blank" class="text-sm text-content2 hover:text-content1 transition-colors">View Site ↗</a>
+        <a href="/flatspace/" target="_blank" class="text-sm text-content2 hover:text-content1 transition-colors">View Site ↗</a>
         <button id="admin-theme-toggle" class="btn btn-ghost btn-sm">
           <svg class="dark-icon hidden" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
           <svg class="light-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
@@ -38,41 +38,34 @@
       </div>
     </header>
     <main class="flex-1 overflow-y-auto p-6">
-  <div style="background:#f59e0b;color:#1c1917;padding:0.4rem 1rem;font-size:0.8rem;font-weight:600;text-align:center;">Read-only preview — <a href="https://github.com/AnEntrypoint/flatload" style="text-decoration:underline;">run locally</a> to edit content</div>
+  <div style="background:#f59e0b;color:#1c1917;padding:0.4rem 1rem;font-size:0.8rem;font-weight:600;text-align:center;">Read-only preview — <a href="https://github.com/AnEntrypoint/flatspace" style="text-decoration:underline;">run locally</a> to edit content</div>
       
 <div class="flex items-center justify-between mb-6">
-  <div>
-    <a href="/flatload/admin/collections/media/" class="text-sm text-muted-foreground hover:text-foreground">&larr; media</a>
-    <h1 class="text-2xl font-bold mt-1">https://picsum.photos/seed/post1/900/600</h1>
-  </div>
-  <div class="flex gap-2">
-    
-    <button form="edit-form" type="submit" class="btn btn-primary btn-sm">Save</button>
-  </div>
+  <div><a href="/flatspace/admin/collections/media/" class="text-sm text-muted-foreground hover:text-foreground">&larr; media</a><h1 class="text-2xl font-bold mt-1">https://picsum.photos/seed/post1/900/600</h1></div>
+  <div class="flex gap-2"><button form="edit-form" type="submit" class="btn btn-primary btn-sm">Save</button></div>
 </div>
 <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-  <form id="edit-form" method="POST" action="/admin/collections/media/image-1" class="lg:col-span-2 space-y-4">
+  <form id="edit-form" method="POST" action="/admin/collections/media/image-1" data-collection="media" class="lg:col-span-2 space-y-4">
     <div class="form-group"><label class="form-label" for="filename">Filename</label><input id="filename" name="filename" type="text" value="https://picsum.photos/seed/post1/900/600" class="input input-solid input-block"  /></div><div class="form-group"><label class="form-label" for="alt">Alt Text</label><input id="alt" name="alt" type="text" value="Abstract shapes" class="input input-solid input-block"  /></div><div class="form-group"><label class="form-label" for="mimeType">MIME Type</label><input id="mimeType" name="mimeType" type="text" value="image/jpeg" class="input input-solid input-block" readonly /></div><div class="form-group"><label class="form-label" for="filesize">File Size (bytes)</label><input id="filesize" name="filesize" type="number" value="" class="input input-solid" readonly /></div><div class="form-group"><label class="form-label" for="width">Width</label><input id="width" name="width" type="number" value="" class="input input-solid" readonly /></div><div class="form-group"><label class="form-label" for="height">Height</label><input id="height" name="height" type="number" value="" class="input input-solid" readonly /></div>
     <button type="submit" class="btn btn-primary">Save Changes</button>
   </form>
   <aside class="space-y-4">
-    <div class="card bg-card border border-border">
-      <div class="card-body gap-3">
-        <h3 class="font-medium text-sm">Document</h3>
+    <div class="card bg-card border border-border"><div class="card-body gap-3">
+      <h3 class="font-medium text-sm">Document</h3>
+      
+      <div class="text-xs text-muted-foreground mt-4 pt-4 border-t border-border space-y-1"><div>ID: <span class="font-mono">image-1</span></div><div>Created: 1/1/2024, 2:00:00 AM</div><div>Updated: 1/1/2024, 2:00:00 AM</div></div>
+      <div class="flex flex-col gap-2 mt-4">
+        <button form="edit-form" type="submit" class="btn btn-primary btn-sm btn-block">Save</button>
         
-        <div class="text-xs text-muted-foreground mt-4 pt-4 border-t border-border space-y-1"><div>ID: <span class="font-mono">image-1</span></div><div>Created: 1/1/2024, 12:00:00 AM</div><div>Updated: 1/1/2024, 12:00:00 AM</div></div>
-        <div class="flex flex-col gap-2 mt-4">
-          <button form="edit-form" type="submit" class="btn btn-primary btn-sm btn-block">Save</button>
-          
-          <button type="button" class="btn btn-ghost btn-sm btn-block text-error">Delete</button>
-        </div>
+        <button type="button" class="btn btn-ghost btn-sm btn-block text-error">Delete</button>
       </div>
-    </div>
+    </div></div>
     
   </aside>
 </div>
     </main>
   </div>
+  <script defer src="/admin/richtext.js"></script>
   
 </body>
 </html>

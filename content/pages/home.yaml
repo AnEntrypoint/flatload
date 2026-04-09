@@ -28,7 +28,7 @@ hero:
           tag: h1
           children:
             - type: text
-              text: Flatload
+              text: Flatspace
               detail: 0
               format: 0
               mode: normal
@@ -54,7 +54,7 @@ hero:
           version: 1
 meta:
   image: image-hero-1
-  title: Flatload — Flat-file CMS
+  title: Flatspace — Flat-file CMS
 layout: []
 createdAt: '2024-01-01T00:00:00.000Z'
 updatedAt: '2024-01-01T00:00:00.000Z'
