@@ -6,7 +6,7 @@ Flat-file CMS — buildless Bun SSR, YAML content, static GitHub Pages output.
 
 ## Live demo
 
-https://anentrypoint.github.io/flatload/
+https://anentrypoint.github.io/flatspace/
 
 ## Quick start
 
