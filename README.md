@@ -1,6 +1,8 @@
-# flatload
+# flatspace
 
 Flat-file CMS — buildless Bun SSR, YAML content, static GitHub Pages output.
+
+[![npm](https://img.shields.io/npm/v/flatspace)](https://www.npmjs.com/package/flatspace)
 
 ## Live demo
 
@@ -70,8 +72,21 @@ Default login: `demo@example.com` / `demo` (from `content/users/demo.yaml`)
 - **Media**: file passthrough, no image resizing dependency
 - **Admin**: built-in admin UI at `/admin` — schema-driven field rendering, CRUD for all collections, globals editing, media library, version history
 
-## npm publishing
+## npm
 
-A GitHub Actions workflow at `.github/workflows/publish.yml` bumps the patch version and publishes to npm on every push to `main`.
+```bash
+npm install flatspace
+```
 
-**Required secret**: add `NPM_TOKEN` in repo **Settings → Secrets and variables → Actions**.
+```js
+import { createServer } from 'flatspace';
+createServer({ port: 3000, contentDir: 'content', publicDir: 'public' });
+```
+
+```bash
+npx flatspace aggregate --input saved_images.json --output descriptions.json
+```
+
+### Publishing
+Push to `main` → GH Actions auto-bumps patch version and publishes to npm.
+**Required secret**: `NPM_TOKEN` in repo **Settings → Secrets and variables → Actions**.
