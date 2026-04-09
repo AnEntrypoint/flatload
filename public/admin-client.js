@@ -161,3 +161,9 @@ document.addEventListener('click', e => {
   document.body.appendChild(toast)
   setTimeout(() => toast.remove(), 3000)
 })()
+
+window.__debug = {
+  get theme() { return localStorage.getItem('admin-theme') || 'system' },
+  get sidebar() { return localStorage.getItem('admin-sidebar') || 'open' },
+  get formDirty() { const f = document.querySelector('form#edit-form, form#global-form'); return f ? 'check beforeunload' : 'no form' }
+}

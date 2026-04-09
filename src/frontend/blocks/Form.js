@@ -43,7 +43,7 @@ function renderField(field) {
 export async function renderFormBlock(block) {
   let form = block.form
   if (typeof form === 'string' || typeof form === 'number') {
-    try { form = await payload.findByID({ collection: 'forms', id: form, depth: 0 }) } catch { return '' }
+    try { form = await payload.findByID({ collection: 'forms', id: form, depth: 0 }) } catch (err) { console.error('form lookup failed:', err.message); return '' }
   }
   if (!form) return ''
 

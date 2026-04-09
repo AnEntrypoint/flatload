@@ -24,7 +24,7 @@ async function resolveDocDepth1(collectionSlug, doc) {
       try {
         const media = payload.findByID({ collection: field.relationTo || 'media', id: val })
         if (media) resolved[field.name] = media
-      } catch {}
+      } catch (err) { console.error("edit field resolve error:", err.message) }
     } else if (field.type === 'relationship') {
       const col = Array.isArray(field.relationTo) ? field.relationTo[0] : field.relationTo
       if (!col) return
@@ -87,7 +87,7 @@ export async function editView(collectionSlug, id) {
   try { fieldsHtml = await getFieldsHtml(collectionSlug, doc) } catch { fieldsHtml = fallbackFieldsHtml(doc) }
   const hasVersions = ['pages', 'posts'].includes(collectionSlug)
   const metaSection = `<div class="text-xs text-muted-foreground mt-4 pt-4 border-t border-border space-y-1"><div>ID: <span class="font-mono">${doc.id}</span></div><div>Created: ${doc.createdAt ? new Date(doc.createdAt).toLocaleString() : '—'}</div><div>Updated: ${doc.updatedAt ? new Date(doc.updatedAt).toLocaleString() : '—'}</div></div>`
-  const body = `
+  let body = `
 <div class="flex items-center justify-between mb-6">
   <div><a href="/admin/collections/${collectionSlug}" class="text-sm text-muted-foreground hover:text-foreground">&larr; ${collectionSlug}</a><h1 class="text-2xl font-bold mt-1">${doc.title || doc.filename || doc.email || doc.name || 'Edit ' + label}</h1></div>
   <div class="flex gap-2">${hasVersions ? `<a href="/admin/collections/${collectionSlug}/${id}/versions" class="btn btn-ghost btn-sm">Versions</a>` : ''}<button form="edit-form" type="submit" class="btn btn-primary btn-sm">Save</button></div>
