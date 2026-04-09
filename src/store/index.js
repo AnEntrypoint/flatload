@@ -16,7 +16,7 @@ function globalFile(slug) {
 }
 
 function readDoc(file) {
-  try { return yaml.load(readFileSync(file, 'utf8')) || {} } catch { return null }
+  try { return yaml.load(readFileSync(file, 'utf8')) || {} } catch (err) { console.error('failed to read', file + ':', err.message); return null }
 }
 
 function writeDoc(file, data) {

@@ -14,5 +14,5 @@ export async function checkRedirect(pathname) {
     }
     if (to.url) return { url: to.url, statusCode: doc.type || 301 }
     return null
-  } catch { return null }
+  } catch (err) { console.error('redirect check failed:', err.message); return null }
 }

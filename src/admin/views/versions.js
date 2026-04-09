@@ -12,7 +12,7 @@ function gitLog(filePath) {
       const [hash, author, date, ...msgParts] = line.split('|')
       return { hash, shortHash: hash?.slice(0, 8), author, date, message: msgParts.join('|') }
     })
-  } catch { return [] }
+  } catch (err) { console.error('git log failed for', filePath + ':', err.message); return [] }
 }
 
 function gitDiff(filePath, hash) {
@@ -20,7 +20,7 @@ function gitDiff(filePath, hash) {
     return execSync(`git diff ${hash}~1 ${hash} -- "${filePath}"`, {
       cwd: resolve('.'), encoding: 'utf8', timeout: 5000,
     }).slice(0, 4000)
-  } catch { return '' }
+  } catch (err) { console.error('git diff failed:', err.message); return '' }
 }
 
 export async function versionsView(collectionSlug, id, query = {}) {

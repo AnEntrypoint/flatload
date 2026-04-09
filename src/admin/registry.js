@@ -16,7 +16,7 @@ export function getCollections() {
       const config = Object.values(mod)[0]
       if (config?.slug) _collections.push(config)
     }
-  } catch {}
+  } catch (err) { console.error('registry: failed to load collections:', err.message) }
   return _collections
 }
 
@@ -29,7 +29,7 @@ export function getGlobalConfigs() {
       const config = Object.values(mod)[0]
       if (config?.slug) _globals.push(config)
     }
-  } catch {}
+  } catch (err) { console.error('registry: failed to load globals:', err.message) }
   return _globals
 }
 

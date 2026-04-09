@@ -22,6 +22,20 @@
 - Live preview panel in edit view (iframe-based)
 - Collection auto-discovery from src/payload/collections/ (registry.js)
 
+
+### Fixed (validation pass)
+- All silent catch blocks now log errors with context before returning
+- Removed --allow-empty from git auto-commit (no noise commits)
+- Fixed const body assignment in edit.js that broke static build
+- Rebuilt docs/ to reflect auth removal and Flatspace rename
+
+### Removed (validation pass)
+- Orphaned utils: deepMerge.js, generatePreviewPath.js, toKebabCase.js, formatAuthors.js
+- PostHero.js authors rendering (references removed Users collection)
+
+### Added (validation pass)
+- window.__debug exposed in admin client (theme, sidebar, formDirty)
+
 ### Fixed
 - Renamed remaining "Flatload" references to "Flatspace"
 - Removed stale "users" from build.js and list view

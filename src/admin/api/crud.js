@@ -39,8 +39,10 @@ function parseFormData(formData) {
 function gitCommit(msg) {
   try {
     execSync('git add -A content/', { stdio: 'pipe' })
-    execSync(`git commit -m ${JSON.stringify(msg)} --allow-empty`, { stdio: 'pipe' })
-  } catch {}
+    const status = execSync('git diff --cached --quiet 2>&1 || echo CHANGED', { encoding: 'utf8' }).trim()
+    if (status !== 'CHANGED') return
+    execSync(`git commit -m ${JSON.stringify(msg)}`, { stdio: 'pipe' })
+  } catch (err) { console.error('git commit failed:', err.message) }
 }
 
 export async function updateHandler(req, collection, id) {
