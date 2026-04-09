@@ -28,5 +28,10 @@
   },
   "bin": {
     "flatspace": "./bin/flatspace.js"
-  }
+  },
+  "files": [
+    "index.js",
+    "src/",
+    "bin/"
+  ]
 }
