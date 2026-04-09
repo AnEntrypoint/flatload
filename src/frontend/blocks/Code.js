@@ -1,6 +1,5 @@
 export function renderCode(block) {
   const lang = block.language || 'text'
-  // Basic HTML escape for code
   const code = String(block.code || '')
     .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
 

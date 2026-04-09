@@ -37,7 +37,7 @@ export async function postsPage(req, { page: pageNum = 1 } = {}) {
 </div>`
 
   return new Response(
-    renderLayout({ title: 'Posts | Flatload', body, header, footer }),
+    renderLayout({ title: 'Posts | Flatspace', body, header, footer }),
     { headers: { 'Content-Type': 'text/html; charset=utf-8' } },
   )
 }

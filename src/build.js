@@ -13,7 +13,7 @@ import path from 'path'
 const BASE = '/flatspace'
 const DOCS = path.resolve('docs')
 const DEMO_USER = { email: 'demo@flatspace.dev', name: 'Demo' }
-const ADMIN_COLLECTIONS = ['posts', 'pages', 'media', 'categories', 'users', 'forms', 'redirects']
+const ADMIN_COLLECTIONS = ['posts', 'pages', 'media', 'categories', 'forms', 'redirects']
 
 function makeReq(url) {
   return new Request(`http://localhost:3000${url}`)

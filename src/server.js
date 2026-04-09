@@ -61,6 +61,22 @@ export function createServer(config = {}) {
     const collection = parts[0]
     const id = parts[1]
 
+    if (collection === 'globals' && parts[1]) {
+      const slug = parts[1]
+      if (req.method === 'GET') {
+        const { findGlobal } = await import('./store/index.js')
+        const doc = findGlobal({ slug })
+        return doc ? Response.json(doc) : new Response('Not found', { status: 404 })
+      }
+      if (req.method === 'PATCH') {
+        const { updateGlobal } = await import('./store/index.js')
+        const data = await req.json()
+        updateGlobal({ slug, data })
+        return Response.json({ ok: true })
+      }
+      return new Response('Method not allowed', { status: 405 })
+    }
+
     if (req.method === 'GET') {
       if (id) {
         const { findByID } = await import('./store/index.js')
@@ -75,9 +91,22 @@ export function createServer(config = {}) {
       return Response.json(find({ collection, where, sort, limit, page }))
     }
 
-    if (req.method === 'POST' && collection === 'form-submissions') {
-      const body = await req.json()
-      create({ collection: 'form-submissions', data: { ...body, submittedAt: new Date().toISOString() } })
+    if (req.method === 'POST') {
+      const data = await req.json()
+      const doc = create({ collection, data })
+      return Response.json(doc, { status: 201 })
+    }
+
+    if (req.method === 'PATCH' && id) {
+      const { update } = await import('./store/index.js')
+      const data = await req.json()
+      update({ collection, id, data })
+      return Response.json({ ok: true })
+    }
+
+    if (req.method === 'DELETE' && id) {
+      const { del } = await import('./store/index.js')
+      del({ collection, id })
       return Response.json({ ok: true })
     }
 
@@ -96,7 +125,7 @@ export function createServer(config = {}) {
   }
 
   const server = Bun.serve({ port, fetch: masterFetch })
-  console.log(`flatload running at http://localhost:${port}`)
+  console.log(`flatspace running at http://localhost:${port}`)
   return server
 }
 

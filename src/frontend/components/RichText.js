@@ -1,5 +1,3 @@
-// Lexical JSON → HTML string walker
-// Handles all node types used by ghpl's editor config
 
 const FORMAT_MAP = {
   1: 'bold', 2: 'italic', 4: 'strikethrough', 8: 'underline',
@@ -9,7 +7,6 @@ const FORMAT_MAP = {
 function applyFormat(text, format) {
   if (!format) return escHtml(text)
   let result = escHtml(text)
-  // format is a bitmask
   if (format & 1)  result = `<strong>${result}</strong>`
   if (format & 2)  result = `<em>${result}</em>`
   if (format & 4)  result = `<s>${result}</s>`
@@ -52,7 +49,6 @@ function renderList(node) {
 }
 
 function renderBlock(node) {
-  // Inline blocks embedded in rich text (banner, code, mediaBlock, cta)
   const fields = node.fields || {}
   const blockType = fields.blockType
 
@@ -132,7 +128,6 @@ function renderNode(node) {
     case 'upload':
       return renderUpload(node)
     default:
-      // Unknown node: render children if present, otherwise empty
       if (node.children) return (node.children || []).map(renderNode).join('')
       return ''
   }
@@ -140,7 +135,6 @@ function renderNode(node) {
 
 export function renderRichText(content) {
   if (!content) return ''
-  // content may be a Lexical JSON object or a stringified version
   const data = typeof content === 'string' ? JSON.parse(content) : content
   if (!data?.root) return ''
   return renderNode(data.root)

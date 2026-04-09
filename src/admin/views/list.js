@@ -1,4 +1,5 @@
 import { adminLayout } from '../layout.js'
+import { getCollectionBySlug } from '../registry.js'
 import { payload } from '../../utils/getPayload.js'
 
 const COLLECTION_META = {
@@ -6,7 +7,6 @@ const COLLECTION_META = {
   posts:      { label: 'Posts',      columns: ['title', 'slug', '_status', 'publishedAt', 'updatedAt'], defaultSort: '-updatedAt' },
   media:      { label: 'Media',      columns: ['filename', 'mimeType', 'updatedAt'], defaultSort: '-updatedAt' },
   categories: { label: 'Categories', columns: ['title', 'slug', 'updatedAt'], defaultSort: 'title' },
-  users:      { label: 'Users',      columns: ['name', 'email', 'updatedAt'], defaultSort: '-updatedAt' },
   forms:      { label: 'Forms',      columns: ['title', 'updatedAt'], defaultSort: '-updatedAt' },
   redirects:  { label: 'Redirects',  columns: ['from', 'to', 'updatedAt'], defaultSort: '-updatedAt' },
   search:     { label: 'Search',     columns: ['title', 'slug', 'updatedAt'], defaultSort: '-updatedAt' },
@@ -35,7 +35,7 @@ function cellValue(doc, col) {
   return String(val)
 }
 
-export async function listView(collectionSlug, user, { page = 1, search = '' } = {}) {
+export async function listView(collectionSlug, { page = 1, search = '', sort = '' } = {}) {
   const meta = COLLECTION_META[collectionSlug] || { label: collectionSlug, columns: ['id', 'updatedAt'], defaultSort: '-updatedAt' }
   const LIMIT = 20
 
@@ -44,15 +44,19 @@ export async function listView(collectionSlug, user, { page = 1, search = '' } =
     : {}
 
   const result = await payload.find({
-    collection: collectionSlug, where, sort: meta.defaultSort,
+    collection: collectionSlug, where, sort: sort || meta.defaultSort,
     limit: LIMIT, page: parseInt(page, 10), depth: 0,
   })
 
   const { docs, totalDocs, totalPages, page: currentPage } = result
 
-  const headers = meta.columns.map(c =>
-    `<th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-content2">${colLabel(c)}</th>`
-  ).join('')
+  const currentSort = sort || meta.defaultSort
+  const headers = meta.columns.map(c => {
+    const active = currentSort === c || currentSort === '-' + c
+    const next = currentSort === c ? '-' + c : c
+    const arrow = active ? (currentSort.startsWith('-') ? ' ↓' : ' ↑') : ''
+    return `<th class="w-10 px-3 py-3"><input type="checkbox" class="checkbox checkbox-sm" id="select-all" onchange="document.querySelectorAll('.row-check').forEach(c=>{c.checked=this.checked});document.getElementById('bulk-bar').classList.toggle('hidden',!this.checked)" /></th><th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-content2"><a href="?sort=${next}${search ? '&search=' + encodeURIComponent(search) : ''}" class="hover:text-content1${active ? ' text-primary' : ''}">${colLabel(c)}${arrow}</a></th>`
+  }).join('')
 
   const rows = docs.map(doc => {
     const cells = meta.columns.map((col, i) => {
@@ -62,20 +66,20 @@ export async function listView(collectionSlug, user, { page = 1, search = '' } =
         : val
       return `<td class="px-4 py-3 text-sm text-content1">${content}</td>`
     }).join('')
-    return `<tr class="border-b border-border/20 hover:bg-backgroundSecondary transition-colors">${cells}</tr>`
+    return `<tr class="border-b border-border/20 hover:bg-backgroundSecondary transition-colors"><td class="w-10 px-3 py-3"><input type="checkbox" class="checkbox checkbox-sm row-check" value="${doc.id}" onchange="var c=document.querySelectorAll('.row-check:checked').length;document.getElementById('bulk-bar').classList.toggle('hidden',!c);document.getElementById('bulk-count').textContent=c" /></td>${cells}</tr>`
   }).join('')
 
   const emptyRow = !docs.length
-    ? `<tr><td colspan="${meta.columns.length}" class="px-4 py-10 text-center text-content3">No ${meta.label} found</td></tr>`
+    ? `<tr><td colspan="${meta.columns.length}" class="px-4 py-10 text-center text-content3" colspan="99">No ${meta.label} found</td></tr>`
     : ''
 
   const pagination = totalPages > 1 ? `
 <div class="flex items-center justify-between mt-4 text-sm text-content2">
   <span>${totalDocs} total</span>
   <div class="flex gap-2 items-center">
-    ${currentPage > 1 ? `<a href="?page=${currentPage - 1}${search ? `&search=${search}` : ''}" class="btn btn-outline btn-sm">&larr; Prev</a>` : ''}
+    ${currentPage > 1 ? `<a href="?page=${currentPage - 1}${search ? `&search=${search}` : ''}${sort ? `&sort=${sort}` : ''}" class="btn btn-outline btn-sm">&larr; Prev</a>` : ''}
     <span>Page ${currentPage} of ${totalPages}</span>
-    ${currentPage < totalPages ? `<a href="?page=${currentPage + 1}${search ? `&search=${search}` : ''}" class="btn btn-outline btn-sm">Next &rarr;</a>` : ''}
+    ${currentPage < totalPages ? `<a href="?page=${currentPage + 1}${search ? `&search=${search}` : ''}${sort ? `&sort=${sort}` : ''}" class="btn btn-outline btn-sm">Next &rarr;</a>` : ''}
   </div>
 </div>` : ''
 
@@ -88,6 +92,10 @@ export async function listView(collectionSlug, user, { page = 1, search = '' } =
   <input name="search" value="${search}" placeholder="Search..." class="input input-solid input-sm flex-1" />
   <button type="submit" class="btn btn-outline btn-sm">Search</button>
 </form>
+<div id="bulk-bar" class="hidden flex items-center gap-3 mb-3 p-3 bg-backgroundSecondary border border-border/30 rounded">
+  <span class="text-sm"><span id="bulk-count">0</span> selected</span>
+  <button type="button" class="btn btn-error btn-sm" onclick="if(!confirm('Delete selected?'))return;document.querySelectorAll('.row-check:checked').forEach(c=>fetch('/admin/api/collections/${collectionSlug}/'+c.value,{method:'DELETE'}));setTimeout(()=>location.reload(),500)">Delete Selected</button>
+</div>
 <div class="card bg-backgroundSecondary border border-border/30 overflow-hidden">
   <div class="overflow-x-auto">
     <table class="table w-full">
@@ -98,5 +106,5 @@ export async function listView(collectionSlug, user, { page = 1, search = '' } =
 </div>
 ${pagination}`
 
-  return adminLayout({ title: meta.label, body, user, breadcrumb: meta.label, path: `/admin/collections/${collectionSlug}` })
+  return adminLayout({ title: meta.label, body, breadcrumb: '<a href="/admin" class="hover:text-content1">Dashboard</a> <span class="text-content3">/</span> ' + meta.label, path: `/admin/collections/${collectionSlug}` })
 }
