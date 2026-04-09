@@ -10,9 +10,9 @@ import { cp, mkdir } from 'fs/promises'
 import { existsSync } from 'fs'
 import path from 'path'
 
-const BASE = '/flatload'
+const BASE = '/flatspace'
 const DOCS = path.resolve('docs')
-const DEMO_USER = { email: 'demo@flatload.io', name: 'Demo' }
+const DEMO_USER = { email: 'demo@flatspace.dev', name: 'Demo' }
 const ADMIN_COLLECTIONS = ['posts', 'pages', 'media', 'categories', 'users', 'forms', 'redirects']
 
 function makeReq(url) {
@@ -37,7 +37,7 @@ function rewritePaths(html, depth) {
 
 function patchAdminHtml(html, cssDepth) {
   const cssPrefix = '../'.repeat(cssDepth)
-  const banner = `<div style="background:#f59e0b;color:#1c1917;padding:0.4rem 1rem;font-size:0.8rem;font-weight:600;text-align:center;">Read-only preview — <a href="https://github.com/AnEntrypoint/flatload" style="text-decoration:underline;">run locally</a> to edit content</div>`
+  const banner = `<div style="background:#f59e0b;color:#1c1917;padding:0.4rem 1rem;font-size:0.8rem;font-weight:600;text-align:center;">Read-only preview — <a href="https://github.com/AnEntrypoint/flatspace" style="text-decoration:underline;">run locally</a> to edit content</div>`
   return html
     .replace('href="/app.css"', `href="${cssPrefix}app.css"`)
     .replace(/<script[^>]*src="\/admin\/client\.js"[^>]*><\/script>/, '')
