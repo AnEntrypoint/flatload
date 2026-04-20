@@ -56,6 +56,16 @@ export function createServer(config = {}) {
   }
 
   async function apiHandler(req) {
+    try { return await apiRoute(req) }
+    catch (err) {
+      if (/invalid (slug|id|git hash|collection|global|filename)/.test(err.message)) {
+        return Response.json({ error: err.message }, { status: 400 })
+      }
+      return Response.json({ error: err.message }, { status: 500 })
+    }
+  }
+
+  async function apiRoute(req) {
     const url = new URL(req.url)
     const parts = url.pathname.replace('/api/', '').split('/')
     const collection = parts[0]

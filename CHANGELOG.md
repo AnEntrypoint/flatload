@@ -1,5 +1,24 @@
 ## [Unreleased]
 
+### Security (2026-04-20 hardening pass)
+- Fixed shell injection in `/admin/api/versions/restore` — user-supplied `hash` was interpolated into `execSync`
+- Fixed shell injection in version history `git log` / `git diff` — switched to `spawnSync` with arg arrays
+- Fixed shell injection in git auto-commit — switched to `spawnSync` with arg arrays
+- Added path traversal protection in store (`safeJoin` + `requireSlug`/`requireId`)
+- Added path traversal protection in media upload (`safeFilename` canonicalizes user-provided filenames)
+- Fixed XSS in admin list view (search input, row IDs, cell values all escaped)
+- Fixed XSS in admin edit view (doc title, slug, id interpolations escaped)
+- Fixed XSS in versions view (commit messages, authors, hashes escaped)
+- Replaced inline `onclick` handlers that interpolated user data with data-attribute event delegation
+- Added `Content-Security-Policy`, `X-Content-Type-Options: nosniff`, `Referrer-Policy` on all admin responses
+- Fixed undefined `collection` variable bug in `edit.js:blockTemplateHtml` (was silently throwing ReferenceError)
+- Bumped `js-yaml` ^4.1.0 → ^4.1.1 (CVE-2025-64718: prototype pollution via `<<` merge key)
+- Admin/API now return 400 with clear error for invalid slugs/ids/hashes instead of 500
+
+### Added
+- `src/utils/safe.js`: centralized `escapeHtml`, `validSlug`, `validId`, `validGitHash`, `validFilename`, `safeJoin`, `safeFilename`, `requireSlug`, `requireId`, `requireGitHash`
+- `test.js` at repo root: 26 integration tests covering security utilities and store CRUD + traversal blocking
+
 ### Removed
 - Users collection and authentication system (git is now the access control)
 - Login/logout views and cookie-based sessions
