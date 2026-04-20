@@ -57,7 +57,7 @@ function renderPasswordField(field, prefix = '') {
 
 function renderCheckboxField(field, value, prefix = '') {
   const name = `${prefix}${field.name}`
-  return `<div class="form-group flex items-center gap-3"><input type="hidden" name="${name}" value="false" /><input id="${name}" name="${name}" type="checkbox" value="true" ${value ? 'checked' : ''} class="checkbox" /><label class="form-label mb-0" for="${name}">${fieldLabel(field)}</label></div>`
+  return `<div class="my-4" style="display:flex;flex-direction:row;align-items:center;gap:0.75rem"><input type="hidden" name="${name}" value="false" /><input id="${name}" name="${name}" type="checkbox" value="true" ${value ? 'checked' : ''} class="checkbox" style="width:1.125rem;height:1.125rem" /><label for="${name}" style="margin:0;font-size:0.875rem;cursor:pointer">${fieldLabel(field)}</label></div>`
 }
 
 function renderSelectField(field, value, prefix = '') {

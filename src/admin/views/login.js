@@ -15,8 +15,6 @@ export function loginView({ error = '' } = {}) {
     <button type="submit" class="btn btn-primary btn-block mt-2">Sign In</button>
   </div>
 </form>
-<p class="text-center text-sm text-muted-foreground mt-4">
-  <a href="/next/seed?secret=${process.env.PAYLOAD_SECRET || ''}" class="underline hover:no-underline">Seed database</a> if first run
-</p>`
+`
   return adminLoginLayout({ body, error })
 }

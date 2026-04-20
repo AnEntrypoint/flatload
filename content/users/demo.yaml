@@ -1,6 +1,6 @@
 id: demo
-name: Demo Author
+name: Demo Admin
 email: demo@example.com
-hash: $2b$10$wHcghMrVYqhEv81tbpNOHu/Kl/CocVlN3fqTvLcmm/tOs3.xfvoXG
-createdAt: '2024-01-01T00:00:00.000Z'
-updatedAt: '2024-01-01T00:00:00.000Z'
+hash: $2a$10$Pzyn2vmcJGFfp4RB/8M.nuiKY5ZNqN1KR2mmu7ycianLrh0/A4zHC
+createdAt: '2026-04-20T15:49:59.052Z'
+updatedAt: '2026-04-20T15:49:59.052Z'

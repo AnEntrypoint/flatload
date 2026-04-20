@@ -88,13 +88,11 @@ export async function listView(collectionSlug, user, { page = 1, search = '' } =
   <input name="search" value="${search}" placeholder="Search..." class="input input-solid input-sm flex-1" />
   <button type="submit" class="btn btn-outline btn-sm">Search</button>
 </form>
-<div class="card bg-backgroundSecondary border border-border/30 overflow-hidden">
-  <div class="overflow-x-auto">
-    <table class="table w-full">
-      <thead class="bg-backgroundPrimary"><tr>${headers}</tr></thead>
-      <tbody>${rows}${emptyRow}</tbody>
-    </table>
-  </div>
+<div class="rounded-lg border border-border/30 bg-backgroundSecondary overflow-hidden">
+  <table class="w-full" style="border-collapse:collapse;table-layout:auto">
+    <thead style="background:rgb(var(--backgroundPrimary))"><tr>${headers}</tr></thead>
+    <tbody>${rows}${emptyRow}</tbody>
+  </table>
 </div>
 ${pagination}`
 

@@ -15,6 +15,9 @@ const MIME = {
 export async function mediaHandler(req) {
   const url = new URL(req.url)
   const filename = decodeURIComponent(url.pathname.replace(/^\/media\//, ''))
+  if (/^https?:\/\//i.test(filename)) {
+    return new Response(null, { status: 302, headers: { Location: filename, 'Cache-Control': 'public, max-age=3600' } })
+  }
   const original = path.resolve(MEDIA_DIR, filename)
   if (!original.startsWith(MEDIA_DIR)) return new Response('Forbidden', { status: 403 })
   if (!fs.existsSync(original)) return new Response('Not found', { status: 404 })
