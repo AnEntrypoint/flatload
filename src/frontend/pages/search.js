@@ -33,7 +33,6 @@ export async function searchPage(req) {
     if (docs.length) {
       resultsHtml = `<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">${
         docs.map((doc) => {
-          // Search results are lightweight — render as cards directly
           return renderCard({
             slug: doc.slug,
             title: doc.meta?.title || doc.slug,

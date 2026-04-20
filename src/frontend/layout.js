@@ -8,7 +8,7 @@ function renderHeader(header) {
   return `
 <header class="sticky top-0 z-40 w-full border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
   <div class="container flex h-16 items-center justify-between gap-4">
-    <a href="/" class="font-bold text-xl tracking-tight text-primary">Flatload</a>
+    <a href="/" class="font-bold text-xl tracking-tight text-primary">Flatspace</a>
     <nav class="hidden md:flex items-center gap-6">
       ${navItems}
       <button id="theme-toggle" aria-label="Toggle theme" class="hover:text-primary transition-colors">
@@ -43,7 +43,7 @@ function renderFooter(footer) {
   return `
 <footer class="border-t border-border mt-auto bg-background">
   <div class="container py-8 flex flex-col md:flex-row items-center justify-between gap-4">
-    <p class="text-sm text-muted-foreground">&copy; ${new Date().getFullYear()} Flatload</p>
+    <p class="text-sm text-muted-foreground">&copy; ${new Date().getFullYear()} Flatspace</p>
     ${navItems ? `<nav class="flex flex-wrap gap-6">${navItems}</nav>` : ''}
   </div>
 </footer>`
@@ -64,15 +64,15 @@ export function renderLayout({ title, description, ogImage, canonical, body, hea
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>${title || 'Flatload'}</title>
+  <title>${title || 'Flatspace'}</title>
   ${metaDesc}
   ${canonicalTag}
-  <meta property="og:title" content="${title || 'Flatload'}" />
+  <meta property="og:title" content="${title || 'Flatspace'}" />
   <meta property="og:type" content="website" />
   ${absCanonical ? `<meta property="og:url" content="${absCanonical}" />` : ''}
   ${ogImg}
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="${title || 'Flatload'}" />
+  <meta name="twitter:title" content="${title || 'Flatspace'}" />
   ${metaDesc ? `<meta name="twitter:description" content="${description}" />` : ''}
   <link rel="stylesheet" href="/app.css" />
   <script>${themeInitScript}</script>

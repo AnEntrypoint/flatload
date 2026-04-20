@@ -6,6 +6,9 @@ public/media/cache/
 *.db-wal
 .DS_Store
 .gm-stop-verified
+.codeinsight
+.prd
+*.stackdump
 .plugkit-browser-profile/
 shot*.png
 final-*.png

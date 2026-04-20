@@ -136,6 +136,24 @@ document.addEventListener('click', e => {
   if (mp) { window.adminOpenMediaPicker(mp.dataset.mediaPicker); return }
   const cu = e.target.closest('[data-clear-upload]')
   if (cu) { window.adminClearUpload(cu.dataset.clearUpload); return }
+  const bd = e.target.closest('[data-bulk-delete]')
+  if (bd) {
+    if (!confirm('Delete selected?')) return
+    const col = bd.dataset.collection
+    const ids = [...document.querySelectorAll('.row-check:checked')].map(c => c.value)
+    Promise.all(ids.map(id => fetch(`/admin/api/collections/${encodeURIComponent(col)}/${encodeURIComponent(id)}`, { method: 'DELETE' })))
+      .finally(() => setTimeout(() => location.reload(), 300))
+    return
+  }
+  const dd = e.target.closest('[data-delete-doc]')
+  if (dd) {
+    if (!confirm('Delete?')) return
+    const col = dd.dataset.collection
+    const id = dd.dataset.id
+    fetch(`/admin/api/collections/${col}/${id}`, { method: 'DELETE' })
+      .then(() => location.href = `/admin/collections/${col}`)
+    return
+  }
 })
 
 ;(function () {
@@ -161,3 +179,9 @@ document.addEventListener('click', e => {
   document.body.appendChild(toast)
   setTimeout(() => toast.remove(), 3000)
 })()
+
+window.__debug = {
+  get theme() { return localStorage.getItem('admin-theme') || 'system' },
+  get sidebar() { return localStorage.getItem('admin-sidebar') || 'open' },
+  get formDirty() { const f = document.querySelector('form#edit-form, form#global-form'); return f ? 'check beforeunload' : 'no form' }
+}

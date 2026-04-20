@@ -7,6 +7,6 @@ navItems:
   - link:
       type: custom
       label: Source Code
-      url: https://github.com/AnEntrypoint/flatload
+      url: https://github.com/AnEntrypoint/flatspace
       newTab: true
 updatedAt: '2024-01-01T00:00:00.000Z'

@@ -5,32 +5,42 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Global Gaze — Admin</title>
   <link rel="stylesheet" href="../../../../app.css" />
-  <script>(function(){try{var t=localStorage.getItem('admin-theme')||'system';var d=window.matchMedia('(prefers-color-scheme:dark)').matches;var dark=(t==='dark')||(t==='system'&&d);document.documentElement.setAttribute('data-theme',dark?'dark':'light');}catch(e){}})();</script>
+  <script>(function(){try{
+const sidebarState = localStorage.getItem('admin-sidebar') || 'open';
+document.documentElement.setAttribute('data-sidebar', sidebarState);var t=localStorage.getItem('admin-theme')||'system';var d=window.matchMedia('(prefers-color-scheme:dark)').matches;var dark=(t==='dark')||(t==='system'&&d);document.documentElement.setAttribute('data-theme',dark?'dark':'light');}catch(e){}})();</script>
+  <style>
+[data-sidebar="collapsed"] .sidebar { width: 0; overflow: hidden; padding: 0; border: none; }
+[data-sidebar="collapsed"] .sidebar-label { display: none; }
+@media (max-width: 1023px) { .sidebar { display: none; } .sidebar.mobile-open { display: flex; position: fixed; z-index: 40; top: 0; left: 0; height: 100vh; width: 16rem; background: var(--backgroundPrimary, #fff); } }
+</style>
 </head>
 <body class="min-h-screen flex">
   <div class="sidebar sidebar-sticky w-64 shrink-0 border-r border-border/30">
     <div class="p-4 border-b border-border/30">
-      <a href="/flatload/admin/" class="font-semibold text-base text-content1">Flatload Admin</a>
+      <a href="/flatspace/admin/" class="font-semibold text-base text-content1 sidebar-label">Flatspace</a>
+      <button id="sidebar-toggle" class="btn btn-ghost btn-xs ml-auto sidebar-label">
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 19l-7-7 7-7M18 19l-7-7 7-7"/></svg>
+      </button>
     </div>
     <nav class="menu p-3 flex-1 overflow-y-auto">
       <ul class="menu-items">
-        <li class="menu-item"><a href="/flatload/admin/" class="w-full">Dashboard</a></li>
+        <li class="menu-item"><a href="/flatspace/admin/" class="w-full">Dashboard</a></li>
         <li><span class="menu-title px-2 mt-3">Collections</span></li>
-        <li class="menu-item"><a href="/flatload/admin/collections/pages/" class="w-full">Pages</a></li><li class="menu-item active"><a href="/flatload/admin/collections/posts/" class="w-full font-medium text-primary">Posts</a></li><li class="menu-item"><a href="/flatload/admin/collections/media/" class="w-full">Media</a></li><li class="menu-item"><a href="/flatload/admin/collections/categories/" class="w-full">Categories</a></li><li class="menu-item"><a href="/flatload/admin/collections/users/" class="w-full">Users</a></li>
+        <li class="menu-item"><a href="/flatspace/admin/collections/categories/" class="w-full">Categories</a></li><li class="menu-item"><a href="/flatspace/admin/collections/media/" class="w-full">Media</a></li><li class="menu-item"><a href="/flatspace/admin/collections/pages/" class="w-full">Pages</a></li><li class="menu-item active"><a href="/flatspace/admin/collections/posts/" class="w-full font-medium text-primary">Posts</a></li>
         </ul>
     </nav>
-    <div class="p-4 border-t border-border/30 text-xs text-content3">
-      <div class="mb-2 truncate">demo@flatload.io</div>
-      
-    </div>
   </div>
   <div class="flex-1 flex flex-col min-h-screen overflow-hidden">
     <header class="navbar bg-backgroundSecondary border-b border-border/30 h-14 px-6 shrink-0">
-      <div class="navbar-start">
-        <span class="text-sm text-content2">posts / edit</span>
+      <div class="navbar-start gap-2">
+        <button id="mobile-menu" class="btn btn-ghost btn-sm lg:hidden">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+        </button>
+        <nav class="text-sm text-content2 flex items-center gap-1"><a href="/admin" class="hover:text-content1">Dashboard</a> <span class="text-content3">/</span> <a href="/flatspace/admin/collections/posts/" class="hover:text-content1">Post</a> <span class="text-content3">/</span> Global Gaze</nav>
       </div>
       <div class="navbar-end gap-4">
-        <a href="/flatload/" target="_blank" class="text-sm text-content2 hover:text-content1 transition-colors">View Site ↗</a>
+        <button class="btn btn-ghost btn-sm text-content2 gap-1"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg><span class="hidden md:inline text-xs">Search</span><kbd class="hidden md:inline text-[10px] bg-muted px-1 rounded">⌘K</kbd></button>
+        <a href="/flatspace/" target="_blank" class="text-sm text-content2 hover:text-content1 transition-colors">View Site ↗</a>
         <button id="admin-theme-toggle" class="btn btn-ghost btn-sm">
           <svg class="dark-icon hidden" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
           <svg class="light-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
@@ -38,41 +48,39 @@
       </div>
     </header>
     <main class="flex-1 overflow-y-auto p-6">
-  <div style="background:#f59e0b;color:#1c1917;padding:0.4rem 1rem;font-size:0.8rem;font-weight:600;text-align:center;">Read-only preview — <a href="https://github.com/AnEntrypoint/flatload" style="text-decoration:underline;">run locally</a> to edit content</div>
+  <div style="background:#f59e0b;color:#1c1917;padding:0.4rem 1rem;font-size:0.8rem;font-weight:600;text-align:center;">Read-only preview — <a href="https://github.com/AnEntrypoint/flatspace" style="text-decoration:underline;">run locally</a> to edit content</div>
       
 <div class="flex items-center justify-between mb-6">
-  <div>
-    <a href="/flatload/admin/collections/posts/" class="text-sm text-muted-foreground hover:text-foreground">&larr; posts</a>
-    <h1 class="text-2xl font-bold mt-1">Global Gaze</h1>
-  </div>
-  <div class="flex gap-2">
-    <a href="/flatload/admin/collections/posts/global-gaze/versions/" class="btn btn-ghost btn-sm">Versions</a>
-    <button form="edit-form" type="submit" class="btn btn-primary btn-sm">Save</button>
-  </div>
+  <div><a href="/flatspace/admin/collections/posts/" class="text-sm text-muted-foreground hover:text-foreground">&larr; posts</a><h1 class="text-2xl font-bold mt-1">Global Gaze</h1></div>
+  <div class="flex gap-2"><a href="/flatspace/admin/collections/posts/global-gaze/versions/" class="btn btn-ghost btn-sm">Versions</a><button form="edit-form" type="submit" class="btn btn-primary btn-sm">Save</button></div>
 </div>
 <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-  <form id="edit-form" method="POST" action="/admin/collections/posts/global-gaze" class="lg:col-span-2 space-y-4">
-    <div class="form-group"><label class="form-label" for="title">Title</label><input id="title" name="title" type="text" value="Global Gaze" class="input input-solid input-block"  /></div><div class="form-group"><label class="form-label" for="slug">Slug</label><input id="slug" name="slug" type="text" value="global-gaze" class="input input-solid input-block"  /></div><div class="form-group"><label class="form-label">Hero Image</label><div class="p-3 border border-border rounded mb-2"><img src="/media/https://picsum.photos/seed/post2/900/600?preset=thumbnail" alt="" class="w-20 h-20 object-cover rounded mb-2" /><div class="text-sm">https://picsum.photos/seed/post2/900/600</div></div><input name="heroImage" type="hidden" value="image-2" /><a href="/flatload/admin/collections/media/" class="btn btn-ghost btn-sm" target="_blank">Browse Media</a></div><div class="form-group"><label class="form-label">Content</label><div id="content-editor" class="border border-border rounded min-h-48 p-3 prose max-w-none" contenteditable="true"><h2 class="font-bold mb-2">Exploring the world through a lens of curiosity and wonder</h2><p class="mb-2">In every corner of the globe, stories wait to be discovered by those willing to look beyond the familiar.</p><p class="mb-2">Global perspectives enrich our understanding of shared humanity, reminding us that beneath cultural differences lie universal aspirations.</p></div><input type="hidden" name="content" id="content-value" value='{"root":{"type":"root","direction":"ltr","format":"","indent":0,"version":1,"children":[{"type":"heading","tag":"h2","children":[{"type":"text","text":"Exploring the world through a lens of curiosity and wonder","detail":0,"format":0,"mode":"normal","style":"","version":1}],"direction":"ltr","format":"","indent":0,"version":1},{"type":"paragraph","children":[{"type":"text","text":"In every corner of the globe, stories wait to be discovered by those willing to look beyond the familiar.","detail":0,"format":0,"mode":"normal","style":"","version":1}],"direction":"ltr","format":"","indent":0,"textFormat":0,"version":1},{"type":"paragraph","children":[{"type":"text","text":"Global perspectives enrich our understanding of shared humanity, reminding us that beneath cultural differences lie universal aspirations.","detail":0,"format":0,"mode":"normal","style":"","version":1}],"direction":"ltr","format":"","indent":0,"textFormat":0,"version":1}]}}' /><script>(function(){var el=document.getElementById('content-editor');var inp=document.getElementById('content-value');if(el)el.addEventListener('input',function(){inp.value=JSON.stringify({root:{type:'root',version:1,children:[{type:'paragraph',version:1,children:[{type:'text',version:1,text:el.innerText,format:0}]}]}});});})()</script></div><div class="form-group" data-rel-field="relatedPosts"><label class="form-label">Related Posts</label><div class="mb-2"><span class="badge badge-outline mr-1">Digital Horizons <button type="button" data-remove-rel="relatedPosts" data-id="digital-horizons" class="ml-1 hover:text-error">×</button></span><span class="badge badge-outline mr-1">Dollar and Sense: The Financial Forecast <button type="button" data-remove-rel="relatedPosts" data-id="dollar-and-sense-the-financial-forecast" class="ml-1 hover:text-error">×</button></span></div><input name="relatedPosts" type="hidden" value="digital-horizons,dollar-and-sense-the-financial-forecast" /><button type="button" class="btn btn-ghost btn-sm">+ Add Related Posts</button></div><div class="form-group" data-rel-field="categories"><label class="form-label">Categories</label><div class="mb-2"><span class="badge badge-outline mr-1">News <button type="button" data-remove-rel="categories" data-id="news" class="ml-1 hover:text-error">×</button></span></div><input name="categories" type="hidden" value="news" /><button type="button" class="btn btn-ghost btn-sm">+ Add Categories</button></div><div class="form-group" data-rel-field="authors"><label class="form-label">Authors</label><div class="mb-2"><span class="badge badge-outline mr-1">Demo Author <button type="button" data-remove-rel="authors" data-id="demo" class="ml-1 hover:text-error">×</button></span></div><input name="authors" type="hidden" value="demo" /><button type="button" class="btn btn-ghost btn-sm">+ Add Authors</button></div><div class="form-group"><label class="form-label" for="publishedAt">Published At</label><input id="publishedAt" name="publishedAt" type="datetime-local" value="2024-01-22T00:00" class="input input-solid" /></div><fieldset class="border border-border rounded p-4 mb-4"><legend class="text-sm font-medium px-2">SEO</legend><div class="form-group"><label class="form-label" for="meta.title">Meta Title</label><input id="meta.title" name="meta.title" type="text" value="Global Gaze" class="input input-solid input-block"  /></div><div class="form-group"><label class="form-label" for="meta.description">Meta Description</label><textarea id="meta.description" name="meta.description" class="input input-solid input-block h-32 resize-y">Stories from around the world.</textarea></div><div class="form-group"><label class="form-label">Meta Image</label><div class="p-3 border border-border rounded mb-2"><div class="text-sm text-content3">No file selected</div></div><input name="meta.image" type="hidden" value="" /><a href="/flatload/admin/collections/media/" class="btn btn-ghost btn-sm" target="_blank">Browse Media</a></div></fieldset>
+  <form id="edit-form" method="POST" action="/admin/collections/posts/global-gaze" data-collection="posts" class="lg:col-span-2 space-y-4">
+    <div class="form-group"><label class="form-label" for="title">Title</label><input id="title" name="title" type="text" value="Global Gaze" class="input input-solid input-block"  /></div><div class="form-group"><label class="form-label" for="slug">Slug</label><input id="slug" name="slug" type="text" value="global-gaze" class="input input-solid input-block"  /></div><div class="form-group" data-upload-field="heroImage"><label class="form-label">Hero Image</label><div class="p-3 border border-border rounded mb-2" id="heroImage-preview"><img src="/media/https://picsum.photos/seed/post2/900/600?preset=thumbnail" alt="" class="w-20 h-20 object-cover rounded mb-2" /><div class="text-sm">https://picsum.photos/seed/post2/900/600</div></div><input name="heroImage" type="hidden" id="heroImage-upload-id" value="image-2" /><div class="flex gap-2"><button type="button" class="btn btn-ghost btn-sm" data-media-picker="heroImage">Choose</button><button type="button" class="btn btn-ghost btn-sm text-error" data-clear-upload="heroImage">Clear</button></div></div><div class="form-group" data-rte="content"><label class="form-label">Content</label><div class="rte-wrap border border-border rounded overflow-hidden"><div class="rte-toolbar flex flex-wrap items-center gap-1 p-2 bg-muted border-b border-border text-xs select-none"><button type="button" class="rte-btn px-2 py-1 rounded hover:bg-background font-bold" data-cmd="bold">B</button><button type="button" class="rte-btn px-2 py-1 rounded hover:bg-background italic" data-cmd="italic">I</button><button type="button" class="rte-btn px-2 py-1 rounded hover:bg-background underline" data-cmd="underline">U</button><button type="button" class="rte-btn px-2 py-1 rounded hover:bg-background line-through" data-cmd="strikeThrough">S</button><button type="button" class="rte-btn px-2 py-1 rounded hover:bg-background font-mono" data-cmd="code">{ }</button><span class="mx-1 text-border">|</span><button type="button" class="rte-btn px-2 py-1 rounded hover:bg-background font-bold" data-cmd="h1">H1</button><button type="button" class="rte-btn px-2 py-1 rounded hover:bg-background font-bold" data-cmd="h2">H2</button><button type="button" class="rte-btn px-2 py-1 rounded hover:bg-background font-bold" data-cmd="h3">H3</button><button type="button" class="rte-btn px-2 py-1 rounded hover:bg-background" data-cmd="p">¶</button><span class="mx-1 text-border">|</span><button type="button" class="rte-btn px-2 py-1 rounded hover:bg-background" data-cmd="insertOrderedList">OL</button><button type="button" class="rte-btn px-2 py-1 rounded hover:bg-background" data-cmd="insertUnorderedList">UL</button><button type="button" class="rte-btn px-2 py-1 rounded hover:bg-background" data-cmd="blockquote">"</button><button type="button" class="rte-btn px-2 py-1 rounded hover:bg-background" data-cmd="link">&#128279;</button></div><div id="content-editor" class="rte-editor min-h-48 p-3 prose max-w-none outline-none" contenteditable="true"><h2 class="font-bold mb-2">Exploring the world through a lens of curiosity and wonder</h2><p class="mb-2">In every corner of the globe, stories wait to be discovered by those willing to look beyond the familiar.</p><p class="mb-2">Global perspectives enrich our understanding of shared humanity, reminding us that beneath cultural differences lie universal aspirations.</p></div></div><input type="hidden" name="content" id="content-value" value='{"root":{"type":"root","direction":"ltr","format":"","indent":0,"version":1,"children":[{"type":"heading","tag":"h2","children":[{"type":"text","text":"Exploring the world through a lens of curiosity and wonder","detail":0,"format":0,"mode":"normal","style":"","version":1}],"direction":"ltr","format":"","indent":0,"version":1},{"type":"paragraph","children":[{"type":"text","text":"In every corner of the globe, stories wait to be discovered by those willing to look beyond the familiar.","detail":0,"format":0,"mode":"normal","style":"","version":1}],"direction":"ltr","format":"","indent":0,"textFormat":0,"version":1},{"type":"paragraph","children":[{"type":"text","text":"Global perspectives enrich our understanding of shared humanity, reminding us that beneath cultural differences lie universal aspirations.","detail":0,"format":0,"mode":"normal","style":"","version":1}],"direction":"ltr","format":"","indent":0,"textFormat":0,"version":1}]}}' /></div><div class="form-group" data-rel-field="relatedPosts"><label class="form-label">Related Posts</label><div class="mb-2 flex flex-wrap gap-1" data-rel-display><span class="badge badge-outline mr-1">Digital Horizons <button type="button" data-remove-rel="relatedPosts" data-id="digital-horizons" class="ml-1 hover:text-error">&times;</button></span><span class="badge badge-outline mr-1">Dollar and Sense: The Financial Forecast <button type="button" data-remove-rel="relatedPosts" data-id="dollar-and-sense-the-financial-forecast" class="ml-1 hover:text-error">&times;</button></span></div><input name="relatedPosts" type="hidden" value="digital-horizons,dollar-and-sense-the-financial-forecast" /><button type="button" class="btn btn-ghost btn-sm">+ Add Related Posts</button></div><div class="form-group" data-rel-field="categories"><label class="form-label">Categories</label><div class="mb-2 flex flex-wrap gap-1" data-rel-display><span class="badge badge-outline mr-1">News <button type="button" data-remove-rel="categories" data-id="news" class="ml-1 hover:text-error">&times;</button></span></div><input name="categories" type="hidden" value="news" /><button type="button" class="btn btn-ghost btn-sm">+ Add Categories</button></div><div class="form-group"><label class="form-label" for="publishedAt">Published At</label><input id="publishedAt" name="publishedAt" type="datetime-local" value="2024-01-22T00:00" class="input input-solid" /></div><fieldset class="border border-border rounded p-4 mb-4"><legend class="text-sm font-medium px-2">SEO</legend><div class="form-group"><label class="form-label" for="meta.title">Meta Title</label><input id="meta.title" name="meta.title" type="text" value="Global Gaze" class="input input-solid input-block"  /></div><div class="form-group"><label class="form-label" for="meta.description">Meta Description</label><textarea id="meta.description" name="meta.description" class="input input-solid input-block h-32 resize-y">Stories from around the world.</textarea></div><div class="form-group" data-upload-field="meta.image"><label class="form-label">Meta Image</label><div class="p-3 border border-border rounded mb-2" id="meta.image-preview"><div class="text-sm text-content3">No file selected</div></div><input name="meta.image" type="hidden" id="meta.image-upload-id" value="" /><div class="flex gap-2"><button type="button" class="btn btn-ghost btn-sm" data-media-picker="meta.image">Choose</button></div></div></fieldset>
     <button type="submit" class="btn btn-primary">Save Changes</button>
   </form>
   <aside class="space-y-4">
-    <div class="card bg-card border border-border">
-      <div class="card-body gap-3">
-        <h3 class="font-medium text-sm">Document</h3>
-        <div class="form-group"><label class="form-label">Status</label><select name="_status" class="select select-solid"><option value="draft" >Draft</option><option value="published" selected>Published</option></select></div>
-        <div class="text-xs text-muted-foreground mt-4 pt-4 border-t border-border space-y-1"><div>ID: <span class="font-mono">global-gaze</span></div><div>Created: 1/22/2024, 12:00:00 AM</div><div>Updated: 1/22/2024, 12:00:00 AM</div></div>
-        <div class="flex flex-col gap-2 mt-4">
-          <button form="edit-form" type="submit" class="btn btn-primary btn-sm btn-block">Save</button>
-          <a href="/global-gaze" target="_blank" class="btn btn-ghost btn-sm btn-block">View ↗</a>
-          <button type="button" class="btn btn-ghost btn-sm btn-block text-error">Delete</button>
-        </div>
+    <div class="card bg-card border border-border"><div class="card-body gap-3">
+      <h3 class="font-medium text-sm">Document</h3>
+      <div class="form-group"><label class="form-label">Status</label><select name="_status" class="select select-solid"><option value="draft" >Draft</option><option value="published" selected>Published</option></select></div>
+      <div class="text-xs text-muted-foreground mt-4 pt-4 border-t border-border space-y-1"><div>ID: <span class="font-mono">global-gaze</span></div><div>Created: 1/22/2024, 2:00:00 AM</div><div>Updated: 1/22/2024, 2:00:00 AM</div></div>
+      <div class="flex flex-col gap-2 mt-4">
+        <button type="button" id="toggle-preview" class="btn btn-ghost btn-sm btn-block mb-2">Preview ↗</button>
+         <button form="edit-form" type="submit" name="_action" value="draft" class="btn btn-outline btn-sm btn-block">Save Draft</button>
+         <button form="edit-form" type="submit" name="_action" value="publish" class="btn btn-primary btn-sm btn-block">Publish</button>
+        <a href="/global-gaze" target="_blank" class="btn btn-ghost btn-sm btn-block">View ↗</a>
+        <button type="button" class="btn btn-ghost btn-sm btn-block text-error">Delete</button>
       </div>
-    </div>
+    </div></div>
     <div class="card bg-card border border-border"><div class="card-body"><h3 class="font-medium text-sm mb-2">Live Preview</h3><a href="/global-gaze" target="preview-frame" class="btn btn-ghost btn-sm btn-block">Open Preview ↗</a></div></div>
   </aside>
-</div>
+</div><div class="hidden lg:w-1/2"><iframe id="preview-frame" class="w-full h-full border-l border-border" style="min-height:80vh"></iframe></div>
     </main>
   </div>
+  <script defer src="/admin/richtext.js"></script>
   
+  <script defer src="/admin/search.js"></script>
+  <script defer src="/admin/drawer.js"></script>
+  <script defer src="/admin/preview.js"></script>
 </body>
 </html>

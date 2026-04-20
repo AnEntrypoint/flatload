@@ -8,7 +8,6 @@ import { getHeader, getFooter } from '../utils/getGlobals.js'
 import { renderLayout } from './layout.js'
 import { checkRedirect } from '../utils/redirects.js'
 
-// URLPattern is built into Bun/V8 — no import needed
 const routes = [
   { pattern: new URLPattern({ pathname: '/' }),                         handler: (req) => homePage(req) },
   { pattern: new URLPattern({ pathname: '/posts' }),                    handler: (req) => postsPage(req) },
@@ -43,7 +42,6 @@ export async function frontendRouter(req) {
     }
   }
 
-  // Check redirects before 404
   const redirect = await checkRedirect(url.pathname)
   if (redirect) {
     return new Response(null, {
@@ -52,7 +50,6 @@ export async function frontendRouter(req) {
     })
   }
 
-  // 404
   const [header, footer] = await Promise.all([getHeader(), getFooter()])
   return new Response(
     renderLayout({ title: '404 | Zero-Hop', body: notFoundHtml(), header, footer }),

@@ -1,7 +1,7 @@
 import { adminLayout } from '../layout.js'
 import { payload } from '../../utils/getPayload.js'
 
-export async function mediaView(user, { page = 1, search = '' } = {}) {
+export async function mediaView({ page = 1, search = '' } = {}) {
   const LIMIT = 24
   const where = search ? { filename: { like: search } } : {}
 
@@ -58,10 +58,10 @@ export async function mediaView(user, { page = 1, search = '' } = {}) {
 </div>
 ${pagination}`
 
-  return adminLayout({ title: 'Media', body, user, breadcrumb: 'media', path: '/admin/collections/media' })
+  return adminLayout({ title: 'Media', body, breadcrumb: '<a href="/admin" class="hover:text-content1">Dashboard</a> <span class="text-content3">/</span> Media', path: '/admin/collections/media' })
 }
 
-export function mediaUploadView(user) {
+export function mediaUploadView() {
   const body = `
 <div class="flex items-center justify-between mb-6">
   <div>
@@ -88,5 +88,5 @@ export function mediaUploadView(user) {
   </form>
 </div>`
 
-  return adminLayout({ title: 'Upload Media', body, user, breadcrumb: 'media / upload', path: '/admin/collections/media' })
+  return adminLayout({ title: 'Upload Media', body, breadcrumb: '<a href="/admin" class="hover:text-content1">Dashboard</a> <span class="text-content3">/</span> <a href="/admin/collections/media" class="hover:text-content1">Media</a> <span class="text-content3">/</span> Upload', path: '/admin/collections/media' })
 }

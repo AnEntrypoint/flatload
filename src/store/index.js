@@ -1,22 +1,23 @@
 import path from 'path'
 import { readFileSync, writeFileSync, readdirSync, existsSync, mkdirSync, unlinkSync } from 'fs'
-import { join, resolve } from 'path'
+import { resolve } from 'path'
 import yaml from 'js-yaml'
+import { safeJoin, requireSlug, requireId } from '../utils/safe.js'
 
 let CONTENT_DIR = resolve('content')
 
 export function setContentDir(dir) { CONTENT_DIR = resolve(dir) }
 
 function collectionDir(collection) {
-  return join(CONTENT_DIR, collection)
+  return safeJoin(CONTENT_DIR, requireSlug(collection, 'collection'))
 }
 
 function globalFile(slug) {
-  return join(CONTENT_DIR, 'globals', `${slug}.yaml`)
+  return safeJoin(CONTENT_DIR, 'globals', `${requireSlug(slug, 'global')}.yaml`)
 }
 
 function readDoc(file) {
-  try { return yaml.load(readFileSync(file, 'utf8')) || {} } catch { return null }
+  try { return yaml.load(readFileSync(file, 'utf8')) || {} } catch (err) { console.error('failed to read', file + ':', err.message); return null }
 }
 
 function writeDoc(file, data) {
@@ -25,7 +26,7 @@ function writeDoc(file, data) {
 }
 
 function docFile(collection, id) {
-  return join(collectionDir(collection), `${id}.yaml`)
+  return safeJoin(collectionDir(collection), `${requireId(id, 'id')}.yaml`)
 }
 
 function allDocs(collection) {
@@ -33,7 +34,7 @@ function allDocs(collection) {
   if (!existsSync(dir)) return []
   return readdirSync(dir)
     .filter(f => f.endsWith('.yaml'))
-    .map(f => readDoc(join(dir, f)))
+    .map(f => readDoc(path.join(dir, f)))
     .filter(Boolean)
 }
 

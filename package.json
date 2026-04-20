@@ -1,6 +1,6 @@
 {
   "name": "flatspace",
-  "version": "1.0.2",
+  "version": "1.0.12",
   "description": "Flat-file CMS server — buildless Bun SSR, YAML content, zero-hop stack",
   "license": "MIT",
   "type": "module",
@@ -16,8 +16,7 @@
     "build": "bun run build:css && bun run build:client && bun run src/build.js"
   },
   "dependencies": {
-    "bcryptjs": "^2.4.3",
-    "js-yaml": "^4.1.0",
+    "js-yaml": "^4.1.1",
     "rippleui": "^1.12.1",
     "webjsx": "latest",
     "xstate": "^5.18.0"
@@ -29,5 +28,10 @@
   },
   "bin": {
     "flatspace": "./bin/flatspace.js"
-  }
+  },
+  "files": [
+    "index.js",
+    "src/",
+    "bin/"
+  ]
 }
