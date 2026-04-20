@@ -5,6 +5,7 @@ import { postPage } from './frontend/pages/post.js'
 import { dashboardView } from './admin/views/dashboard.js'
 import { listView } from './admin/views/list.js'
 import { editView } from './admin/views/edit.js'
+import { mediaView } from './admin/views/media.js'
 import { find } from './store/index.js'
 import { cp, mkdir } from 'fs/promises'
 import { existsSync } from 'fs'
@@ -39,6 +40,12 @@ function patchAdminHtml(html, cssDepth) {
   const cssPrefix = '../'.repeat(cssDepth)
   const banner = `<div style="background:#f59e0b;color:#1c1917;padding:0.4rem 1rem;font-size:0.8rem;font-weight:600;text-align:center;">Read-only preview — <a href="https://github.com/AnEntrypoint/flatspace" style="text-decoration:underline;">run locally</a> to edit content</div>`
   return html
+    .replace(/src="\/media\/([^"]+)"/g, (m, raw) => {
+      const [pathPart] = raw.split('?')
+      const decoded = decodeURIComponent(pathPart)
+      if (/^https?:\/\//i.test(decoded)) return `src="${decoded}"`
+      return `src="${cssPrefix}media/${raw}"`
+    })
     .replace('href="/app.css"', `href="${cssPrefix}app.css"`)
     .replace(/<script[^>]*src="\/admin\/client\.js"[^>]*><\/script>/, '')
     .replace(/\s+onclick="[^"]*"/g, '')
@@ -75,7 +82,7 @@ async function copyDir(src, dest) {
 
 async function buildStaticAdmin() {
   await mkdir(path.join(DOCS, 'admin'), { recursive: true })
-  const dashboard = await dashboardView(DEMO_USER)
+  const dashboard = await dashboardView()
   await Bun.write(path.join(DOCS, 'admin', 'index.html'), patchAdminHtml(dashboard, 1))
   console.log('wrote admin/')
 
@@ -83,7 +90,7 @@ async function buildStaticAdmin() {
     ADMIN_COLLECTIONS.map(async (slug) => {
       try {
         await mkdir(path.join(DOCS, 'admin', 'collections', slug), { recursive: true })
-        const html = await listView(slug, DEMO_USER)
+        const html = slug === 'media' ? await mediaView() : await listView(slug)
         await Bun.write(path.join(DOCS, 'admin', 'collections', slug, 'index.html'), patchAdminHtml(html, 3))
         console.log('wrote admin/collections/' + slug)
 
@@ -91,7 +98,7 @@ async function buildStaticAdmin() {
         await Promise.all(result.docs.map(async (doc) => {
           try {
             await mkdir(path.join(DOCS, 'admin', 'collections', slug, doc.id), { recursive: true })
-            const itemHtml = await editView(slug, doc.id, DEMO_USER)
+            const itemHtml = await editView(slug, doc.id)
             await Bun.write(path.join(DOCS, 'admin', 'collections', slug, doc.id, 'index.html'), patchAdminHtml(itemHtml, 4))
             console.log('wrote admin/collections/' + slug + '/' + doc.id)
           } catch (e) { console.error('admin item error', slug, doc.id, e.message) }

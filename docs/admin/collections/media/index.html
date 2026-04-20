@@ -26,7 +26,7 @@ document.documentElement.setAttribute('data-sidebar', sidebarState);var t=localS
       <ul class="menu-items">
         <li class="menu-item"><a href="/flatspace/admin/" class="w-full">Dashboard</a></li>
         <li><span class="menu-title px-2 mt-3">Collections</span></li>
-        <li class="menu-item"><a href="/flatspace/admin/collections/categories/" class="w-full">Categories</a></li><li class="menu-item active"><a href="/flatspace/admin/collections/media/" class="w-full font-medium text-primary">Media</a></li><li class="menu-item"><a href="/flatspace/admin/collections/pages/" class="w-full">Pages</a></li><li class="menu-item"><a href="/flatspace/admin/collections/posts/" class="w-full">Posts</a></li>
+        <li class="menu-item"><a href="/flatspace/admin/collections/categories/" class="w-full">Categories</a></li><li class="menu-item active"><a href="/flatspace/admin/collections/media/" class="w-full font-medium text-primary">Media</a></li><li class="menu-item"><a href="/flatspace/admin/collections/pages/" class="w-full">Pages</a></li><li class="menu-item"><a href="/flatspace/admin/collections/posts/" class="w-full">Posts</a></li><li class="menu-item"><a href="/flatspace/admin/collections/users/" class="w-full">Users</a></li>
         </ul>
     </nav>
   </div>
@@ -51,24 +51,39 @@ document.documentElement.setAttribute('data-sidebar', sidebarState);var t=localS
   <div style="background:#f59e0b;color:#1c1917;padding:0.4rem 1rem;font-size:0.8rem;font-weight:600;text-align:center;">Read-only preview — <a href="https://github.com/AnEntrypoint/flatspace" style="text-decoration:underline;">run locally</a> to edit content</div>
       
 <div class="flex items-center justify-between mb-6">
-  <h1 class="text-2xl font-bold text-content1">Media</h1>
-  
+  <h1 class="text-2xl font-bold">Media</h1>
+  <a href="/flatspace/admin/collections/media/upload/" class="btn btn-primary btn-sm">+ Upload</a>
 </div>
 <form method="get" class="mb-4 flex gap-2 max-w-sm">
-  <input name="search" value="" placeholder="Search..." class="input input-solid input-sm flex-1" />
-  <button type="submit" class="btn btn-outline btn-sm">Search</button>
+  <input name="search" value="" placeholder="Search files..." class="input input-solid flex-1" />
+  <button type="submit" class="btn btn-ghost btn-sm">Search</button>
 </form>
-<div id="bulk-bar" class="hidden flex items-center gap-3 mb-3 p-3 bg-backgroundSecondary border border-border/30 rounded">
-  <span class="text-sm"><span id="bulk-count">0</span> selected</span>
-  <button type="button" class="btn btn-error btn-sm">Delete Selected</button>
-</div>
-<div class="card bg-backgroundSecondary border border-border/30 overflow-hidden">
-  <div class="overflow-x-auto">
-    <table class="table w-full">
-      <thead class="bg-backgroundPrimary"><tr><th class="w-10 px-3 py-3"><input type="checkbox" class="checkbox checkbox-sm" id="select-all" onchange="document.querySelectorAll('.row-check').forEach(c=>{c.checked=this.checked});document.getElementById('bulk-bar').classList.toggle('hidden',!this.checked)" /></th><th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-content2"><a href="?sort=filename" class="hover:text-content1">Filename</a></th><th class="w-10 px-3 py-3"><input type="checkbox" class="checkbox checkbox-sm" id="select-all" onchange="document.querySelectorAll('.row-check').forEach(c=>{c.checked=this.checked});document.getElementById('bulk-bar').classList.toggle('hidden',!this.checked)" /></th><th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-content2"><a href="?sort=mimeType" class="hover:text-content1">Mime Type</a></th><th class="w-10 px-3 py-3"><input type="checkbox" class="checkbox checkbox-sm" id="select-all" onchange="document.querySelectorAll('.row-check').forEach(c=>{c.checked=this.checked});document.getElementById('bulk-bar').classList.toggle('hidden',!this.checked)" /></th><th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-content2"><a href="?sort=updatedAt" class="hover:text-content1 text-primary">Updated At ↓</a></th></tr></thead>
-      <tbody><tr class="border-b border-border/20 hover:bg-backgroundSecondary transition-colors"><td class="w-10 px-3 py-3"><input type="checkbox" class="checkbox checkbox-sm row-check" value="image-hero-1" onchange="var c=document.querySelectorAll('.row-check:checked').length;document.getElementById('bulk-bar').classList.toggle('hidden',!c);document.getElementById('bulk-count').textContent=c" /></td><td class="px-4 py-3 text-sm text-content1"><a href="/flatspace/admin/collections/media/image-hero-1/" class="block -mx-4 -my-3 px-4 py-3 hover:text-primary"><img src="/media/https://picsum.photos/seed/hero1/1400/800?w=40&h=40" alt="" class="w-10 h-10 object-cover rounded inline-block mr-2" />https://picsum.photos/seed/hero1/1400/800</a></td><td class="px-4 py-3 text-sm text-content1">image/jpeg</td><td class="px-4 py-3 text-sm text-content1">1/1/2024</td></tr><tr class="border-b border-border/20 hover:bg-backgroundSecondary transition-colors"><td class="w-10 px-3 py-3"><input type="checkbox" class="checkbox checkbox-sm row-check" value="image-3" onchange="var c=document.querySelectorAll('.row-check:checked').length;document.getElementById('bulk-bar').classList.toggle('hidden',!c);document.getElementById('bulk-count').textContent=c" /></td><td class="px-4 py-3 text-sm text-content1"><a href="/flatspace/admin/collections/media/image-3/" class="block -mx-4 -my-3 px-4 py-3 hover:text-primary"><img src="/media/https://picsum.photos/seed/post3/900/600?w=40&h=40" alt="" class="w-10 h-10 object-cover rounded inline-block mr-2" />https://picsum.photos/seed/post3/900/600</a></td><td class="px-4 py-3 text-sm text-content1">image/jpeg</td><td class="px-4 py-3 text-sm text-content1">1/1/2024</td></tr><tr class="border-b border-border/20 hover:bg-backgroundSecondary transition-colors"><td class="w-10 px-3 py-3"><input type="checkbox" class="checkbox checkbox-sm row-check" value="image-2" onchange="var c=document.querySelectorAll('.row-check:checked').length;document.getElementById('bulk-bar').classList.toggle('hidden',!c);document.getElementById('bulk-count').textContent=c" /></td><td class="px-4 py-3 text-sm text-content1"><a href="/flatspace/admin/collections/media/image-2/" class="block -mx-4 -my-3 px-4 py-3 hover:text-primary"><img src="/media/https://picsum.photos/seed/post2/900/600?w=40&h=40" alt="" class="w-10 h-10 object-cover rounded inline-block mr-2" />https://picsum.photos/seed/post2/900/600</a></td><td class="px-4 py-3 text-sm text-content1">image/jpeg</td><td class="px-4 py-3 text-sm text-content1">1/1/2024</td></tr><tr class="border-b border-border/20 hover:bg-backgroundSecondary transition-colors"><td class="w-10 px-3 py-3"><input type="checkbox" class="checkbox checkbox-sm row-check" value="image-1" onchange="var c=document.querySelectorAll('.row-check:checked').length;document.getElementById('bulk-bar').classList.toggle('hidden',!c);document.getElementById('bulk-count').textContent=c" /></td><td class="px-4 py-3 text-sm text-content1"><a href="/flatspace/admin/collections/media/image-1/" class="block -mx-4 -my-3 px-4 py-3 hover:text-primary"><img src="/media/https://picsum.photos/seed/post1/900/600?w=40&h=40" alt="" class="w-10 h-10 object-cover rounded inline-block mr-2" />https://picsum.photos/seed/post1/900/600</a></td><td class="px-4 py-3 text-sm text-content1">image/jpeg</td><td class="px-4 py-3 text-sm text-content1">1/1/2024</td></tr></tbody>
-    </table>
-  </div>
+<div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
+  <a href="/flatspace/admin/collections/media/image-hero-1/" class="card bg-card border border-border hover:shadow-md transition-shadow overflow-hidden">
+      <img src="https://picsum.photos/seed/hero1/1400/800" alt="Hero image" class="w-full h-32 object-cover" loading="lazy" />
+      <div class="p-2">
+        <div class="text-xs truncate">https://picsum.photos/seed/hero1/1400/800</div>
+        <div class="text-xs text-muted-foreground">image/jpeg</div>
+      </div>
+    </a><a href="/flatspace/admin/collections/media/image-3/" class="card bg-card border border-border hover:shadow-md transition-shadow overflow-hidden">
+      <img src="https://picsum.photos/seed/post3/900/600" alt="Abstract shapes" class="w-full h-32 object-cover" loading="lazy" />
+      <div class="p-2">
+        <div class="text-xs truncate">https://picsum.photos/seed/post3/900/600</div>
+        <div class="text-xs text-muted-foreground">image/jpeg</div>
+      </div>
+    </a><a href="/flatspace/admin/collections/media/image-2/" class="card bg-card border border-border hover:shadow-md transition-shadow overflow-hidden">
+      <img src="https://picsum.photos/seed/post2/900/600" alt="Abstract shapes" class="w-full h-32 object-cover" loading="lazy" />
+      <div class="p-2">
+        <div class="text-xs truncate">https://picsum.photos/seed/post2/900/600</div>
+        <div class="text-xs text-muted-foreground">image/jpeg</div>
+      </div>
+    </a><a href="/flatspace/admin/collections/media/image-1/" class="card bg-card border border-border hover:shadow-md transition-shadow overflow-hidden">
+      <img src="https://picsum.photos/seed/post1/900/600" alt="Abstract shapes" class="w-full h-32 object-cover" loading="lazy" />
+      <div class="p-2">
+        <div class="text-xs truncate">https://picsum.photos/seed/post1/900/600</div>
+        <div class="text-xs text-muted-foreground">image/jpeg</div>
+      </div>
+    </a>
 </div>
 
     </main>

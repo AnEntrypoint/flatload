@@ -26,7 +26,7 @@ document.documentElement.setAttribute('data-sidebar', sidebarState);var t=localS
       <ul class="menu-items">
         <li class="menu-item"><a href="/flatspace/admin/" class="w-full">Dashboard</a></li>
         <li><span class="menu-title px-2 mt-3">Collections</span></li>
-        <li class="menu-item active"><a href="/flatspace/admin/collections/categories/" class="w-full font-medium text-primary">Categories</a></li><li class="menu-item"><a href="/flatspace/admin/collections/media/" class="w-full">Media</a></li><li class="menu-item"><a href="/flatspace/admin/collections/pages/" class="w-full">Pages</a></li><li class="menu-item"><a href="/flatspace/admin/collections/posts/" class="w-full">Posts</a></li>
+        <li class="menu-item active"><a href="/flatspace/admin/collections/categories/" class="w-full font-medium text-primary">Categories</a></li><li class="menu-item"><a href="/flatspace/admin/collections/media/" class="w-full">Media</a></li><li class="menu-item"><a href="/flatspace/admin/collections/pages/" class="w-full">Pages</a></li><li class="menu-item"><a href="/flatspace/admin/collections/posts/" class="w-full">Posts</a></li><li class="menu-item"><a href="/flatspace/admin/collections/users/" class="w-full">Users</a></li>
         </ul>
     </nav>
   </div>
@@ -69,7 +69,7 @@ document.documentElement.setAttribute('data-sidebar', sidebarState);var t=localS
          <button form="edit-form" type="submit" name="_action" value="draft" class="btn btn-outline btn-sm btn-block">Save Draft</button>
          <button form="edit-form" type="submit" name="_action" value="publish" class="btn btn-primary btn-sm btn-block">Publish</button>
         <a href="/software" target="_blank" class="btn btn-ghost btn-sm btn-block">View ↗</a>
-        <button type="button" class="btn btn-ghost btn-sm btn-block text-error">Delete</button>
+        <button type="button" data-delete-doc data-collection="categories" data-id="software" class="btn btn-ghost btn-sm btn-block text-error">Delete</button>
       </div>
     </div></div>
     

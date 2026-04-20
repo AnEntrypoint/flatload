@@ -26,7 +26,7 @@ document.documentElement.setAttribute('data-sidebar', sidebarState);var t=localS
       <ul class="menu-items">
         <li class="menu-item"><a href="/flatspace/admin/" class="w-full">Dashboard</a></li>
         <li><span class="menu-title px-2 mt-3">Collections</span></li>
-        <li class="menu-item"><a href="/flatspace/admin/collections/categories/" class="w-full">Categories</a></li><li class="menu-item"><a href="/flatspace/admin/collections/media/" class="w-full">Media</a></li><li class="menu-item"><a href="/flatspace/admin/collections/pages/" class="w-full">Pages</a></li><li class="menu-item"><a href="/flatspace/admin/collections/posts/" class="w-full">Posts</a></li>
+        <li class="menu-item"><a href="/flatspace/admin/collections/categories/" class="w-full">Categories</a></li><li class="menu-item"><a href="/flatspace/admin/collections/media/" class="w-full">Media</a></li><li class="menu-item"><a href="/flatspace/admin/collections/pages/" class="w-full">Pages</a></li><li class="menu-item"><a href="/flatspace/admin/collections/posts/" class="w-full">Posts</a></li><li class="menu-item"><a href="/flatspace/admin/collections/users/" class="w-full">Users</a></li>
         </ul>
     </nav>
   </div>
@@ -60,15 +60,13 @@ document.documentElement.setAttribute('data-sidebar', sidebarState);var t=localS
 </form>
 <div id="bulk-bar" class="hidden flex items-center gap-3 mb-3 p-3 bg-backgroundSecondary border border-border/30 rounded">
   <span class="text-sm"><span id="bulk-count">0</span> selected</span>
-  <button type="button" class="btn btn-error btn-sm">Delete Selected</button>
+  <button type="button" class="btn btn-error btn-sm" data-bulk-delete data-collection="forms">Delete Selected</button>
 </div>
-<div class="card bg-backgroundSecondary border border-border/30 overflow-hidden">
-  <div class="overflow-x-auto">
-    <table class="table w-full">
-      <thead class="bg-backgroundPrimary"><tr><th class="w-10 px-3 py-3"><input type="checkbox" class="checkbox checkbox-sm" id="select-all" onchange="document.querySelectorAll('.row-check').forEach(c=>{c.checked=this.checked});document.getElementById('bulk-bar').classList.toggle('hidden',!this.checked)" /></th><th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-content2"><a href="?sort=title" class="hover:text-content1">Title</a></th><th class="w-10 px-3 py-3"><input type="checkbox" class="checkbox checkbox-sm" id="select-all" onchange="document.querySelectorAll('.row-check').forEach(c=>{c.checked=this.checked});document.getElementById('bulk-bar').classList.toggle('hidden',!this.checked)" /></th><th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-content2"><a href="?sort=updatedAt" class="hover:text-content1 text-primary">Updated At ↓</a></th></tr></thead>
-      <tbody><tr class="border-b border-border/20 hover:bg-backgroundSecondary transition-colors"><td class="w-10 px-3 py-3"><input type="checkbox" class="checkbox checkbox-sm row-check" value="contact-form" onchange="var c=document.querySelectorAll('.row-check:checked').length;document.getElementById('bulk-bar').classList.toggle('hidden',!c);document.getElementById('bulk-count').textContent=c" /></td><td class="px-4 py-3 text-sm text-content1"></td><td class="px-4 py-3 text-sm text-content1">1/1/2024</td></tr></tbody>
-    </table>
-  </div>
+<div class="rounded-lg border border-border/30 bg-backgroundSecondary overflow-hidden">
+  <table class="w-full" style="border-collapse:collapse;table-layout:auto">
+    <thead style="background:rgb(var(--backgroundPrimary))"><tr><th class="w-10 px-3 py-3"><input type="checkbox" class="checkbox checkbox-sm" id="select-all" onchange="document.querySelectorAll('.row-check').forEach(c=>{c.checked=this.checked});document.getElementById('bulk-bar').classList.toggle('hidden',!this.checked)" /></th><th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-content2"><a href="?sort=title" class="hover:text-content1">Title</a></th><th class="w-10 px-3 py-3"><input type="checkbox" class="checkbox checkbox-sm" id="select-all" onchange="document.querySelectorAll('.row-check').forEach(c=>{c.checked=this.checked});document.getElementById('bulk-bar').classList.toggle('hidden',!this.checked)" /></th><th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-content2"><a href="?sort=updatedAt" class="hover:text-content1 text-primary">Updated At ↓</a></th></tr></thead>
+    <tbody><tr class="border-b border-border/20 hover:bg-backgroundSecondary transition-colors"><td class="w-10 px-3 py-3"><input type="checkbox" class="checkbox checkbox-sm row-check" value="contact-form" onchange="var c=document.querySelectorAll('.row-check:checked').length;document.getElementById('bulk-bar').classList.toggle('hidden',!c);document.getElementById('bulk-count').textContent=c" /></td><td class="px-4 py-3 text-sm text-content1"></td><td class="px-4 py-3 text-sm text-content1">1/1/2024</td></tr></tbody>
+  </table>
 </div>
 
     </main>
