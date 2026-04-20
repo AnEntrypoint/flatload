@@ -1,9 +1,7 @@
+import { escapeHtml } from '../utils/safe.js'
+
 export function fieldLabel(field) {
   return field.label || field.name?.replace(/([A-Z])/g, ' $1').replace(/^./, s => s.toUpperCase()) || field.name
-}
-
-function escapeHtml(str) {
-  return String(str || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
 }
 
 function lexicalToHtml(node) {
@@ -34,10 +32,11 @@ function lexicalToHtml(node) {
 export function renderTextField(field, value = '', prefix = '') {
   const name = `${prefix}${field.name}`
   const val = String(value ?? '')
+  const label = escapeHtml(fieldLabel(field))
   if (field.textarea || field.type === 'textarea') {
-    return `<div class="form-group"><label class="form-label" for="${name}">${fieldLabel(field)}</label><textarea id="${name}" name="${name}" class="input input-solid input-block h-32 resize-y">${val.replace(/</g, '&lt;')}</textarea></div>`
+    return `<div class="form-group"><label class="form-label" for="${escapeHtml(name)}">${label}</label><textarea id="${escapeHtml(name)}" name="${escapeHtml(name)}" class="input input-solid input-block h-32 resize-y">${escapeHtml(val)}</textarea></div>`
   }
-  return `<div class="form-group"><label class="form-label" for="${name}">${fieldLabel(field)}</label><input id="${name}" name="${name}" type="text" value="${val.replace(/"/g, '&quot;')}" class="input input-solid input-block" ${field.admin?.readOnly ? 'readonly' : ''} /></div>`
+  return `<div class="form-group"><label class="form-label" for="${escapeHtml(name)}">${label}</label><input id="${escapeHtml(name)}" name="${escapeHtml(name)}" type="text" value="${escapeHtml(val)}" class="input input-solid input-block" ${field.admin?.readOnly ? 'readonly' : ''} /></div>`
 }
 
 function renderNumberField(field, value, prefix = '') {
