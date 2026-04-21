@@ -1,5 +1,12 @@
 ## [Unreleased]
 
+### Added (2026-04-21)
+- `flatspace build` CLI subcommand — runs a Node-native theme-based static build when `flatspace.config.{mjs,js}` is present in cwd
+- Theme contract: config points at a module exporting `{ render(ctx), assets }`; `ctx` exposes `read(collection)`, `readGlobal(slug)`, `basePath`, `site`, `writeFile`
+- Tailwind compile via `npx @tailwindcss/cli` (works under both `npx flatspace build` and `bunx flatspace build`)
+- Works from plain Node — no Bun required for consumers
+- Legacy `bun run src/build.js` path preserved for flatspace's own demo site
+
 ### Security (2026-04-20 hardening pass)
 - Fixed shell injection in `/admin/api/versions/restore` — user-supplied `hash` was interpolated into `execSync`
 - Fixed shell injection in version history `git log` / `git diff` — switched to `spawnSync` with arg arrays
