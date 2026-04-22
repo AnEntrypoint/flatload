@@ -19,6 +19,6 @@ if (cmd === 'aggregate') {
 } else {
   console.error('flatspace — usage:');
   console.error('  flatspace build                       # build static site using flatspace.config.{mjs,js} in cwd');
-  console.error('  flatspace aggregate --input <f> --output <f> [--type images|videos|merge]');
+  console.error('  flatspace aggregate --input <f> --output <f> [--type images|videos|merge|passthrough]');
   process.exit(cmd ? 1 : 0);
 }

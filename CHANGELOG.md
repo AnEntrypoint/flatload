@@ -1,5 +1,12 @@
 ## [Unreleased]
 
+### Added (2026-04-22)
+- `flatspace aggregate --type passthrough` — write input verbatim for structured content docs that are already in final shape (e.g. single-doc YAML→JSON pipelines for static sites)
+
+### Changed (2026-04-22) — BREAKING for silent `videos` fallback
+- `aggregate` autodetect no longer silently routes arbitrary objects to `videos()` (which runs `Object.values().sort(date desc)` and corrupts structured content into an array). Object inputs must now have `date` fields on every value to autodetect as `videos`; otherwise the CLI errors with a hint to pass `--type passthrough`. Same strictness applied to array inputs for `images` (every item must have `filename`).
+- Callers previously relying on the implicit `videos` fallback for date-bearing object maps are unaffected. Callers feeding flatspace a content-doc object (rs-learn Pages `index.json` was one such) now either switch to `yq`/plain JSON output or add `--type passthrough`.
+
 ### Added (2026-04-21)
 - `flatspace build` CLI subcommand — runs a Node-native theme-based static build when `flatspace.config.{mjs,js}` is present in cwd
 - Theme contract: config points at a module exporting `{ render(ctx), assets }`; `ctx` exposes `read(collection)`, `readGlobal(slug)`, `basePath`, `site`, `writeFile`

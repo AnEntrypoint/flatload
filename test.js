@@ -1,6 +1,7 @@
 import { escapeHtml, validSlug, validId, validGitHash, validFilename, safeJoin, safeFilename, requireSlug, requireId, requireGitHash } from './src/utils/safe.js'
 import { setContentDir, find, findByID, create, update, del } from './src/store/index.js'
-import { mkdtempSync, writeFileSync, mkdirSync, rmSync } from 'fs'
+import { aggregate } from './src/aggregate.js'
+import { mkdtempSync, writeFileSync, readFileSync, mkdirSync, rmSync } from 'fs'
 import { tmpdir } from 'os'
 import { join } from 'path'
 
@@ -49,6 +50,41 @@ try {
   okThrows('store blocks slash in collection', () => find({ collection: 'pages/hack' }))
 } finally {
   rmSync(tmp, { recursive: true, force: true })
+}
+
+console.log('== aggregate.js ==')
+const atmp = mkdtempSync(join(tmpdir(), 'flatspace-agg-'))
+try {
+  const imgsIn = join(atmp, 'imgs-in.json')
+  const imgsOut = join(atmp, 'imgs-out.json')
+  writeFileSync(imgsIn, JSON.stringify([{ filename: 'a.jpg', date: '2026-01-01', size: 1 }]))
+  await aggregate({ input: imgsIn, output: imgsOut })
+  const imgs = JSON.parse(readFileSync(imgsOut, 'utf8'))
+  ok('images autodetect', imgs['a.jpg']?.title === 'a')
+
+  const vidsIn = join(atmp, 'vids-in.json')
+  const vidsOut = join(atmp, 'vids-out.json')
+  writeFileSync(vidsIn, JSON.stringify({ x: { date: '2026-02-01', t: 1 }, y: { date: '2026-03-01', t: 2 } }))
+  await aggregate({ input: vidsIn, output: vidsOut })
+  const vids = JSON.parse(readFileSync(vidsOut, 'utf8'))
+  ok('videos autodetect + sort desc', Array.isArray(vids) && vids[0].t === 2)
+
+  const passIn = join(atmp, 'pass-in.json')
+  const passOut = join(atmp, 'pass-out.json')
+  const contentDoc = { slug: 'index', project: { title: 'x' }, pipeline: { label: 'p' } }
+  writeFileSync(passIn, JSON.stringify(contentDoc))
+  await aggregate({ input: passIn, output: passOut, type: 'passthrough' })
+  const pass1 = JSON.parse(readFileSync(passOut, 'utf8'))
+  ok('passthrough preserves shape', pass1.pipeline?.label === 'p' && !Array.isArray(pass1))
+
+  const structIn = join(atmp, 'struct-in.json')
+  const structOut = join(atmp, 'struct-out.json')
+  writeFileSync(structIn, JSON.stringify(contentDoc))
+  let threw = false
+  try { await aggregate({ input: structIn, output: structOut }) } catch { threw = true }
+  ok('autodetect refuses to mangle content doc (no date fields)', threw)
+} finally {
+  rmSync(atmp, { recursive: true, force: true })
 }
 
 console.log(`\n${pass} passed, ${fail} failed`)
