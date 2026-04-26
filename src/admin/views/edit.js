@@ -56,7 +56,7 @@ function fallbackFieldsHtml(doc) {
 }
 
 function statusSelect(current) {
-  return `<div class="form-group"><label class="form-label">Status</label><select name="_status" class="select select-solid"><option value="draft" ${current === 'draft' ? 'selected' : ''}>Draft</option><option value="published" ${current === 'published' ? 'selected' : ''}>Published</option></select></div>`
+  return `<div class="form-group"><label class="form-label">status</label><select name="_status" class="input"><option value="draft" ${current === 'draft' ? 'selected' : ''}>draft</option><option value="published" ${current === 'published' ? 'selected' : ''}>published</option></select></div>`
 }
 
 function findBlocksField(fields, name) {
@@ -92,40 +92,62 @@ export async function editView(collectionSlug, id) {
   const hasVersions = ['pages', 'posts'].includes(collectionSlug)
   const encCol = encodeURIComponent(collectionSlug)
   const encId = encodeURIComponent(id)
-  const heading = doc.title || doc.filename || doc.email || doc.name || 'Edit ' + label
+  const heading = doc.title || doc.filename || doc.email || doc.name || 'edit ' + label
   const safeHeading = escapeHtml(heading)
-  const safeLabel = escapeHtml(label)
+  const safeLabel = escapeHtml(label.toLowerCase())
   const safeCol = escapeHtml(collectionSlug)
   const safeId = escapeHtml(doc.id)
-  const metaSection = `<div class="text-xs text-muted-foreground mt-4 pt-4 border-t border-border space-y-1"><div>ID: <span class="font-mono">${safeId}</span></div><div>Created: ${escapeHtml(doc.createdAt ? new Date(doc.createdAt).toLocaleString() : '—')}</div><div>Updated: ${escapeHtml(doc.updatedAt ? new Date(doc.updatedAt).toLocaleString() : '—')}</div></div>`
-  let body = `
-<div class="flex items-center justify-between mb-6">
-  <div><a href="/admin/collections/${encCol}" class="text-sm text-muted-foreground hover:text-foreground">&larr; ${safeCol}</a><h1 class="text-2xl font-bold mt-1">${safeHeading}</h1></div>
-  <div class="flex gap-2">${hasVersions ? `<a href="/admin/collections/${encCol}/${encId}/versions" class="btn btn-ghost btn-sm">Versions</a>` : ''}<button form="edit-form" type="submit" class="btn btn-primary btn-sm">Save</button></div>
+
+  const metaTable = `
+<table class="kv">
+  <tr><td>id</td><td><code>${safeId}</code></td></tr>
+  <tr><td>created</td><td>${escapeHtml(doc.createdAt ? new Date(doc.createdAt).toLocaleString() : '—')}</td></tr>
+  <tr><td>updated</td><td>${escapeHtml(doc.updatedAt ? new Date(doc.updatedAt).toLocaleString() : '—')}</td></tr>
+</table>`
+
+  const body = `
+<div style="display:flex;align-items:flex-start;justify-content:space-between;gap:16px;margin-bottom:16px;flex-wrap:wrap">
+  <div>
+    <a href="/admin/collections/${encCol}" class="t-meta" style="text-decoration:none">← ${safeCol}</a>
+    <h1 style="margin-top:4px">${safeHeading}</h1>
+  </div>
+  <div style="display:flex;gap:8px">
+    ${hasVersions ? `<a href="/admin/collections/${encCol}/${encId}/versions" class="btn">versions</a>` : ''}
+    <button form="edit-form" type="submit" class="btn-primary">save</button>
+  </div>
 </div>
-<div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-  <form id="edit-form" method="POST" action="/admin/collections/${encCol}/${encId}" data-collection="${safeCol}" class="lg:col-span-2 space-y-4">
+
+<div style="display:grid;grid-template-columns:minmax(0,1fr) 280px;gap:24px;align-items:start">
+  <form id="edit-form" method="POST" action="/admin/collections/${encCol}/${encId}" data-collection="${safeCol}">
     ${fieldsHtml}
-    <button type="submit" class="btn btn-primary">Save Changes</button>
+    <div style="margin-top:24px;display:flex;gap:8px">
+      <button type="submit" class="btn-primary">save changes</button>
+    </div>
   </form>
-  <aside class="space-y-4">
-    <div class="card bg-card border border-border"><div class="card-body gap-3">
-      <h3 class="font-medium text-sm">Document</h3>
-      ${hasVersions ? statusSelect(doc._status) : ''}
-      ${metaSection}
-      <div class="flex flex-col gap-2 mt-4">
-        <button type="button" id="toggle-preview" class="btn btn-ghost btn-sm btn-block mb-2">Preview ↗</button>
-         <button form="edit-form" type="submit" name="_action" value="draft" class="btn btn-outline btn-sm btn-block">Save Draft</button>
-         <button form="edit-form" type="submit" name="_action" value="publish" class="btn btn-primary btn-sm btn-block">Publish</button>
-        ${doc.slug ? `<a href="/${encodeURIComponent(doc.slug)}" target="_blank" class="btn btn-ghost btn-sm btn-block">View ↗</a>` : ''}
-        <button type="button" data-delete-doc data-collection="${encCol}" data-id="${encId}" class="btn btn-ghost btn-sm btn-block text-error">Delete</button>
+
+  <aside style="display:flex;flex-direction:column;gap:12px;position:sticky;top:64px">
+    <div class="panel">
+      <div class="panel-head">document</div>
+      <div class="panel-body" style="padding:14px">
+        ${hasVersions ? statusSelect(doc._status) : ''}
+        ${metaTable}
+        <div style="display:flex;flex-direction:column;gap:6px;margin-top:12px">
+          ${hasVersions ? `<button form="edit-form" type="submit" name="_action" value="draft" class="btn">save draft</button>
+          <button form="edit-form" type="submit" name="_action" value="publish" class="btn-primary">publish</button>` : ''}
+          ${doc.slug ? `<a href="/${encodeURIComponent(doc.slug)}" target="_blank" class="btn-ghost">view ↗</a>` : ''}
+          <button type="button" data-delete-doc data-collection="${encCol}" data-id="${encId}" class="btn-ghost" style="color:var(--warn)">delete</button>
+        </div>
       </div>
-    </div></div>
-    ${hasVersions ? `<div class="card bg-card border border-border"><div class="card-body"><h3 class="font-medium text-sm mb-2">Live Preview</h3><a href="/${encodeURIComponent(doc.slug||'')}" target="preview-frame" class="btn btn-ghost btn-sm btn-block">Open Preview ↗</a></div></div>` : ''}
+    </div>
   </aside>
 </div>`
-  body += '<div class="hidden lg:w-1/2"><iframe id="preview-frame" class="w-full h-full border-l border-border" style="min-height:80vh"></iframe></div>'
-  return adminLayout({ title: heading, body, breadcrumb: `<a href="/admin" class="hover:text-content1">Dashboard</a> <span class="text-content3">/</span> <a href="/admin/collections/${encCol}" class="hover:text-content1">${safeLabel}</a> <span class="text-content3">/</span> ${safeHeading}`, path: '/admin/collections/' + collectionSlug })
+
+  return adminLayout({
+    title: heading,
+    body,
+    breadcrumb: `<a href="/admin">dashboard</a> <span class="sep">/</span> <a href="/admin/collections/${encCol}">${safeLabel}</a> <span class="sep">/</span> <span class="leaf">${safeHeading}</span>`,
+    path: '/admin/collections/' + collectionSlug,
+  })
 }
 
 export async function createView(collectionSlug) {
@@ -135,23 +157,36 @@ export async function createView(collectionSlug) {
   try { fieldsHtml = await getFieldsHtml(collectionSlug, {}) } catch { fieldsHtml = renderTextField({ name: 'title', label: 'Title' }, '') }
   const hasVersions = ['pages', 'posts'].includes(collectionSlug)
   const encCol = encodeURIComponent(collectionSlug)
-  const safeLabel = escapeHtml(label)
+  const safeLabel = escapeHtml(label.toLowerCase())
   const safeCol = escapeHtml(collectionSlug)
   const body = `
-<div class="flex items-center justify-between mb-6">
-  <div><a href="/admin/collections/${encCol}" class="text-sm text-muted-foreground hover:text-foreground">&larr; ${safeCol}</a><h1 class="text-2xl font-bold mt-1">New ${safeLabel}</h1></div>
-  <button form="create-form" type="submit" class="btn btn-primary btn-sm">Create</button>
+<div style="display:flex;align-items:flex-start;justify-content:space-between;gap:16px;margin-bottom:16px;flex-wrap:wrap">
+  <div>
+    <a href="/admin/collections/${encCol}" class="t-meta" style="text-decoration:none">← ${safeCol}</a>
+    <h1 style="margin-top:4px">new ${safeLabel}</h1>
+  </div>
+  <button form="create-form" type="submit" class="btn-primary">create</button>
 </div>
-<div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-  <form id="create-form" method="POST" action="/admin/collections/${encCol}/create" data-collection="${safeCol}" class="lg:col-span-2 space-y-4">
+
+<div style="display:grid;grid-template-columns:minmax(0,1fr) 280px;gap:24px;align-items:start">
+  <form id="create-form" method="POST" action="/admin/collections/${encCol}/create" data-collection="${safeCol}">
     ${fieldsHtml}
-    <button type="submit" class="btn btn-primary">Create ${safeLabel}</button>
+    <div style="margin-top:24px"><button type="submit" class="btn-primary">create ${safeLabel}</button></div>
   </form>
-  <aside><div class="card bg-card border border-border"><div class="card-body gap-3">
-    <h3 class="font-medium text-sm">Document</h3>
-    ${hasVersions ? statusSelect('draft') : ''}
-    <button form="create-form" type="submit" class="btn btn-primary btn-sm btn-block mt-4">Create</button>
-  </div></div></aside>
+  <aside>
+    <div class="panel">
+      <div class="panel-head">new document</div>
+      <div class="panel-body" style="padding:14px">
+        ${hasVersions ? statusSelect('draft') : ''}
+        <button form="create-form" type="submit" class="btn-primary" style="width:100%;margin-top:8px;justify-content:center">create</button>
+      </div>
+    </div>
+  </aside>
 </div>`
-  return adminLayout({ title: 'New ' + label, body, breadcrumb: `<a href="/admin" class="hover:text-content1">Dashboard</a> <span class="text-content3">/</span> <a href="/admin/collections/${encCol}" class="hover:text-content1">${safeLabel}</a> <span class="text-content3">/</span> New`, path: '/admin/collections/' + collectionSlug })
+  return adminLayout({
+    title: 'new ' + label,
+    body,
+    breadcrumb: `<a href="/admin">dashboard</a> <span class="sep">/</span> <a href="/admin/collections/${encCol}">${safeLabel}</a> <span class="sep">/</span> <span class="leaf">new</span>`,
+    path: '/admin/collections/' + collectionSlug,
+  })
 }

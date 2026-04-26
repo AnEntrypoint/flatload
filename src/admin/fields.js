@@ -34,9 +34,9 @@ export function renderTextField(field, value = '', prefix = '') {
   const val = String(value ?? '')
   const label = escapeHtml(fieldLabel(field))
   if (field.textarea || field.type === 'textarea') {
-    return `<div class="form-group"><label class="form-label" for="${escapeHtml(name)}">${label}</label><textarea id="${escapeHtml(name)}" name="${escapeHtml(name)}" class="input input-solid input-block h-32 resize-y">${escapeHtml(val)}</textarea></div>`
+    return `<div class="form-group"><label class="form-label" for="${escapeHtml(name)}">${label}</label><textarea id="${escapeHtml(name)}" name="${escapeHtml(name)}" class="input" style="min-height:128px;resize:vertical;font-family:var(--ff-mono)">${escapeHtml(val)}</textarea></div>`
   }
-  return `<div class="form-group"><label class="form-label" for="${escapeHtml(name)}">${label}</label><input id="${escapeHtml(name)}" name="${escapeHtml(name)}" type="text" value="${escapeHtml(val)}" class="input input-solid input-block" ${field.admin?.readOnly ? 'readonly' : ''} /></div>`
+  return `<div class="form-group"><label class="form-label" for="${escapeHtml(name)}">${label}</label><input id="${escapeHtml(name)}" name="${escapeHtml(name)}" type="text" value="${escapeHtml(val)}" class="input" ${field.admin?.readOnly ? 'readonly' : ''} /></div>`
 }
 
 function renderNumberField(field, value, prefix = '') {

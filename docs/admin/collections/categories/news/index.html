@@ -3,79 +3,82 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>News — Admin</title>
+  <title>News — flatspace</title>
+  <meta name="theme-color" content="#247420" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#92CEAC" media="(prefers-color-scheme: dark)">
+  <meta name="color-scheme" content="light dark">
+  <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Instrument+Serif&family=JetBrains+Mono:wght@400;500;600;700&display=swap">
   <link rel="stylesheet" href="../../../../app.css" />
-  <script>(function(){try{
-const sidebarState = localStorage.getItem('admin-sidebar') || 'open';
-document.documentElement.setAttribute('data-sidebar', sidebarState);var t=localStorage.getItem('admin-theme')||'system';var d=window.matchMedia('(prefers-color-scheme:dark)').matches;var dark=(t==='dark')||(t==='system'&&d);document.documentElement.setAttribute('data-theme',dark?'dark':'light');}catch(e){}})();</script>
-  <style>
-[data-sidebar="collapsed"] .sidebar { width: 0; overflow: hidden; padding: 0; border: none; }
-[data-sidebar="collapsed"] .sidebar-label { display: none; }
-@media (max-width: 1023px) { .sidebar { display: none; } .sidebar.mobile-open { display: flex; position: fixed; z-index: 40; top: 0; left: 0; height: 100vh; width: 16rem; background: var(--backgroundPrimary, #fff); } }
-</style>
+  <link rel="stylesheet" href="../../../../admin-brand.css" />
+  <script>(function(){try{var t=localStorage.getItem('admin-theme')||'system';var d=window.matchMedia('(prefers-color-scheme:dark)').matches;var dark=(t==='dark')||(t==='system'&&d);document.documentElement.setAttribute('data-theme',dark?'dark':'light');}catch(e){}})();</script>
 </head>
-<body class="min-h-screen flex">
-  <div class="sidebar sidebar-sticky w-64 shrink-0 border-r border-border/30">
-    <div class="p-4 border-b border-border/30">
-      <a href="/flatspace/admin/" class="font-semibold text-base text-content1 sidebar-label">Flatspace</a>
-      <button id="sidebar-toggle" class="btn btn-ghost btn-xs ml-auto sidebar-label">
-        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 19l-7-7 7-7M18 19l-7-7 7-7"/></svg>
-      </button>
-    </div>
-    <nav class="menu p-3 flex-1 overflow-y-auto">
-      <ul class="menu-items">
-        <li class="menu-item"><a href="/flatspace/admin/" class="w-full">Dashboard</a></li>
-        <li><span class="menu-title px-2 mt-3">Collections</span></li>
-        <li class="menu-item active"><a href="/flatspace/admin/collections/categories/" class="w-full font-medium text-primary">Categories</a></li><li class="menu-item"><a href="/flatspace/admin/collections/media/" class="w-full">Media</a></li><li class="menu-item"><a href="/flatspace/admin/collections/pages/" class="w-full">Pages</a></li><li class="menu-item"><a href="/flatspace/admin/collections/posts/" class="w-full">Posts</a></li><li class="menu-item"><a href="/flatspace/admin/collections/users/" class="w-full">Users</a></li>
-        </ul>
-    </nav>
-  </div>
-  <div class="flex-1 flex flex-col min-h-screen overflow-hidden">
-    <header class="navbar bg-backgroundSecondary border-b border-border/30 h-14 px-6 shrink-0">
-      <div class="navbar-start gap-2">
-        <button id="mobile-menu" class="btn btn-ghost btn-sm lg:hidden">
-          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
-        </button>
-        <nav class="text-sm text-content2 flex items-center gap-1"><a href="/admin" class="hover:text-content1">Dashboard</a> <span class="text-content3">/</span> <a href="/flatspace/admin/collections/categories/" class="hover:text-content1">Categorie</a> <span class="text-content3">/</span> News</nav>
-      </div>
-      <div class="navbar-end gap-4">
-        <button class="btn btn-ghost btn-sm text-content2 gap-1"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg><span class="hidden md:inline text-xs">Search</span><kbd class="hidden md:inline text-[10px] bg-muted px-1 rounded">⌘K</kbd></button>
-        <a href="/flatspace/" target="_blank" class="text-sm text-content2 hover:text-content1 transition-colors">View Site ↗</a>
-        <button id="admin-theme-toggle" class="btn btn-ghost btn-sm">
-          <svg class="dark-icon hidden" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
-          <svg class="light-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
-        </button>
-      </div>
+<body>
+  <div class="app">
+    <header class="app-topbar">
+      <a href="/flatspace/admin/" class="brand">flatspace<span class="slash"> // </span><span class="mono-dim">admin</span></a>
+      <nav>
+        <a href="/flatspace/admin/">dashboard</a>
+        <a href="/flatspace/" target="_blank">view site ↗</a>
+        <a href="#" id="admin-theme-toggle" title="toggle theme">◐</a>
+      </nav>
     </header>
-    <main class="flex-1 overflow-y-auto p-6">
+    <div class="app-crumb"><a href="/admin">dashboard</a> <span class="sep">/</span> <a href="/flatspace/admin/collections/categories/">categorie</a> <span class="sep">/</span> <span class="leaf">News</span></div>
+    <div class="app-body">
+      <aside class="app-side">
+        <div class="group">collections</div>
+        <a href="/flatspace/admin/collections/categories/" class="active"><span class="glyph">//</span>Categories</a><a href="/flatspace/admin/collections/forms/"><span class="glyph">//</span>Forms</a><a href="/flatspace/admin/collections/media/"><span class="glyph">//</span>Media</a><a href="/flatspace/admin/collections/pages/"><span class="glyph">//</span>Pages</a><a href="/flatspace/admin/collections/posts/"><span class="glyph">//</span>Posts</a><a href="/flatspace/admin/collections/redirects/"><span class="glyph">//</span>Redirects</a><a href="/flatspace/admin/collections/users/"><span class="glyph">//</span>Users</a>
+        <div class="group">globals</div><a href="/flatspace/admin/globals/footer/"><span class="glyph">§</span>Footer</a><a href="/flatspace/admin/globals/header/"><span class="glyph">§</span>Header</a>
+      </aside>
+      <main class="app-main">
   <div style="background:#f59e0b;color:#1c1917;padding:0.4rem 1rem;font-size:0.8rem;font-weight:600;text-align:center;">Read-only preview — <a href="https://github.com/AnEntrypoint/flatspace" style="text-decoration:underline;">run locally</a> to edit content</div>
-      
-<div class="flex items-center justify-between mb-6">
-  <div><a href="/flatspace/admin/collections/categories/" class="text-sm text-muted-foreground hover:text-foreground">&larr; categories</a><h1 class="text-2xl font-bold mt-1">News</h1></div>
-  <div class="flex gap-2"><button form="edit-form" type="submit" class="btn btn-primary btn-sm">Save</button></div>
-</div>
-<div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-  <form id="edit-form" method="POST" action="/admin/collections/categories/news" data-collection="categories" class="lg:col-span-2 space-y-4">
-    <div class="form-group"><label class="form-label" for="title">Title</label><input id="title" name="title" type="text" value="News" class="input input-solid input-block"  /></div><div class="form-group"><label class="form-label" for="slug">Slug</label><input id="slug" name="slug" type="text" value="news" class="input input-solid input-block"  /></div>
-    <button type="submit" class="btn btn-primary">Save Changes</button>
-  </form>
-  <aside class="space-y-4">
-    <div class="card bg-card border border-border"><div class="card-body gap-3">
-      <h3 class="font-medium text-sm">Document</h3>
-      
-      <div class="text-xs text-muted-foreground mt-4 pt-4 border-t border-border space-y-1"><div>ID: <span class="font-mono">news</span></div><div>Created: 1/1/2024, 2:00:00 AM</div><div>Updated: 1/1/2024, 2:00:00 AM</div></div>
-      <div class="flex flex-col gap-2 mt-4">
-        <button type="button" id="toggle-preview" class="btn btn-ghost btn-sm btn-block mb-2">Preview ↗</button>
-         <button form="edit-form" type="submit" name="_action" value="draft" class="btn btn-outline btn-sm btn-block">Save Draft</button>
-         <button form="edit-form" type="submit" name="_action" value="publish" class="btn btn-primary btn-sm btn-block">Publish</button>
-        <a href="/news" target="_blank" class="btn btn-ghost btn-sm btn-block">View ↗</a>
-        <button type="button" data-delete-doc data-collection="categories" data-id="news" class="btn btn-ghost btn-sm btn-block text-error">Delete</button>
-      </div>
-    </div></div>
+        
+<div style="display:flex;align-items:flex-start;justify-content:space-between;gap:16px;margin-bottom:16px;flex-wrap:wrap">
+  <div>
+    <a href="/flatspace/admin/collections/categories/" class="t-meta" style="text-decoration:none">← categories</a>
+    <h1 style="margin-top:4px">News</h1>
+  </div>
+  <div style="display:flex;gap:8px">
     
+    <button form="edit-form" type="submit" class="btn-primary">save</button>
+  </div>
+</div>
+
+<div style="display:grid;grid-template-columns:minmax(0,1fr) 280px;gap:24px;align-items:start">
+  <form id="edit-form" method="POST" action="/admin/collections/categories/news" data-collection="categories">
+    <div class="form-group"><label class="form-label" for="title">Title</label><input id="title" name="title" type="text" value="News" class="input"  /></div><div class="form-group"><label class="form-label" for="slug">Slug</label><input id="slug" name="slug" type="text" value="news" class="input"  /></div>
+    <div style="margin-top:24px;display:flex;gap:8px">
+      <button type="submit" class="btn-primary">save changes</button>
+    </div>
+  </form>
+
+  <aside style="display:flex;flex-direction:column;gap:12px;position:sticky;top:64px">
+    <div class="panel">
+      <div class="panel-head">document</div>
+      <div class="panel-body" style="padding:14px">
+        
+        
+<table class="kv">
+  <tr><td>id</td><td><code>news</code></td></tr>
+  <tr><td>created</td><td>1/1/2024, 2:00:00 AM</td></tr>
+  <tr><td>updated</td><td>1/1/2024, 2:00:00 AM</td></tr>
+</table>
+        <div style="display:flex;flex-direction:column;gap:6px;margin-top:12px">
+          
+          <a href="/news" target="_blank" class="btn-ghost">view ↗</a>
+          <button type="button" data-delete-doc data-collection="categories" data-id="news" class="btn-ghost" style="color:var(--warn)">delete</button>
+        </div>
+      </div>
+    </div>
   </aside>
-</div><div class="hidden lg:w-1/2"><iframe id="preview-frame" class="w-full h-full border-l border-border" style="min-height:80vh"></iframe></div>
-    </main>
+</div>
+      </main>
+    </div>
+    <div class="app-status">
+      <span class="item">247420 // flatspace</span>
+      <span class="spread"></span>
+      <span class="item">probably emerging 🌀</span>
+    </div>
   </div>
   <script defer src="/admin/richtext.js"></script>
   

@@ -47,6 +47,7 @@ function patchAdminHtml(html, cssDepth) {
       return `src="${cssPrefix}media/${raw}"`
     })
     .replace('href="/app.css"', `href="${cssPrefix}app.css"`)
+    .replace('href="/admin-brand.css"', `href="${cssPrefix}admin-brand.css"`)
     .replace(/<script[^>]*src="\/admin\/client\.js"[^>]*><\/script>/, '')
     .replace(/\s+onclick="[^"]*"/g, '')
     .replace(/<a\s[^>]*href="[^"]*\/(create|edit|logout)[^"]*"[^>]*>[^<]*<\/a>/g, '')
@@ -136,6 +137,7 @@ async function main() {
 
   await copyDir('public/media', path.join(DOCS, 'media'))
   if (existsSync('public/app.css')) await Bun.write(path.join(DOCS, 'app.css'), Bun.file('public/app.css'))
+  if (existsSync('public/admin-brand.css')) await Bun.write(path.join(DOCS, 'admin-brand.css'), Bun.file('public/admin-brand.css'))
   if (existsSync('public/client.js')) await Bun.write(path.join(DOCS, 'client.js'), Bun.file('public/client.js'))
   await Bun.write(path.join(DOCS, '.nojekyll'), '')
   console.log('build complete →', DOCS)

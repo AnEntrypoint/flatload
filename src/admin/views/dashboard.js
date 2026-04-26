@@ -14,31 +14,32 @@ export async function dashboardView() {
   )
 
   const cards = counts.map(({ slug, label, count }) => `
-<a href="/admin/collections/${slug}" class="card bg-backgroundSecondary border border-border/30 hover:shadow-md transition-shadow">
-  <div class="card-body">
-    <p class="text-content2 text-sm">${label}</p>
-    <p class="text-3xl font-bold mt-1 text-content1">${count}</p>
-  </div>
+<a href="/admin/collections/${slug}" class="card-item">
+  <span class="code">${String(count)}</span>
+  <span class="name">${label}</span>
 </a>`).join('')
 
   const body = `
-<div class="mb-6">
-  <h1 class="text-2xl font-bold text-content1">Dashboard</h1>
-</div>
-<div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+<h1>dashboard</h1>
+<p class="lede">flat-file CMS // yaml content // git as version history</p>
+
+<h3>collections</h3>
+<div class="cards">
   ${cards}
 </div>
-<div class="mt-8 card bg-backgroundSecondary border border-border/30">
-  <div class="card-body">
-    <h2 class="font-semibold text-base mb-3 text-content1">Quick Links</h2>
-    <div class="flex flex-wrap gap-2">
-      <a href="/admin/collections/posts/create" class="btn btn-primary btn-sm">New Post</a>
-      <a href="/admin/collections/pages/create" class="btn btn-outline btn-sm">New Page</a>
-      <a href="/admin/globals/header" class="btn btn-outline btn-sm">Edit Header</a>
-      <a href="/admin/globals/footer" class="btn btn-outline btn-sm">Edit Footer</a>
-    </div>
-  </div>
+
+<h3>quick actions</h3>
+<div style="display:flex;flex-wrap:wrap;gap:8px;margin:8px 0 24px 0;">
+  <a href="/admin/collections/posts/create" class="btn-primary">+ new post</a>
+  <a href="/admin/collections/pages/create" class="btn">+ new page</a>
+  <a href="/admin/globals/header" class="btn-ghost">edit header</a>
+  <a href="/admin/globals/footer" class="btn-ghost">edit footer</a>
 </div>`
 
-  return adminLayout({ title: 'Dashboard', body, breadcrumb: '<a href="/admin" class="hover:text-content1">Dashboard</a>', path: '/admin' })
+  return adminLayout({
+    title: 'dashboard',
+    body,
+    breadcrumb: '<span class="leaf">dashboard</span>',
+    path: '/admin',
+  })
 }

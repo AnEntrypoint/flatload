@@ -1,6 +1,7 @@
 import { adminLayout } from '../layout.js'
 import { payload } from '../../utils/getPayload.js'
 import { renderField } from '../fields.js'
+import { escapeHtml } from '../../utils/safe.js'
 
 const GLOBALS_FIELDS = {
   header: () => import('../../payload/globals/Header.js').then(m => m.Header.fields),
@@ -10,6 +11,7 @@ const GLOBALS_FIELDS = {
 export async function globalView(slug) {
   const doc = await payload.findGlobal({ slug, depth: 1 })
   const title = slug.charAt(0).toUpperCase() + slug.slice(1)
+  const safeTitle = escapeHtml(title.toLowerCase())
 
   let fieldsHtml = ''
   try {
@@ -28,25 +30,33 @@ export async function globalView(slug) {
   }
 
   const body = `
-<div class="flex items-center justify-between mb-6">
-  <h1 class="text-2xl font-bold">${title}</h1>
-  <button form="global-form" type="submit" class="btn btn-primary btn-sm">Save</button>
+<div style="display:flex;align-items:flex-end;justify-content:space-between;gap:16px;margin-bottom:16px;flex-wrap:wrap">
+  <h1>${safeTitle}</h1>
+  <button form="global-form" type="submit" class="btn-primary">save</button>
 </div>
-<div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-  <form id="global-form" method="POST" action="/admin/globals/${slug}" class="lg:col-span-2 space-y-4">
+
+<div style="display:grid;grid-template-columns:minmax(0,1fr) 280px;gap:24px;align-items:start">
+  <form id="global-form" method="POST" action="/admin/globals/${escapeHtml(slug)}">
     ${fieldsHtml}
-    <button type="submit" class="btn btn-primary">Save ${title}</button>
+    <div style="margin-top:24px"><button type="submit" class="btn-primary">save ${safeTitle}</button></div>
   </form>
   <aside>
-    <div class="card bg-card border border-border">
-      <div class="card-body">
-        <h3 class="font-medium text-sm mb-2">Global</h3>
-        <div class="text-xs text-muted-foreground">Updated: ${doc.updatedAt ? new Date(doc.updatedAt).toLocaleString() : '—'}</div>
-        <button form="global-form" type="submit" class="btn btn-primary btn-sm btn-block mt-4">Save</button>
+    <div class="panel">
+      <div class="panel-head">global</div>
+      <div class="panel-body" style="padding:14px">
+        <table class="kv">
+          <tr><td>updated</td><td>${doc.updatedAt ? escapeHtml(new Date(doc.updatedAt).toLocaleString()) : '—'}</td></tr>
+        </table>
+        <button form="global-form" type="submit" class="btn-primary" style="width:100%;margin-top:12px;justify-content:center">save</button>
       </div>
     </div>
   </aside>
 </div>`
 
-  return adminLayout({ title, body, breadcrumb: '<a href="/admin" class="hover:text-content1">Dashboard</a> <span class="text-content3">/</span> Globals <span class="text-content3">/</span> ' + title, path: '/admin/globals/' + slug })
+  return adminLayout({
+    title,
+    body,
+    breadcrumb: `<a href="/admin">dashboard</a> <span class="sep">/</span> globals <span class="sep">/</span> <span class="leaf">${safeTitle}</span>`,
+    path: '/admin/globals/' + slug,
+  })
 }
